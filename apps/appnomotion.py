@@ -11,7 +11,7 @@ class AppNoMotionLight():
     def activate(self, ev_content, state, r):
         devices = state['devices']
         messages = []
-        print self.candidates
+        print(self.candidates)
         for place in self.candidates:
             state['last_motion'][place] = state['timestamp']
             ll = state['groups_lights'][place]

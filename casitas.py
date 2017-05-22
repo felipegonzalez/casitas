@@ -30,7 +30,7 @@ state['devices'] = devices
 state['devices_state'] = {}
 for dev_name in device_settings.keys():
     state['devices_state'][dev_name] = {}
-print state['devices_state']
+print(state['devices_state'])
 
 #create instances for apps #############
 app_motion = AppMotionLight()
@@ -48,7 +48,7 @@ for con in conn_names:
 # check subscriptions are ok 
 for con in conn_names:
     a = conns[con].get_message()
-    print a
+    print(a)
 
 timer_print = time.time()
 
@@ -59,7 +59,7 @@ while True:
 
     if(time.time()-timer_print > 10):
         print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
-        print colored(state, 'green')
+        print(colored(state, 'green'))
         timer_print = time.time()
 
     state['timestamp'] = time.time()
@@ -81,7 +81,7 @@ while True:
     # get event and load data
     ev = events.get_message()
     if (ev and (ev['type']=='message')):
-        print colored(ev , 'blue')
+        print(colored(ev , 'blue'))
         ev_content = json.loads(ev['data'])
         state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value']
         #print ev
@@ -90,7 +90,7 @@ while True:
     comm = commands.get_message()
     if comm:
         if (comm['type']=='message'):
-            print colored(comm, 'red')
+            print(colored(comm, 'red'))
             c = json.loads(comm['data'])
             getattr(devices[c['device_name']], c['command'])(c, state)
 
