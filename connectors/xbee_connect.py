@@ -3,22 +3,22 @@
 import logging
 import logging.handlers
 from xbee import ZigBee
-from pubsubsettings import r 
+from settings import r 
 import json
 
 SERIAL_PORT = '/dev/tty.usbserial-AH02VCE9'
 
-def monitor()
+def monitor():
     p = r.pubsub()
     p.suscribe('xbee-commands')
     print("Activar xbee coordinator...")
     try:
         serialConnection = serial.Serial( SERIAL_PORT, 9600,timeout=0.15)
         xbee = ZigBee(serialConnection)
-        print "Conexión xbee serial...OK"
+        print("Conexión xbee serial...OK")
     except:
         logging.warning('Error serial/xbee')
-        print "Error serial/xbee"
+        print("Error serial/xbee")
     print('Iniciar ciclo')
     while True:
         response = xbee.wait_read_frame(timeout=0.10)
