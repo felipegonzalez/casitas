@@ -27,8 +27,8 @@ def monitor():
     print('Iniciar ciclo')
     while True:
         response = {}
-        response = xbee.wait_read_frame()
-        #print(response)
+        response = xbee.wait_read_frame(timeout = 0.15)
+        print(response)
         if(len(response)>0):
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
