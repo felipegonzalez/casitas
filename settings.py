@@ -22,12 +22,12 @@ device_settings = {
         'cajasala':{
         'place':'sala',
         'device_type':'xbeebox',
-        'dest_addr_long':'0013a20040bf0582'
+        'addr_long':'0013a20040bf0582'
         },
         'cajarecamara':{
         'place':'recamara',
         'device_type':'xbeebox',
-        'dest_addr_long':'0013a20040c45639',
+        'addr_long':'0013a20040c45639',
         'children':{'luzchica':'D2'} #pin number
         },
         'hue':{
@@ -41,6 +41,12 @@ device_settings = {
         'state':'unarmed'
         }
 }
+#xbee_dict
+xbee_dict = {}
+for key in device_settings.keys():
+        if(device_settings[key]['device_type'] == 'xbeebox'):
+                xbee_dict[device_settings[key]['addr_long']] = key
+                
 
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm}

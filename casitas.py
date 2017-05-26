@@ -25,6 +25,7 @@ for dev_name in device_settings.keys():
     type_device = device_settings[dev_name]['device_type']
     init = device_settings[dev_name]
     devices[dev_name] = dev_class[type_device](name=dev_name,init=init, messager = r)
+print(devices)
 
 state['devices'] = devices
 state['devices_state'] = {}
@@ -71,8 +72,9 @@ while True:
     for con_name in conns.keys():
         item = conns[con_name].get_message()
         if (item and (item['type']=='message')):
-            #print item
+            print(item)
             message = json.loads(item['data'])
+            print(message)
             from_device = message['device_name']
             m_parsed = devices[from_device].parse(message)
             for m in m_parsed:

@@ -1,10 +1,11 @@
 import time
+import json
 
 class XbeeBox(object):
 
     def __init__(self, name, init, messager):
         self.name = name
-        self.dest_addr_long = init['dest_addr_long']
+        self.addr_long = init['addr_long']
         self.place = init['place']
         self.state = {}
         self.polling = 60
@@ -23,20 +24,23 @@ class XbeeBox(object):
 
     def parse(self, ev_content):
         #in this case, xbee only has motion sensor
-        data = ev_content['data']
+        data = ev_content['content'].split('\r\n')
+        print(data)
         events = []
-        for key in data.keys():
-            event_type = key
-            value = data[key]
-            events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
+        for elem in data:
+            if(len(elem) > 0):
+                ev_split = elem.split(',')
+                event_type = ev_split[0]
+                value = ev_split[3]
+                events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
         return events
 
     def turn_on(self, command, state):
         #data = json.loads(command['data']) should be done before
         if (self.children[command['value']] in state['lights']):
             state['last_motion'][self.place] = state['timestamp']
-        new_message = {'dest_addr_long': self.dest_addr_long, 'command':self.children[command['value']], 
-                       'parameter':'\x05', 'mode':'pin'}
+        new_message = {'addr_long': self.addr_long, 'command':self.children[command['value']], 
+                       'parameter':'05', 'mode':'pin'}
         self.state[command['value']] = 'on'
         self.messager.publish('xbee-commands', new_message)
         print('Encender xbee')
@@ -44,10 +48,10 @@ class XbeeBox(object):
         
     def turn_off(self, command, state):
         #data = json.loads(command['data']) should be done before
-        new_message = {'dest_addr_long': self.dest_addr_long, 'command':self.children[command['value']], 
-                       'parameter':'\x04', 'mode':'pin'}
+        new_message = {'addr_long': self.addr_long, 'command':self.children[command['value']], 
+                       'parameter':'04', 'mode':'pin'}
         self.state[command['value']] = 'off'
-        self.messager.publish('xbee-commands', new_message)
+        self.messager.publish('xbee-commands', json.dumps(new_message))
         print('Apagar xbee')
         return 
 

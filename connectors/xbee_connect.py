@@ -6,8 +6,12 @@ from xbee import ZigBee
 import os, sys
 sys.path.insert(0,os.path.pardir)
 from settings import r 
+from settings import xbee_dict
 import json
 import serial
+from binascii import unhexlify
+from binascii import hexlify
+
 
 SERIAL_PORT = '/dev/tty.usbserial-AH02VCE9'
 
@@ -28,31 +32,34 @@ def monitor():
     while True:
         response = {}
         response = xbee.wait_read_frame(timeout = 0.15)
-        print(response)
+        #print(response)
         if(len(response)>0):
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
             response['rf_data'] = response['rf_data'].decode('utf-8')
-            message = json.dumps({'type':'xbee', 
+            message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
                 'source':response['source_addr_long'], 'content':response['rf_data']})
             r.publish('xbee-events', message)
 
-            message = p.get_message()
-            if(message and message['type'] == 'message'):
-                print(message)
-                message_in = json.loads(message['data'])
-                print(message_in)
-                if message_in:
-                    dest_addr_long = message_in['source_addr_long']
-                    if message_in['mode'] == 'tx':
-                        dest_addr = message_in['source_addr']
-                        data = message_in['data']
-                        xbee.tx(dest_addr_long=dest_addr_long, dest_addr=dest_addr, data=data)
+        message = p.get_message()
+        if(message and message['type'] == 'message'):
+            print(message)
+            message_in = json.loads(message['data'].decode('utf-8'))
+            print(message_in)
+            if message_in:
+                dest_addr_long = unhexlify(message_in['addr_long'])
+                if message_in['mode'] == 'tx':
+                    dest_addr = message_in['source_addr']
+                    data = message_in['data']
+                    xbee.tx(dest_addr_long=dest_addr_long, dest_addr=dest_addr, data=data)
                         #xbee.tx(dest_addr_long=b'\x00\x13\xa2\x00\x40\xbf\x96\x2c',dest_addr='\x40\xb3', data=b'1')
-                    if message_in['mode'] == 'pin':
-                        command = message_in['command']
-                        parameter = message_in['parameter']
-                        xbee.remote_at(dest_addr_long= dest_addr_long, command=command, parameter=parameter)
+                if message_in['mode'] == 'pin':
+                    command = hexlify(bytes.fromhex(message_in['command']))
+                    print(dest_addr_long)
+                    print(command)
+                    parameter = bytes.fromhex(message_in['parameter'])
+                    print(parameter)
+                    xbee.remote_at(dest_addr_long= dest_addr_long, command=command, parameter=parameter)
 
 
 if __name__ == "__main__":
