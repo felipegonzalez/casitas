@@ -4,7 +4,7 @@ import json
 
 class AppNoMotionLight():
     def __init__(self):
-        self.delays = {'sala':10, 'recamara':10}
+        self.delays = {'sala':10, 'bano_visitas':10}
         self.candidates = []
         #self.device = device
 

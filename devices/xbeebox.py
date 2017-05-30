@@ -10,6 +10,10 @@ class XbeeBox(object):
         self.state = {}
         self.polling = 60
         self.last_check = 0
+        if('pins' in init):
+            self.pins = init['pins']
+        else:
+            self.pins = {}
 
         if ('children' in init.keys()):
             self.children = init['children'] #dictionary {'luzchica':'D2', ...}
@@ -23,16 +27,24 @@ class XbeeBox(object):
 
 
     def parse(self, ev_content):
-        #in this case, xbee only has motion sensor
-        data = ev_content['content'].split('\r\n')
-        print(data)
         events = []
-        for elem in data:
-            if(len(elem) > 0):
-                ev_split = elem.split(',')
-                event_type = ev_split[0]
-                value = ev_split[3]
-                events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
+        if(ev_content['type']=='rf_data'):
+            data = ev_content['content'].split('\r\n')
+            #print(data)
+            for elem in data:
+                if(len(elem) > 0):
+                    ev_split = elem.split(',')
+                    event_type = ev_split[0]
+                    value = ev_split[3]
+                    if(event_type=='pir'):
+                        event_type ='motion'
+                    events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
+        if(ev_content['type']=='samples'):
+            for elem in ev_content['content']:
+                for k in elem.keys():
+                    event_type = self.pins[k]
+                    value = elem[k]
+                    events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
         return events
 
     def turn_on(self, command, state):

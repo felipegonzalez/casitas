@@ -32,14 +32,25 @@ def monitor():
     while True:
         response = {}
         response = xbee.wait_read_frame(timeout = 0.15)
-        #print(response)
         if(len(response)>0):
+            print(response)
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
-            response['rf_data'] = response['rf_data'].decode('utf-8')
-            message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
-                'source':response['source_addr_long'], 'content':response['rf_data']})
-            r.publish('xbee-events', message)
+            print(response['source_addr_long'])
+            if('rf_data' in response.keys()):
+                response['rf_data'] = response['rf_data'].decode('utf-8')
+                message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
+                    'source':response['source_addr_long'], 'type':'rf_data',
+                    'content':response['rf_data']})
+                r.publish('xbee-events', message)
+            if('samples' in response.keys()):
+                #response['samples'] = response['rf_data'].decode('utf-8')
+                message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
+                    'source':response['source_addr_long'], 'type':'samples',
+                    'content':response['samples']})
+                r.publish('xbee-events', message)
+
+            
 
         message = p.get_message()
         if(message and message['type'] == 'message'):
