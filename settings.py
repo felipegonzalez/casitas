@@ -30,6 +30,12 @@ device_settings = {
         'addr_long':'0013a20040caaddc',
         'pins':{'dio-1':'motion'}
         },
+        'caja_bano_principal':{
+        'place':'bano_principal',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040c2833b',
+        'pins':{'dio-1':'motion'}
+        },
         #cajarecamara':{
         #'place':'recamara',
         #'device_type':'xbeebox',
@@ -41,7 +47,7 @@ device_settings = {
         'place':'home',
         'device_type':'hue',
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
-        'Downstairs bath 1':'37'},
+        'Downstairs bath 1':'37' ,'Main bath one':'57'},
         },
         'ouralarm':{
         'device_type':'alarm',
@@ -61,12 +67,15 @@ dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm}
 
 #state definition, initial
 state = {'timestamp':0}
-state['photo'] = {'sala':0, 'bano_visitas':0}
-state['min_photo'] = {'sala':100, 'bano_visitas':100}
-state['last_motion'] = {'sala':time.time(), 'bano_visitas':time.time()}
+state['photo'] = {'sala':0, 'bano_visitas':0, 'bano_principal':0}
+state['min_photo'] = {'sala':100, 'bano_visitas':100, 'bano_principal':100}
+state['last_motion'] = {'sala':time.time(), 'bano_visitas':time.time(),
+        'bano_principal':time.time()}
 state['groups_lights'] = { 
                 'sala':{'Living room foot 1':'hue', 'Living room foot 2':'hue'},
-                'bano_visitas':{'Downstairs bath 1':'hue'}}
-state['lights'] = ['Living room foot 1','Living room foot 2','Downstairs bath 1']
+                'bano_visitas':{'Downstairs bath 1':'hue'},
+                'bano_principal':{'Main bath one':'hue'}}
+state['lights'] = ['Living room foot 1','Living room foot 2','Downstairs bath 1',
+        'Main bath one']
 
 #apps_settings = ['app_motion']
