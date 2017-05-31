@@ -44,11 +44,12 @@ def monitor():
                 #try:
                 print('http://'+message_in['address']+'/state')
                 print(message_in['payload'])
-                req = requests.put('http://'+message_in['address']+'/state', 
+                try:
+                    req = requests.put('http://'+message_in['address']+'/state', 
                                     data=message_in['payload'], 
                                     timeout=0.5)
-                #except:
-                #    print('Error http request put')
+                except:
+                    print('Error http request put')
 
 
 
