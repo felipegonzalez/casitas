@@ -38,6 +38,7 @@ class XbeeBox(object):
                     value = ev_split[3]
                     if(event_type=='pir'):
                         event_type ='motion'
+                        value = int(value)==1
                     events.append({'device_name':self.name, 'event_type':event_type, 'value':value})
         if(ev_content['type']=='samples'):
             for elem in ev_content['content']:
