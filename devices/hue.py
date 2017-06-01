@@ -23,11 +23,12 @@ class HueHub(object):
         #data = json.loads(command['data']) should be done before
         if (self.children[command['value']] in state['lights']):
             state['last_motion'][self.place] = state['timestamp']
-        address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']]
-        data = json.dumps({'on':True})
-        self.state[command['value']] = 'on'
-        new_message = {'address':address, 'payload':data, 'type':'put'}
-        self.messager.publish('http-commands', json.dumps(new_message))
+        if (state['photo'][self.place] < state['min_photo']):
+            address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']]
+            data = json.dumps({'on':True})
+            self.state[command['value']] = 'on'
+            new_message = {'address':address, 'payload':data, 'type':'put'}
+            self.messager.publish('http-commands', json.dumps(new_message))
         #print('Encender hue light')
         return
    

@@ -14,7 +14,7 @@ from devices.alarm import Alarm
 conn_names = ['xbee-events']
 
 # home areas
-places = ['sala', 'bano_visitas']
+places = ['sala', 'bano_visitas', 'bano_principal']
 
 
 # devices
@@ -66,11 +66,15 @@ dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm}
 
 
 #state definition, initial
-state = {'timestamp':0}
-state['photo'] = {'sala':0, 'bano_visitas':0, 'bano_principal':0}
-state['min_photo'] = {'sala':100, 'bano_visitas':100, 'bano_principal':100}
-state['last_motion'] = {'sala':time.time(), 'bano_visitas':time.time(),
-        'bano_principal':time.time()}
+state = {'timestamp':time.time()}
+state['photo'] = {}
+state['min_photo'] = {}
+state['last_motion'] = {}
+for place in places :
+        state['photo'][place] = 0
+        state['min_photo'][place] = 200
+        state['last_motion'][place] =  0
+
 state['groups_lights'] = { 
                 'sala':{'Living room foot 1':'hue', 'Living room foot 2':'hue'},
                 'bano_visitas':{'Downstairs bath 1':'hue'},
