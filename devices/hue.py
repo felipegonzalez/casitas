@@ -7,6 +7,7 @@ class HueHub(object):
         self.ip_address= init['ip_address']
         self.name = name
         self.place = init['place']
+        self.place_lights = init['place_lights']
         self.state = {}
         self.children = init['children']
         self.messager = messager
@@ -21,10 +22,12 @@ class HueHub(object):
 
     def turn_on(self, command, state):
         #data = json.loads(command['data']) should be done before
-        if (self.children[command['value']] in state['lights']):
-            state['last_motion'][self.place] = state['timestamp']
-        if (state['photo'][self.place] < state['min_photo']):
-            address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']]
+        light_no = self.children[command['value']]
+        place = self.place_lights[command['value']]
+        #if (light_name in state['lights']):
+        state['last_motion'][place] = state['timestamp']
+        if (state['photo'][place] < state['min_photo'][place]):
+            address = self.ip_address + '/api/newdeveloper/lights/' + light_no
             data = json.dumps({'on':True})
             self.state[command['value']] = 'on'
             new_message = {'address':address, 'payload':data, 'type':'put'}

@@ -51,6 +51,7 @@ for con in conn_names:
     a = conns[con].get_message()
     print(a)
 
+print(state['groups_lights'])
 timer_print = time.time()
 
 ########### main loop ############################################
