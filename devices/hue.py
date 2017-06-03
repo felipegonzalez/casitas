@@ -13,6 +13,9 @@ class HueHub(object):
         self.messager = messager
         self.polling = 60
         self.last_check = 0
+        self.last_on = {}
+        for item in self.children:
+            self.last_on[self.children[item]] = 0
 
 
 
@@ -26,11 +29,13 @@ class HueHub(object):
         place = self.place_lights[command['value']]
         #if (light_name in state['lights']):
         state['last_motion'][place] = state['timestamp']
-        if (state['photo'][place] < state['min_photo'][place]):
+        if ((state['photo'][place] < state['min_photo'][place]) and 
+                time.time() - self.last_on[light_no] > 10):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no
             data = json.dumps({'on':True})
             self.state[command['value']] = 'on'
             new_message = {'address':address, 'payload':data, 'type':'put'}
+            self.last_on[light_no] = time.time()
             self.messager.publish('http-commands', json.dumps(new_message))
         #print('Encender hue light')
         return
@@ -46,7 +51,8 @@ class HueHub(object):
  
     def update(self, state):
         if(state['timestamp']-self.last_check > self.polling):
-            new_message = {'address':self.ip_address, 'payload':'query', 'type':'get'}
+            new_message = {'address':self.ip_address+'/api/newdeveloper/lights/',
+                 'payload':'query', 'type':'get'}
             self.messager.publish('http-commands', json.dumps(new_message))
             self.last_check = time.time()
         return

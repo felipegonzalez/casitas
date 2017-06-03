@@ -14,14 +14,21 @@ from devices.alarm import Alarm
 conn_names = ['xbee-events']
 
 # home areas
-places = ['sala', 'bano_visitas', 'bano_principal', 'cocina']
+places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
+'hall_entrada', 'recamara_principal']
+
+delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
+            'hall_entrada':30, 'recamara_principal':120}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
                 'Downstairs bath 1':'bano_visitas',
                 'Main bath one':'bano_principal',
                  'Kitchen one':'cocina',
-                 'Kitchen two':'cocina' }
+                 'Kitchen two':'cocina',
+                 'Entrance hall':'hall_entrada',
+                 'Bedroom one':'recamara_principal',
+                 'Bedroom two':'recamara_principal'}
 # devices
 device_settings = {
         'cajasala':{
@@ -33,6 +40,11 @@ device_settings = {
         'place':'cocina',
         'device_type':'xbeebox',
         'addr_long':'0013a20040bf06bd'
+        },
+        'cajarecamara':{
+        'place':'recamara_principal',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040c45639'
         },
         'caja_bano_visitas':{
         'place':'bano_visitas',
@@ -46,6 +58,13 @@ device_settings = {
         'addr_long':'0013a20040c2833b',
         'pins':{'dio-1':'motion'}
         },
+        'caja_puerta':{
+        'place':'hall_entrada',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040bef84d',
+        'pins':{'dio-1':'motion', 'dio-2':'door', 'adc-3':'photo', 'dio-0':'none',
+        'dio-12':'none', 'dio-4':'none'}
+        },
         #cajarecamara':{
         #'place':'recamara',
         #'device_type':'xbeebox',
@@ -58,7 +77,8 @@ device_settings = {
         'device_type':'hue',
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
         'Downstairs bath 1':'37' ,'Main bath one':'57' ,'Kitchen one':'42',
-        'Kitchen two':'44'},
+        'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
+        'Bedroom two':'46'},
         'place_lights':place_lights
         },
         'ouralarm':{
@@ -80,12 +100,18 @@ dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm}
 #state definition, initial
 state = {'timestamp':time.time()}
 state['photo'] = {}
+state['temperature'] = {}
+state['humidity'] = {}
 state['min_photo'] = {}
 state['last_motion'] = {}
+state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
         state['min_photo'][place] = 200
         state['last_motion'][place] =  0
+        state['humidity'][place] = 50
+        state['temperature'][place] = 20.0
+        state['motion'][place] = False
 
 state['groups_lights'] = {}
 for place in places:
@@ -100,7 +126,6 @@ for place in places:
 #                'bano_principal':{'Main bath one':'hue'}}
 
 
-state['lights'] = ['Living room foot 1','Living room foot 2','Downstairs bath 1',
-        'Main bath one']
-
+state['lights'] = place_lights.keys()
+print(state['lights'])
 #apps_settings = ['app_motion']

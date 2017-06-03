@@ -35,7 +35,7 @@ print(state['devices_state'])
 
 #create instances for apps #############
 app_motion = AppMotionLight()
-app_nomotion = AppNoMotionLight()
+app_nomotion = AppNoMotionLight(delays)
 
 
 
@@ -59,9 +59,12 @@ timer_print = time.time()
 while True:
 
 
-    if(time.time()-timer_print > 10):
+    if(time.time()-timer_print > 20):
         print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
-        print(colored(state, 'green'))
+        for item in state:
+            if(item!='devices' and item!='devices_state'):
+                print(item)
+                print(colored(state[item], 'magenta'))
         timer_print = time.time()
 
     state['timestamp'] = time.time()
@@ -73,20 +76,32 @@ while True:
     for con_name in conns.keys():
         item = conns[con_name].get_message()
         if (item and (item['type']=='message')):
-            print(item)
+            #print(item)
             message = json.loads(item['data'])
-            print(message)
+            #print(message)
             from_device = message['device_name']
-            m_parsed = devices[from_device].parse(message)
+            try:
+                m_parsed = devices[from_device].parse(message)
+            except:
+                print("Error parsing message")
+                print("From device "+ from_device)
             for m in m_parsed:
                 r.publish('events', json.dumps(m))
 
     # get event and load data
     ev = events.get_message()
     if (ev and (ev['type']=='message')):
-        print(colored(ev , 'blue'))
+        #print(colored(ev , 'blue'))
         ev_content = json.loads(ev['data'])
         state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value']
+        place = device_settings[ev_content['device_name']]['place']
+        event_type = ev_content['event_type']
+        if(event_type != 'none'):
+            if(event_type in state.keys()):
+                #print(place)
+                #print(event_type)
+                #print(ev_content['value'])
+                state[event_type][place] = ev_content['value']
         #print ev
 
     # get command and process using device class
@@ -106,13 +121,13 @@ while True:
     ### motion app
     if (ev and ev_content):
         if (app_motion.check(ev_content, state)):
-            print('Activar app luces')
+            #print('Activar app luces')
             appcomms = app_motion.activate(ev_content, state, r)
             app_messages = app_messages + appcomms
     
     ## no motion app
     if(app_nomotion.check(ev_content, state)):
-        print('Apagar por falta de movimiento')
+        #print('Apagar por falta de movimiento')
         appcoms = app_nomotion.activate(ev_content, state, r)
         app_messages = app_messages + appcoms
     ####################################################################

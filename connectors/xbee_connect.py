@@ -37,12 +37,16 @@ def monitor():
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
             print(response['source_addr_long'])
+            print(xbee_dict[response['source_addr_long']])
             if('rf_data' in response.keys()):
-                response['rf_data'] = response['rf_data'].decode('utf-8')
-                message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
-                    'source':response['source_addr_long'], 'type':'rf_data',
-                    'content':response['rf_data']})
-                r.publish('xbee-events', message)
+                try:
+                    response['rf_data'] = response['rf_data'].decode('utf-8')
+                    message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
+                        'source':response['source_addr_long'], 'type':'rf_data',
+                        'content':response['rf_data']})
+                    r.publish('xbee-events', message)
+                except:
+                    print("Error decoding xbee message")
             if('samples' in response.keys()):
                 #response['samples'] = response['rf_data'].decode('utf-8')
                 message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],
