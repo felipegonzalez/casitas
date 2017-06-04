@@ -15,10 +15,12 @@ conn_names = ['xbee-events']
 
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
-'hall_entrada', 'recamara_principal', 'pasillo_recamaras']
+'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
+        'front_door_hall', 'escaleras_patio']
 
 delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
-            'hall_entrada':30, 'recamara_principal':120, 'pasillo_recamaras':20}
+            'hall_entrada':30, 'recamara_principal':120, 'pasillo_recamaras':20,
+            'front_door_hall':60, 'escaleras_patio':60}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -29,7 +31,10 @@ place_lights = { 'Living room foot 1':'sala',
                  'Entrance hall':'hall_entrada',
                  'Bedroom one':'recamara_principal',
                  'Bedroom two':'recamara_principal',
-                 'Bedroom hall':'pasillo_recamaras'}
+                 'Bedroom hall':'pasillo_recamaras',
+                 'Front door':'front_door_hall',
+                 'Patio stairs one':'escaleras_patio',
+                 'Patio stairs two':'escaleras_patio'}
 # devices
 device_settings = {
         'cajasala':{
@@ -85,7 +90,8 @@ device_settings = {
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
         'Downstairs bath 1':'37' ,'Main bath one':'57' ,'Kitchen one':'42',
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
-        'Bedroom two':'46', 'Bedroom hall':'54'},
+        'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
+        'Patio stairs one':'52', 'Patio stairs two':'53'},
         'place_lights':place_lights
         },
         'ouralarm':{
@@ -127,6 +133,10 @@ for place in places:
                 if place_lights[elem] == place:
                         place_dict[elem] = 'hue'
         state['groups_lights'][place] = place_dict
+print(" ")
+print("Groups lights")
+print(state['groups_lights'])
+print(" ")
 #state['groups_lights'] = { 
 #                'sala':{'Living room foot 1':'hue', 'Living room foot 2':'hue'},
 #                'bano_visitas':{'Downstairs bath 1':'hue'},

@@ -29,8 +29,8 @@ class HueHub(object):
         place = self.place_lights[command['value']]
         #if (light_name in state['lights']):
         state['last_motion'][place] = state['timestamp']
-        if (int(state['photo'][place]) < state['min_photo'][place] and 
-                time.time() - self.last_on[light_no] > 10):
+        #if (int(state['photo'][place]) < state['min_photo'][place] and 
+        if (time.time() - self.last_on[light_no] > 3):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no
             data = json.dumps({'on':True})
             self.state[command['value']] = 'on'

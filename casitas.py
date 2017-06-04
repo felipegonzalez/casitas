@@ -9,6 +9,7 @@ from termcolor import colored
 #import apps
 from apps.appmotionlight import AppMotionLight 
 from apps.appnomotion import AppNoMotionLight
+from apps.appdoorlight import AppDoorLight
 
 
 # subscribe to events ###############
@@ -36,7 +37,7 @@ print(state['devices_state'])
 #create instances for apps #############
 app_motion = AppMotionLight()
 app_nomotion = AppNoMotionLight(delays)
-
+app_doorlight = AppDoorLight()
 
 
 
@@ -133,6 +134,10 @@ while True:
         #print('Apagar por falta de movimiento')
         appcoms = app_nomotion.activate(ev_content, state, r)
         app_messages = app_messages + appcoms
+    ## door light app
+    if(app_doorlight.check(ev_content, state)):
+        appcomms = app_doorlight.activate(ev_content, state, r)
+        app_messages = app_messages + appcomms
     ####################################################################
 
     ######## send commands of apps 
