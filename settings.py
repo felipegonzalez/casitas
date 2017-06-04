@@ -15,10 +15,10 @@ conn_names = ['xbee-events']
 
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
-'hall_entrada', 'recamara_principal']
+'hall_entrada', 'recamara_principal', 'pasillo_recamaras']
 
 delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
-            'hall_entrada':30, 'recamara_principal':120}
+            'hall_entrada':30, 'recamara_principal':120, 'pasillo_recamaras':20}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -28,7 +28,8 @@ place_lights = { 'Living room foot 1':'sala',
                  'Kitchen two':'cocina',
                  'Entrance hall':'hall_entrada',
                  'Bedroom one':'recamara_principal',
-                 'Bedroom two':'recamara_principal'}
+                 'Bedroom two':'recamara_principal',
+                 'Bedroom hall':'pasillo_recamaras'}
 # devices
 device_settings = {
         'cajasala':{
@@ -45,6 +46,12 @@ device_settings = {
         'place':'recamara_principal',
         'device_type':'xbeebox',
         'addr_long':'0013a20040c45639'
+        },
+        'caja_pasillo_recamaras':{
+        'place':'pasillo_recamaras',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040bf05de',
+        'pins':{'dio-4':'motion'}
         },
         'caja_bano_visitas':{
         'place':'bano_visitas',
@@ -78,7 +85,7 @@ device_settings = {
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
         'Downstairs bath 1':'37' ,'Main bath one':'57' ,'Kitchen one':'42',
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
-        'Bedroom two':'46'},
+        'Bedroom two':'46', 'Bedroom hall':'54'},
         'place_lights':place_lights
         },
         'ouralarm':{

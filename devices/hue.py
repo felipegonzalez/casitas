@@ -12,7 +12,7 @@ class HueHub(object):
         self.children = init['children']
         self.messager = messager
         self.polling = 60
-        self.last_check = 0
+        self.last_check = time.time()
         self.last_on = {}
         for item in self.children:
             self.last_on[self.children[item]] = 0
@@ -29,7 +29,7 @@ class HueHub(object):
         place = self.place_lights[command['value']]
         #if (light_name in state['lights']):
         state['last_motion'][place] = state['timestamp']
-        if ((state['photo'][place] < state['min_photo'][place]) and 
+        if (int(state['photo'][place]) < state['min_photo'][place] and 
                 time.time() - self.last_on[light_no] > 10):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no
             data = json.dumps({'on':True})

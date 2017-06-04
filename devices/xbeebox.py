@@ -9,7 +9,7 @@ class XbeeBox(object):
         self.place = init['place']
         self.state = {}
         self.polling = 60
-        self.last_check = 0
+        self.last_check = time.time()
         if('pins' in init):
             self.pins = init['pins']
         else:
@@ -27,6 +27,7 @@ class XbeeBox(object):
 
 
     def parse(self, ev_content):
+        self.last_check = time.time()
         events = []
         if(ev_content['type']=='rf_data'):
             data = ev_content['content'].split('\r\n')
