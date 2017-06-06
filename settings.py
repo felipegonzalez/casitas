@@ -16,11 +16,11 @@ conn_names = ['xbee-events']
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
-        'front_door_hall', 'escaleras_patio']
+        'front_door_hall', 'escaleras_patio','patio']
 
 delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
             'hall_entrada':30, 'recamara_principal':120, 'pasillo_recamaras':20,
-            'front_door_hall':60, 'escaleras_patio':60}
+            'front_door_hall':60, 'escaleras_patio':60, 'patio':60}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -76,6 +76,12 @@ device_settings = {
         'addr_long':'0013a20040bef84d',
         'pins':{'dio-1':'motion', 'dio-2':'door', 'adc-3':'photo', 'dio-0':'none',
         'dio-12':'none', 'dio-4':'none'}
+        },
+        'caja_goteo':{
+        'place':'patio',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040caadda',
+        'pins':{'D2':'regar'}
         },
         #cajarecamara':{
         #'place':'recamara',
