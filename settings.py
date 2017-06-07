@@ -9,7 +9,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 from devices.xbeebox import XbeeBox
 from devices.hue import HueHub
 from devices.alarm import Alarm
-
+from devices.sonos import Sonos
 # connections
 conn_names = ['xbee-events']
 
@@ -101,6 +101,11 @@ device_settings = {
         'Patio stairs one':'52', 'Patio stairs two':'53', 'Entrance table':'48'},
         'place_lights':place_lights
         },
+        'sonos':{
+        'place':'home',
+        'device_type':'sonos',
+        'children':{'Estudio':1, 'Sala de estar':2}
+        },
         'ouralarm':{
         'device_type':'alarm',
         'state':'unarmed'
@@ -114,7 +119,7 @@ for key in device_settings.keys():
 
 
 # device classes
-dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm}
+dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos}
 
 
 #state definition, initial

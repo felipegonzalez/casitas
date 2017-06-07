@@ -70,6 +70,7 @@ while True:
                 print(item)
                 print(colored(state[item], 'magenta'))
         timer_print = time.time()
+        r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
 
     state['timestamp'] = time.time()
 
