@@ -29,6 +29,7 @@ place_lights = { 'Living room foot 1':'sala',
                  'Kitchen one':'cocina',
                  'Kitchen two':'cocina',
                  'Entrance hall':'hall_entrada',
+                 'Entrance table':'hall_entrada',
                  'Bedroom one':'recamara_principal',
                  'Bedroom two':'recamara_principal',
                  'Bedroom hall':'pasillo_recamaras',
@@ -91,7 +92,7 @@ device_settings = {
         'Downstairs bath 1':'37' ,'Main bath one':'57' ,'Kitchen one':'42',
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
-        'Patio stairs one':'52', 'Patio stairs two':'53'},
+        'Patio stairs one':'52', 'Patio stairs two':'53', 'Entrance table':'48'},
         'place_lights':place_lights
         },
         'ouralarm':{
@@ -144,5 +145,6 @@ print(" ")
 
 
 state['lights'] = place_lights.keys()
+state['place_lights'] = place_lights
 print(state['lights'])
 #apps_settings = ['app_motion']

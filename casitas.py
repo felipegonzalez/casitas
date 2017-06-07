@@ -80,7 +80,7 @@ while True:
     for con_name in conns.keys():
         item = conns[con_name].get_message()
         if (item and (item['type']=='message')):
-            #print(item)
+            print(item)
             message = json.loads(item['data'])
             #print(message)
             from_device = message['device_name']

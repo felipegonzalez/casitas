@@ -11,11 +11,14 @@ class AppDoorLight():
     def activate(self, ev_content, state, r):
         devices = state['devices']
         place = devices[ev_content['device_name']].place
-        state['last_motion'][place] = state['timestamp']
-        ll = self.door_mapping[place]
+        #state['last_motion'][place] = state['timestamp']
+        a = self.door_mapping[place]
+        for ll in self.door_mapping[place]:
+            state['last_motion'][state['place_lights'][ll]] = state['timestamp']
+
         #ll = state['groups_lights'][place]
         mensajes = []
-        for dd in ll:
+        for dd in a:
             mensajes.append(json.dumps({'device_name':'hue', 'value':dd, 'command':'turn_on'}))
         return mensajes
 
@@ -29,8 +32,8 @@ class AppDoorLight():
         if ev_content:
             if(ev_content['event_type']=='door' and not(ev_content['value'])):
                 place = devices[ev_content['device_name']].place
-                #if(int(state['photo'][place]) < int(state['min_photo'][place])):
-                fire = True
+                if(int(state['photo'][place]) < int(state['min_photo'][place])):
+                    fire = True
         return fire
 
 
