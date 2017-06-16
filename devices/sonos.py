@@ -46,18 +46,19 @@ class Sonos(object):
    
     def play(self, file):
         try:
-            ####track = sonos.get_current_track_info()
+            sonos = self.zones[0]
+
+            track = sonos.get_current_track_info()
             #playlistPos = int(track['playlist_position'])-1
             #trackPos = track['position']
             #trackURI = track['uri']
 
             # This information allows us to resume services like Pandora
-            ###mediaInfo = sonos.avTransport.GetMediaInfo([('InstanceID', 0)])
+            mediaInfo = sonos.avTransport.GetMediaInfo([('InstanceID', 0)])
             #mediaURI = mediaInfo['CurrentURI']
             #mediaMeta = mediaInfo['CurrentURIMetaData']
-            ### transport_state = sonos.get_current_transport_info()['current_transport_state']
-            ### volumen = sonos.volume
-            sonos = self.zones[1]
+            transport_state = sonos.get_current_transport_info()['current_transport_state']
+            volumen = sonos.volume
             sonos.play_uri('x-file-cifs://homeserver/sonidos/' + file)
             duration_txt = sonos.get_current_track_info()['duration']
             alertDuration = int(duration_txt.split(':')[2])

@@ -19,7 +19,7 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
         'front_door_hall', 'escaleras_patio','patio']
 
 delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
-            'hall_entrada':30, 'recamara_principal':120, 'pasillo_recamaras':20,
+            'hall_entrada':30, 'recamara_principal':180, 'pasillo_recamaras':20,
             'front_door_hall':60, 'escaleras_patio':60, 'patio':60}
 
 place_lights = { 'Living room foot 1':'sala', 

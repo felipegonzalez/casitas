@@ -37,7 +37,7 @@ print(state['devices_state'])
 #create instances for apps #############
 app_motion = AppMotionLight()
 app_nomotion = AppNoMotionLight(delays)
-app_doorlight = AppDoorLight()
+app_doorlight = AppDoorLight(place_lights)
 
 
 
@@ -70,7 +70,7 @@ while True:
                 print(item)
                 print(colored(state[item], 'magenta'))
         timer_print = time.time()
-        r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
+        #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
 
     state['timestamp'] = time.time()
 

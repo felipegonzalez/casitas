@@ -36,7 +36,7 @@ def monitor():
                 try:
                     req =  requests.get('http://'+message_in['address']+'/state', 
                                     data = message_in['payload'], 
-                                    timeout = 0.5)
+                                    timeout = 0.2)
                     r.publish('http-events', req.content)
                 except:
                     print('Error http request get')
@@ -47,7 +47,7 @@ def monitor():
                 try:
                     req = requests.put('http://'+message_in['address']+'/state', 
                                     data=message_in['payload'], 
-                                    timeout=0.5)
+                                    timeout=1)
                 except:
                     print('Error http request put')
 
