@@ -10,18 +10,19 @@ from devices.xbeebox import XbeeBox
 from devices.hue import HueHub
 from devices.alarm import Alarm
 from devices.sonos import Sonos
+from devices.virtual import Virtual
 # connections
 conn_names = ['xbee-events']
 
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
-        'front_door_hall', 'escaleras_patio','patio', 'estudiof']
+        'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin']
 
 delays = {'sala':120, 'bano_visitas':120, 'bano_principal':120, 'cocina':120,
             'hall_entrada':60, 'recamara_principal':180, 'pasillo_recamaras':20,
             'front_door_hall':60, 'escaleras_patio':60, 'patio':60,
-            'estudiof':120}
+            'estudiof':120, 'jardin':60}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -41,6 +42,22 @@ place_lights = { 'Living room foot 1':'sala',
                  'Felipe Study':'estudiof'}
 # devices
 device_settings = {
+        'virtual-jardin':{
+        'place':'jardin',
+        'device_type':'virtual'
+        },
+        'virtual-patio':{
+        'place':'patio',
+        'device_type':'virtual'
+        },
+        'virtual-front_door_hall':{
+        'place':'front_door_hall',
+        'device_type':'virtual'
+        },
+        'virtual-escaleras_patio':{
+        'place':'escaleras_patio',
+        'device_type':'virtual'
+        },
         'cajasala':{
         'place':'sala',
         'device_type':'xbeebox',
@@ -129,7 +146,8 @@ for key in device_settings.keys():
 
 
 # device classes
-dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos}
+dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
+    'virtual':Virtual}
 
 
 #state definition, initial
