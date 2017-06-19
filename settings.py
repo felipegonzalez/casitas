@@ -16,16 +16,18 @@ conn_names = ['xbee-events']
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
-        'front_door_hall', 'escaleras_patio','patio']
+        'front_door_hall', 'escaleras_patio','patio', 'estudiof']
 
-delays = {'sala':60, 'bano_visitas':60, 'bano_principal':60, 'cocina':60,
-            'hall_entrada':30, 'recamara_principal':180, 'pasillo_recamaras':20,
-            'front_door_hall':60, 'escaleras_patio':60, 'patio':60}
+delays = {'sala':120, 'bano_visitas':120, 'bano_principal':120, 'cocina':120,
+            'hall_entrada':60, 'recamara_principal':180, 'pasillo_recamaras':20,
+            'front_door_hall':60, 'escaleras_patio':60, 'patio':60,
+            'estudiof':120}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
                 'Downstairs bath 1':'bano_visitas',
                 'Main bath one':'bano_principal',
+                'Main bath two':'bano_principal',
                  'Kitchen one':'cocina',
                  'Kitchen two':'cocina',
                  'Entrance hall':'hall_entrada',
@@ -35,7 +37,8 @@ place_lights = { 'Living room foot 1':'sala',
                  'Bedroom hall':'pasillo_recamaras',
                  'Front door':'front_door_hall',
                  'Patio stairs one':'escaleras_patio',
-                 'Patio stairs two':'escaleras_patio'}
+                 'Patio stairs two':'escaleras_patio',
+                 'Felipe Study':'estudiof'}
 # devices
 device_settings = {
         'cajasala':{
@@ -78,6 +81,11 @@ device_settings = {
         'pins':{'dio-1':'motion', 'dio-2':'door', 'adc-3':'photo', 'dio-0':'none',
         'dio-12':'none', 'dio-4':'none'}
         },
+        'caja_estudiof':{
+        'place':'estudiof',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040bf06d4'
+        },
         'caja_goteo':{
         'place':'patio',
         'device_type':'xbeebox',
@@ -95,10 +103,12 @@ device_settings = {
         'place':'home',
         'device_type':'hue',
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
-        'Downstairs bath 1':'37' ,'Main bath one':'57' ,'Kitchen one':'42',
+        'Downstairs bath 1':'37' ,'Main bath one':'57' ,
+        'Main bath two':'56', 'Kitchen one':'42',
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
-        'Patio stairs one':'52', 'Patio stairs two':'53', 'Entrance table':'48'},
+        'Patio stairs one':'52', 'Patio stairs two':'53', 
+        'Entrance table':'48','Felipe Study':'36'},
         'place_lights':place_lights
         },
         'sonos':{

@@ -34,9 +34,10 @@ def monitor():
             message_in = json.loads(message['data'])
             if message_in['type'] == 'get':
                 try:
-                    req =  requests.get('http://'+message_in['address']+'/state', 
+                    req =  requests.get('http://'+message_in['address']+'', 
                                     data = message_in['payload'], 
-                                    timeout = 0.2)
+                                    timeout = 0.15)
+                    print(req)
                     r.publish('http-events', req.content)
                 except:
                     print('Error http request get')
@@ -47,7 +48,8 @@ def monitor():
                 try:
                     req = requests.put('http://'+message_in['address']+'/state', 
                                     data=message_in['payload'], 
-                                    timeout=1)
+                                    timeout=0.15)
+                    print(req)
                 except:
                     print('Error http request put')
 

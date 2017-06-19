@@ -45,6 +45,7 @@ class HueHub(object):
         address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']]
         data = json.dumps({'on':False})    
         self.state[command['value']] = 'off'
+        print(self.state)
         new_message = {'address':address, 'payload':data, 'type':'put'}
         self.messager.publish('http-commands', json.dumps(new_message))
         #print('Apagar hue light')
@@ -53,7 +54,7 @@ class HueHub(object):
     def update(self, state):
         if(state['timestamp']-self.last_check > self.polling):
             new_message = {'address':self.ip_address+'/api/newdeveloper/lights/',
-                 'payload':'query', 'type':'get'}
+                 'payload':'', 'type':'get'}
             self.messager.publish('http-commands', json.dumps(new_message))
             self.last_check = time.time()
         return

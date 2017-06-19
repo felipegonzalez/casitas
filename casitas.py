@@ -63,8 +63,9 @@ while True:
     if(time.time()-timer_print > 20):
         print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
         for dev in state['devices']:
-            print(dev)
-            print(round(time.time() - state['devices'][dev].last_check, 1))
+            print("")
+            #print(dev)
+            #print(round(time.time() - state['devices'][dev].last_check, 1))
         for item in state:
             if(item!='devices' and item!='devices_state' and item!='groups_lights'):
                 print(item)
@@ -81,7 +82,7 @@ while True:
     for con_name in conns.keys():
         item = conns[con_name].get_message()
         if (item and (item['type']=='message')):
-            print(item)
+            #print(item)
             message = json.loads(item['data'])
             #print(message)
             from_device = message['device_name']
