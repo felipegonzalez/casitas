@@ -107,7 +107,7 @@ device_settings = {
         'place':'patio',
         'device_type':'xbeebox',
         'addr_long':'0013a20040caadda',
-        'pins':{'D2':'regar'}
+        'children':{'regar':'D2'}
         },
         #cajarecamara':{
         #'place':'recamara',

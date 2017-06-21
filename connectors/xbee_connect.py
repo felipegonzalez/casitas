@@ -38,6 +38,7 @@ def monitor():
             response['source_addr'] = response['source_addr'].hex()
             print(response['source_addr_long'])
             print(xbee_dict[response['source_addr_long']])
+            print("")
             if('rf_data' in response.keys()):
                 try:
                     response['rf_data'] = response['rf_data'].decode('utf-8')
@@ -47,6 +48,7 @@ def monitor():
                     r.publish('xbee-events', message)
                 except:
                     print("Error decoding xbee message")
+                    sys.exit("Stopping")
             if('samples' in response.keys()):
                 #response['samples'] = response['rf_data'].decode('utf-8')
                 message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],

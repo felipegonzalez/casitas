@@ -50,20 +50,20 @@ class XbeeBox(object):
         return events
 
     def turn_on(self, command, state):
-        #data = json.loads(command['data']) should be done before
+        #command = json.loads(command['data']) should be done before
         if (self.children[command['value']] in state['lights']):
             state['last_motion'][self.place] = state['timestamp']
-        new_message = {'addr_long': self.addr_long, 'command':self.children[command['value']], 
-                       'parameter':'05', 'mode':'pin'}
+        new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
+                       "parameter":"05", "mode":"pin"}
         self.state[command['value']] = 'on'
-        self.messager.publish('xbee-commands', new_message)
+        self.messager.publish('xbee-commands', json.dumps(new_message))
         print('Encender xbee')
         return
         
     def turn_off(self, command, state):
-        #data = json.loads(command['data']) should be done before
-        new_message = {'addr_long': self.addr_long, 'command':self.children[command['value']], 
-                       'parameter':'04', 'mode':'pin'}
+        #command = json.loads(command['data']) should be done before
+        new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
+                       "parameter":"04", "mode":"pin"}
         self.state[command['value']] = 'off'
         self.messager.publish('xbee-commands', json.dumps(new_message))
         print('Apagar xbee')
