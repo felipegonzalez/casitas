@@ -9,7 +9,6 @@ class AppMotionLight():
     def activate(self, ev_content, state, r):
         devices = state['devices']
         place = devices[ev_content['device_name']].place
-        state['last_motion'][place] = state['timestamp']
         ll = state['groups_lights'][place]
         mensajes = []
         for dd in ll.keys():
@@ -26,6 +25,7 @@ class AppMotionLight():
         if ev_content:
             if(ev_content['event_type']=='motion' and ev_content['value']):
                 place = devices[ev_content['device_name']].place
+                state['last_motion'][place] = state['timestamp']
                 if(int(state['photo'][place]) < int(state['min_photo'][place])):
                     fire = True
         return fire
