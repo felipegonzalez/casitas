@@ -11,7 +11,6 @@ from apps.appmotionlight import AppMotionLight
 from apps.appnomotion import AppNoMotionLight
 from apps.appdoorlight import AppDoorLight
 
-
 # subscribe to events ###############
 events = r.pubsub()
 events.subscribe('events')
@@ -38,7 +37,6 @@ print(state['devices_state'])
 app_motion = AppMotionLight()
 app_nomotion = AppNoMotionLight(delays)
 app_doorlight = AppDoorLight(place_lights)
-
 
 
 #subscribe to connections #############
@@ -135,12 +133,13 @@ while True:
     ## no motion app
     if(app_nomotion.check(ev_content, state)):
         #print('Apagar por falta de movimiento')
-        appcoms = app_nomotion.activate(ev_content, state, r)
-        app_messages = app_messages + appcoms
+        appcomms = app_nomotion.activate(ev_content, state, r)
+        app_messages = app_messages + appcomms
     ## door light app
     if(app_doorlight.check(ev_content, state)):
         appcomms = app_doorlight.activate(ev_content, state, r)
         app_messages = app_messages + appcomms
+    ## timer app
     ####################################################################
 
     ######## send commands of apps 

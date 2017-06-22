@@ -8,6 +8,7 @@ import cherrypy
 import os, sys
 sys.path.insert(0,os.path.pardir)
 from settings import r 
+#from casitas import app_timer
 
 cherrypy.server.socket_host = '0.0.0.0'
 
@@ -84,6 +85,14 @@ class control(object):
             r.publish('commands', json.dumps({"device_name":"caja_goteo",
                 "command":"turn_on", "value":"regar"
                 }))
+            message_off =json.dumps({'device_name':'caja_goteo',
+                'command':'turn_off', 'value':'regar'
+                })
+            r.publish('commands', json.dumps({"device_name":"timer_1",
+                "command":"add_timer", "interval":5, 
+                "value":message_off}))
+            #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
+            #    "command":"turn_off", "value":"regar"})))
         if(sw=='0'):
             r.publish('commands', json.dumps({'device_name':'caja_goteo',
                 'command':'turn_off', 'value':'regar'

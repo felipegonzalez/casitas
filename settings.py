@@ -11,6 +11,7 @@ from devices.hue import HueHub
 from devices.alarm import Alarm
 from devices.sonos import Sonos
 from devices.virtual import Virtual
+from devices.timer import Timer
 # connections
 conn_names = ['xbee-events']
 
@@ -136,6 +137,11 @@ device_settings = {
         'ouralarm':{
         'device_type':'alarm',
         'state':'unarmed'
+        },
+        'timer_1':{
+        'device_type':'timer',
+        'place':'home',
+
         }
 }
 #xbee_dict
@@ -147,7 +153,7 @@ for key in device_settings.keys():
 
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
-    'virtual':Virtual}
+    'virtual':Virtual, 'timer':Timer}
 
 
 #state definition, initial
