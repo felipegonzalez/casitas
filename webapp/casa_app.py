@@ -79,7 +79,7 @@ class control(object):
 
     @cherrypy.expose
     def regar(self, sw):
-        mensaje = 'Prueba'
+        mensaje = 'Sistema de goteo' + str(sw)
         if(sw=='1'):
             r.publish('commands', json.dumps({"device_name":"caja_goteo",
                 "command":"turn_on", "value":"regar"
@@ -104,18 +104,25 @@ class infoBasica(object):
     exposed = True
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, resp=''):
+        lugares = ['recamara_principal', 'sala', 'estudiof']
+        out = []
+        for lugar in lugares:
+            temp = r.hget('temperature', lugar).decode('utf-8')
+            humd = r.hget('humidity', lugar).decode('utf-8')
+            out.append((lugar, 'temperatura', temp))
+            out.append((lugar, 'humedad', humd))
         # con2 = lite.connect('/Volumes/mmshared/bdatos/ultimas.db')
         # with con2:
         #     cur = con2.cursor()
         #     commandx = "SELECT timestamp, medicion, valor from Status WHERE lugar = 'global' ORDER BY medicion" # OR (lugar='tv' AND medicion='temperature') "
         #     #commandx = "SELECT timestamp,medicion,valor,lugar from Status  ORDER BY lugar, medicion "
         #     res = cur.execute(commandx)
-        # tabla = HTML.table(res).split('\n')
-        # tabla2 = " ".join(tabla[1:(len(tabla)-1)])
-        # tabla3 =  "<table class='table table-striped lead'>"+tabla2+"</table>"
+        tabla = HTML.table(out).split('\n')
+        tabla2 = " ".join(tabla[1:(len(tabla)-1)])
+        tabla3 =  "<table class='table table-striped lead'>"+tabla2+"</table>"
         # con2.close()
         # return tabla3
-        return "Test"
+        return tabla3
 
 
 

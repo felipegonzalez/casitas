@@ -4,7 +4,7 @@ from settings import *
 import json
 import time
 from termcolor import colored
-
+import logdata
 
 #import apps
 from apps.appmotionlight import AppMotionLight 
@@ -70,6 +70,7 @@ while True:
             if(item!='devices' and item!='devices_state' and item!='groups_lights'):
                 print(item)
                 print(colored(state[item], 'magenta'))
+        logdata.log(state,r)
         timer_print = time.time()
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
 
