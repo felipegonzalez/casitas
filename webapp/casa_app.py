@@ -89,7 +89,7 @@ class control(object):
                 'command':'turn_off', 'value':'regar'
                 })
             r.publish('commands', json.dumps({"device_name":"timer_1",
-                "command":"add_timer", "interval":5, 
+                "command":"add_timer", "interval":60*10, 
                 "value":message_off}))
             #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
             #    "command":"turn_off", "value":"regar"})))
@@ -118,8 +118,12 @@ class infoBasica(object):
         for lugar in lugares:
             temp = r.hget('temperature', lugar).decode('utf-8')
             humd = r.hget('humidity', lugar).decode('utf-8')
+            
             out.append((lugar, 'temperatura', temp))
             out.append((lugar, 'humedad', humd))
+            
+        riego = r.get('riego').decode('utf8')
+        out.append(('', 'riego', riego))
         # con2 = lite.connect('/Volumes/mmshared/bdatos/ultimas.db')
         # with con2:
         #     cur = con2.cursor()

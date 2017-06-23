@@ -20,10 +20,10 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin']
 
-delays = {'sala':120, 'bano_visitas':120, 'bano_principal':120, 'cocina':120,
-            'hall_entrada':60, 'recamara_principal':180, 'pasillo_recamaras':20,
-            'front_door_hall':60, 'escaleras_patio':60, 'patio':60,
-            'estudiof':120, 'jardin':60}
+delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
+            'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
+            'front_door_hall':60, 'escaleras_patio':60, 'patio':120,
+            'estudiof':120, 'jardin':80}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -172,6 +172,7 @@ for place in places :
         state['temperature'][place] = 0.0
         state['motion'][place] = False
 
+
 state['groups_lights'] = {}
 for place in places:
         place_dict = {}
@@ -180,8 +181,8 @@ for place in places:
                         place_dict[elem] = 'hue'
         state['groups_lights'][place] = place_dict
 print(" ")
-print("Groups lights")
-print(state['groups_lights'])
+#print("Groups lights")
+#print(state['groups_lights'])
 print(" ")
 #state['groups_lights'] = { 
 #                'sala':{'Living room foot 1':'hue', 'Living room foot 2':'hue'},
@@ -191,5 +192,5 @@ print(" ")
 
 state['lights'] = place_lights.keys()
 state['place_lights'] = place_lights
-print(state['lights'])
+#print(state['lights'])
 #apps_settings = ['app_motion']

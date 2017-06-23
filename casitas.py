@@ -31,7 +31,7 @@ state['devices'] = devices
 state['devices_state'] = {}
 for dev_name in device_settings.keys():
     state['devices_state'][dev_name] = {}
-print(state['devices_state'])
+#print(state['devices_state'])
 
 #create instances for apps #############
 app_motion = AppMotionLight()
@@ -50,7 +50,7 @@ for con in conn_names:
     a = conns[con].get_message()
     print(a)
 
-print(state['groups_lights'])
+#print(state['groups_lights'])
 timer_print = time.time()
 
 ########### main loop ############################################
@@ -68,9 +68,10 @@ while True:
             if(item!='devices' and item!='devices_state' and item!='groups_lights'):
                 print(item)
                 print(colored(state[item], 'magenta'))
-        logdata.log(state,r)
         timer_print = time.time()
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
+    if(time.time()-timer_print > 3):
+       logdata.log(state,r)
 
     state['timestamp'] = time.time()
 
