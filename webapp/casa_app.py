@@ -20,14 +20,18 @@ class control(object):
         return open('index_main.html')
 
 
-    #@cherrypy.expose
-    #def autoluz(self):
+    @cherrypy.expose
+    def autoluz(self):
+        message_say =json.dumps({'device_name':'sonos',
+            'command':'say', 'value':'Auto luces'
+            })
+        r.publish('commands', message_say)
         #con = lite.connect('/Volumes/mmshared/bdatos/comandos.db')
         #with con:
         #    cur = con.cursor()
         #    commandx = "INSERT INTO pendientes VALUES('auto_luces','0')"
         #    cur.execute(commandx)
-        #return 'Auto luces' 
+        return 'Auto luces' 
 
 
 
@@ -85,6 +89,8 @@ class control(object):
             r.publish('commands', json.dumps({"device_name":"caja_goteo",
                 "command":"turn_on", "value":"regar"
                 }))
+            r.publish('commands', json.dumps({"device_name":"sonos",
+                "command":"say", "value":"Regando ahora"}))
             message_off =json.dumps({'device_name':'caja_goteo',
                 'command':'turn_off', 'value':'regar'
                 })
@@ -96,7 +102,9 @@ class control(object):
         if(sw=='0'):
             r.publish('commands', json.dumps({'device_name':'caja_goteo',
                 'command':'turn_off', 'value':'regar'
-                }))  
+                }))
+            r.publish('commands', json.dumps({"device_name":"sonos",
+                "command":"say", "value":"Riego apagado"}))  
         # con = lite.connect('/Volumes/mmshared/bdatos/comandos.db')
         # with con:
         #     cur = con.cursor()
@@ -113,17 +121,24 @@ class infoBasica(object):
     exposed = True
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, resp=''):
-        lugares = ['recamara_principal', 'sala', 'estudiof']
+        lugares = ['recamara_principal', 'sala', 'estudiof','cocina',
+            'hall_entrada', 'patio']
         out = []
         for lugar in lugares:
             temp = r.hget('temperature', lugar).decode('utf-8')
+            if(float(temp) != 0):
+                out.append((lugar, 'Temperatura', temp))
+        for lugar in lugares:
             humd = r.hget('humidity', lugar).decode('utf-8')
-            
-            out.append((lugar, 'temperatura', temp))
-            out.append((lugar, 'humedad', humd))
+            if(float(humd) != 0):
+                out.append((lugar, 'Humedad', humd))
+        for lugar in lugares:
+            motion = r.hget('motion', lugar).decode('utf-8')
+            if(motion=='True'):
+                out.append((lugar, 'Movimiento', motion))
             
         riego = r.get('riego').decode('utf8')
-        out.append(('', 'riego', riego))
+        out.append(('patio', 'Riego por goteo', riego))
         # con2 = lite.connect('/Volumes/mmshared/bdatos/ultimas.db')
         # with con2:
         #     cur = con2.cursor()
