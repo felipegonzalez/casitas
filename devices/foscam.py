@@ -17,7 +17,8 @@ class FosCam(object):
         self.port = init['port']
         self.user = init['user']
         self.password = init['password']
-        self.get_address = 'http://' + self.ip_address + ':'+ self.port + '/cgi-bin/CGIProxy.fcgi'
+        self.place = init['place']
+        self.get_address = self.ip_address + ':'+ self.port + '/cgi-bin/CGIProxy.fcgi'
         self.basic_payload = {'usr':self.user,'pwd':self.password}
         #self.state = self.get_state()
         #self.last_on = {}
@@ -25,16 +26,21 @@ class FosCam(object):
         #    self.last_on[self.children[item]] = 0
 
     def parse(self, message):
-        parsed_m = ''
+        message_p = (message)['data']
+        out_dict = xmltodict.parse(message_p)['CGI_Result']
+        motion = out_dict['motionDetectAlarm'] == '2'
+        self.state = out_dict
+        print(out_dict)
+        parsed_m = [{'device_name':self.name, 'event_type':'motion','value':motion}]
         return parsed_m
 
     def get_state(self):
         pars = self.basic_payload
         pars['cmd'] = 'getDevState'
         new_message = {'device_name':self.name,
-                'address':self.get_address, 'params':pars,
+                'address':self.get_address, 'pars':pars,
                  'payload':'', 'type':'get'}
-        self.messager.publish('http-events', json.dumps(new_message))
+        self.messager.publish('http-commands', json.dumps(new_message))
         #req = requests.get(self.get_address, params = pars, timeout = 0.1)
         #out_dict = xmltodict.parse(req.content)['CGI_Result']
         #print(out_dict)
@@ -50,11 +56,13 @@ class FosCam(object):
             
 
     def update(self, global_state):
-        # if(global_state['timestamp']-self.last_check > self.polling):
-        #     self.state = self.get_state()
-        #     if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] == '2'):
-        #         global_state['alarm_cam'] = True
+        if(global_state['timestamp']-self.last_check > self.polling):
+            self.get_state()
+            if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] == '2'):
+                global_state['alarm_cam'] = True
+            if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] != '2'):
+                global_state['alarm_cam'] = False
         #     else:
         #         global_state['alarm_cam'] = False
-        #     self.last_check = time.time()
+            self.last_check = time.time()
         return

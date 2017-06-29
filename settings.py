@@ -19,7 +19,7 @@ dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
     'virtual':Virtual, 'timer':Timer, 'foscam':FosCam}
 
 # connections
-conn_names = ['xbee-events']
+conn_names = ['xbee-events', 'http-events']
 
 # home areas
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
@@ -162,9 +162,12 @@ xbee_dict = {}
 for key in device_settings.keys():
         if(device_settings[key]['device_type'] == 'xbeebox'):
                 xbee_dict[device_settings[key]['addr_long']] = key
+ip_dict = {}
+for key in device_settings.keys():
+        if('ip_address' in device_settings[key].keys()):
+                ip_dict[device_settings[key]['ip_address']] = key
 
-
-
+print(ip_dict)
 
 
 #state definition, initial

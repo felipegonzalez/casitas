@@ -74,7 +74,9 @@ while True:
                 print(item)
                 print(colored(state[item], 'magenta'))
         timer_print = time.time()
-        #print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
+        print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
+        if(state['alarm_cam']):
+            r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Movimiento cámara', 'command':'say'}))
         print(colored('Delta max :' + str(max_time), 'green'))
         max_time = 0
 
@@ -93,13 +95,15 @@ while True:
         if (item and (item['type']=='message')):
             #print(item)
             message = json.loads(item['data'])
+            #print('Mensaje:')
             #print(message)
             from_device = message['device_name']
             try:
                 m_parsed = devices[from_device].parse(message)
-            except:
+            except Exception as ex:
                 print("Error parsing message")
                 print("From device "+ from_device)
+                print(ex)
             for m in m_parsed:
                 r.publish('events', json.dumps(m))
 
