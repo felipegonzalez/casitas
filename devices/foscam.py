@@ -30,7 +30,7 @@ class FosCam(object):
         out_dict = xmltodict.parse(message_p)['CGI_Result']
         motion = out_dict['motionDetectAlarm'] == '2'
         self.state = out_dict
-        print(out_dict)
+        #print(out_dict)
         parsed_m = [{'device_name':self.name, 'event_type':'motion','value':motion}]
         return parsed_m
 

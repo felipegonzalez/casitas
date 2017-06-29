@@ -14,13 +14,13 @@ import json
 
 
 def process_response(session, response):
-    print("Calling process_response")
-    print(response) 
+    #print("Calling process_response")
+    #print(response) 
     data = response.content
     ip_addr = str(urlparse(response.url).hostname)
     new_message = json.dumps({'device_name':ip_dict[ip_addr], 
         'ip_addr':ip_addr, 'data':data.decode('utf-8')})
-    print(new_message)
+    #print(new_message)
     r.publish('http-events', new_message)
     return
 
@@ -40,12 +40,9 @@ def monitor():
     session = FuturesSession(max_workers=10)
 
     while True:
-        #response = xbee.wait_read_frame(timeout=0.10)
-        #message = json.dumps({'type':'xbee', 'source':response['dest_addr_long'], 'content':response})
-
         message = command_sub.get_message()        
         if (message and message['type']=='message'):
-            print(message['data'])
+            #print(message['data'])
             message_in = json.loads(message['data'])
             device_name = message_in['device_name']
             if message_in['type'] == 'get':
@@ -59,8 +56,8 @@ def monitor():
                     print(format(ex))
             if message_in['type']=='put':
                 #try:
-                print('http://'+message_in['address'])
-                print(message_in['payload'])
+                #print('http://'+message_in['address'])
+                #print(message_in['payload'])
                 try:
                     req = session.put('http://'+message_in['address'], 
                                     data=message_in['payload'], 
