@@ -76,7 +76,8 @@ while True:
         timer_print = time.time()
         print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
         if(state['alarm_cam']):
-            r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Movimiento cámara', 'command':'say'}))
+            pass
+            #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Movimiento cámara', 'command':'say'}))
         print(colored('Delta max :' + str(max_time), 'green'))
         print(colored('Outside: ', 'blue'))
         print(state['devices_state']['estacion_meteo'])

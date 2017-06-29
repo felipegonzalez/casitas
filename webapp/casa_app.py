@@ -122,7 +122,7 @@ class infoBasica(object):
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, resp=''):
         lugares = ['recamara_principal', 'sala', 'estudiof','cocina',
-            'hall_entrada', 'patio']
+            'hall_entrada', 'patio', 'exterior']
         out = []
         for lugar in lugares:
             temp = r.hget('temperature', lugar).decode('utf-8')
