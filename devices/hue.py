@@ -21,6 +21,7 @@ class HueHub(object):
 
     def parse(self, message):
         # deal with gets from states
+        parsed_m = ''
         return parsed_m
 
     def turn_on(self, command, state):
@@ -56,7 +57,8 @@ class HueHub(object):
         if(state['timestamp']-self.last_check > self.polling):
             new_message = {'device_name':self.name,
                 'address':self.ip_address+'/api/newdeveloper/lights/',
-                 'payload':'', 'type':'get'}
+                'params':'',
+                'payload':'', 'type':'get'}
             self.messager.publish('http-commands', json.dumps(new_message))
             self.last_check = time.time()
         return

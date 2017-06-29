@@ -39,10 +39,12 @@ def monitor():
         if (message and message['type']=='message'):
             print(message['data'])
             message_in = json.loads(message['data'])
+            device_name = message_in['device_name']
             if message_in['type'] == 'get':
                 try:
                     req =  session.get('http://'+message_in['address']+'', 
                                     data = message_in['payload'], 
+                                    params = message_in['pars']
                                     background_callback =process_response)
                 except:
                     print('Error http request get')

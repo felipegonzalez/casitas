@@ -29,6 +29,7 @@ class Sonos(object):
 
     def parse(self, message):
         # deal with gets from states
+        parsed_m = ''
         return parsed_m
 
     def say(self, command, state):
@@ -49,9 +50,9 @@ class Sonos(object):
             sonos = self.zones[0]
 
             track = sonos.get_current_track_info()
-            #playlistPos = int(track['playlist_position'])-1
-            #trackPos = track['position']
-            #trackURI = track['uri']
+            playlistPos = int(track['playlist_position'])-1
+            trackPos = track['position']
+            trackURI = track['uri']
 
             # This information allows us to resume services like Pandora
             mediaInfo = sonos.avTransport.GetMediaInfo([('InstanceID', 0)])

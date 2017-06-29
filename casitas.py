@@ -74,7 +74,7 @@ while True:
                 print(item)
                 print(colored(state[item], 'magenta'))
         timer_print = time.time()
-        print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
+        #print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
         print(colored('Delta max :' + str(max_time), 'green'))
         max_time = 0
 
