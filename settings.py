@@ -12,6 +12,12 @@ from devices.alarm import Alarm
 from devices.sonos import Sonos
 from devices.virtual import Virtual
 from devices.timer import Timer
+from devices.foscam import FosCam
+
+# device classes
+dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
+    'virtual':Virtual, 'timer':Timer, 'foscam':FosCam}
+
 # connections
 conn_names = ['xbee-events']
 
@@ -141,7 +147,14 @@ device_settings = {
         'timer_1':{
         'device_type':'timer',
         'place':'home',
-
+        },
+        'cam_entrada':{
+        'device_type':'foscam',
+        'place':'hall_entrada',
+        'ip_address':'192.168.100.220',
+        'port':'88',
+        'user':'felipe',
+        'password':'valqui1'
         }
 }
 #xbee_dict
@@ -151,9 +164,7 @@ for key in device_settings.keys():
                 xbee_dict[device_settings[key]['addr_long']] = key
 
 
-# device classes
-dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
-    'virtual':Virtual, 'timer':Timer}
+
 
 
 #state definition, initial

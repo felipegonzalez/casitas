@@ -33,7 +33,7 @@ class HueHub(object):
         #if (time.time() - self.last_on[light_no] > 1):
         #if(self.state[command['value']]=='off'):
         if(True):
-            address = self.ip_address + '/api/newdeveloper/lights/' + light_no
+            address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
             data = json.dumps({'on':True})
             self.state[command['value']] = 'on'
             new_message = {'address':address, 'payload':data, 'type':'put'}
@@ -43,7 +43,7 @@ class HueHub(object):
         return
    
     def turn_off(self, command, state):
-        address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']]
+        address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
         data = json.dumps({'on':False})    
         self.state[command['value']] = 'off'
         print(self.state)
@@ -54,7 +54,8 @@ class HueHub(object):
  
     def update(self, state):
         if(state['timestamp']-self.last_check > self.polling):
-            new_message = {'address':self.ip_address+'/api/newdeveloper/lights/',
+            new_message = {'device_name':self.name,
+                'address':self.ip_address+'/api/newdeveloper/lights/',
                  'payload':'', 'type':'get'}
             self.messager.publish('http-commands', json.dumps(new_message))
             self.last_check = time.time()

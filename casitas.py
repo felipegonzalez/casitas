@@ -54,12 +54,17 @@ for con in conn_names:
 timer_print = time.time()
 
 ########### main loop ############################################
-
+delta_time = 0
+initial_time=time.time()
+max_time = 0
 while True:
+    delta_time = time.time() - initial_time
+    if(delta_time > max_time):
+        max_time = delta_time
+    initial_time = time.time()
 
-
-    if(time.time()-timer_print > 20):
-        print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
+    if(time.time()-timer_print > 10):
+        #print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
         for dev in state['devices']:
             print("")
             #print(dev)
@@ -69,6 +74,10 @@ while True:
                 print(item)
                 print(colored(state[item], 'magenta'))
         timer_print = time.time()
+        print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
+        print(colored('Delta max :' + str(max_time), 'green'))
+        max_time = 0
+
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
     if(time.time()-timer_print > 3):
        logdata.log(state,r)

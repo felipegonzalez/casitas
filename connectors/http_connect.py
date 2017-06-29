@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import requests
+#import grequests
+from requests_futures.sessions import FuturesSession
 import logging
 import logging.handlers
 import os, sys
@@ -9,12 +10,15 @@ from settings import r
 import json
 
 
-
+def process_response(session, response):
+    print("Calling process_response")
+    print(response) 
+    r.publish('http-events', response.content)
 
 
 def monitor():
-    p = r.pubsub()
-    p.subscribe('http-commands')
+    command_sub = r.pubsub()
+    command_sub.subscribe('http-commands')
     #print("Activar x coordinator...")
     #try:
     #    serialConnection = serial.Serial( SERIAL_PORT, 9600,timeout=0.15)
@@ -24,32 +28,32 @@ def monitor():
     #    logging.warning('Error serial/xbee')
     #    print "Error serial/xbee"
     print('Iniciar ciclo')
+
+    session = FuturesSession(max_workers=10)
+
     while True:
         #response = xbee.wait_read_frame(timeout=0.10)
         #message = json.dumps({'type':'xbee', 'source':response['dest_addr_long'], 'content':response})
 
-        message = p.get_message()        
+        message = command_sub.get_message()        
         if (message and message['type']=='message'):
             print(message['data'])
             message_in = json.loads(message['data'])
             if message_in['type'] == 'get':
                 try:
-                    req =  requests.get('http://'+message_in['address']+'', 
+                    req =  session.get('http://'+message_in['address']+'', 
                                     data = message_in['payload'], 
-                                    timeout = 0.15)
-                    print(req)
-                    r.publish('http-events', req.content)
+                                    background_callback =process_response)
                 except:
                     print('Error http request get')
             if message_in['type']=='put':
                 #try:
-                print('http://'+message_in['address']+'/state')
+                print('http://'+message_in['address'])
                 print(message_in['payload'])
                 try:
-                    req = requests.put('http://'+message_in['address']+'/state', 
+                    req = session.put('http://'+message_in['address'], 
                                     data=message_in['payload'], 
-                                    timeout=0.15)
-                    print(req)
+                                    background_callback=process_response)
                 except:
                     print('Error http request put')
 
