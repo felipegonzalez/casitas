@@ -8,10 +8,15 @@ class Sonos(object):
 
     def __init__(self, name, init, messager):
         self.name = name
+        self.pref_zone = init['children']['1']
         sonos_list = soco.discover()
         zones = []
         while(len(sonos_list) > 0):
-            zones.append(sonos_list.pop())
+            player = sonos_list.pop()
+            zones.append(player)
+            if(player.player_name == self.pref_zone):
+                self.sonos = player
+
         print(zones[0].player_name)
         print(zones[1].player_name)
         self.zones = zones
@@ -47,21 +52,21 @@ class Sonos(object):
    
     def play(self, file):
         try:
-            sonos = self.zones[0]
+            #sonos = self.zones[0]
 
-            track = sonos.get_current_track_info()
+            track = self.sonos.get_current_track_info()
             playlistPos = int(track['playlist_position'])-1
             trackPos = track['position']
             trackURI = track['uri']
 
             # This information allows us to resume services like Pandora
-            mediaInfo = sonos.avTransport.GetMediaInfo([('InstanceID', 0)])
+            mediaInfo = self.sonos.avTransport.GetMediaInfo([('InstanceID', 0)])
             #mediaURI = mediaInfo['CurrentURI']
             #mediaMeta = mediaInfo['CurrentURIMetaData']
-            transport_state = sonos.get_current_transport_info()['current_transport_state']
-            volumen = sonos.volume
-            sonos.play_uri('x-file-cifs://homeserver/sonidos/' + file)
-            duration_txt = sonos.get_current_track_info()['duration']
+            transport_state = self.sonos.get_current_transport_info()['current_transport_state']
+            volumen = self.sonos.volume
+            self.sonos.play_uri('x-file-cifs://homeserver/sonidos/' + file)
+            duration_txt = self.sonos.get_current_track_info()['duration']
             alertDuration = int(duration_txt.split(':')[2])
             #sleepTime=2
             #time.sleep(sleepTime)

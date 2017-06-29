@@ -138,7 +138,7 @@ device_settings = {
         'sonos':{
         'place':'home',
         'device_type':'sonos',
-        'children':{'Estudio':1, 'Sala de estar':2}
+        'children':{'1':'Sala de estar', '2':'Estudio'}
         },
         'ouralarm':{
         'device_type':'alarm',
