@@ -13,10 +13,11 @@ from devices.sonos import Sonos
 from devices.virtual import Virtual
 from devices.timer import Timer
 from devices.foscam import FosCam
+from devices.weather_station import WeatherStation
 
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
-    'virtual':Virtual, 'timer':Timer, 'foscam':FosCam}
+    'virtual':Virtual, 'timer':Timer, 'foscam':FosCam ,'meteo':WeatherStation}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -155,6 +156,11 @@ device_settings = {
         'port':'88',
         'user':'felipe',
         'password':'valqui1'
+        },
+        'estacion_meteo':{
+        'device_type':'meteo',
+        'place':'home',
+        'ip_address':'estacionyun.local'
         }
 }
 #xbee_dict

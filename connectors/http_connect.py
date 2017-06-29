@@ -15,7 +15,7 @@ import json
 
 def process_response(session, response):
     #print("Calling process_response")
-    #print(response) 
+    print(response.content) 
     data = response.content
     ip_addr = str(urlparse(response.url).hostname)
     new_message = json.dumps({'device_name':ip_dict[ip_addr], 
@@ -46,6 +46,7 @@ def monitor():
             message_in = json.loads(message['data'])
             device_name = message_in['device_name']
             if message_in['type'] == 'get':
+                #print(message_in)
                 try:
                     req =  session.get('http://'+message_in['address']+'', 
                                     #data = message_in['payload'], 

@@ -78,6 +78,8 @@ while True:
         if(state['alarm_cam']):
             r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Movimiento cámara', 'command':'say'}))
         print(colored('Delta max :' + str(max_time), 'green'))
+        print(colored('Outside: ', 'blue'))
+        print(state['devices_state']['estacion_meteo'])
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
@@ -104,6 +106,7 @@ while True:
                 print("Error parsing message")
                 print("From device "+ from_device)
                 print(ex)
+                raise
             for m in m_parsed:
                 r.publish('events', json.dumps(m))
 
