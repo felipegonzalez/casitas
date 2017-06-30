@@ -10,9 +10,16 @@ class HueHub(object):
         self.place_lights = init['place_lights']
         self.state = {}
         self.children = init['children']
+        self.light_names = {}
+        for k in self.children.keys() :
+            self.light_names[self.children[k]] = k
+        for k in self.children.keys():
+            self.state[k] = ''
+        print(self.light_names)
+        print(self.state)
         self.messager = messager
-        self.polling = 60
-        self.last_check = time.time()
+        self.polling = 30
+        self.last_check = 0
         self.last_on = {}
         for item in self.children:
             self.last_on[self.children[item]] = 0
@@ -21,7 +28,18 @@ class HueHub(object):
 
     def parse(self, message):
         # deal with gets from states
-        parsed_m = ''
+        message_p = json.loads(message['data'])
+        parsed_m = []
+        #print(message_p)
+        if(isinstance(message_p, dict)):
+            for light_no in message_p.keys():
+                if(message_p[light_no]['state']['on']):
+                    if(light_no in self.light_names.keys()):
+                        self.state[self.light_names[light_no]] = 'on'
+                else:
+                    if(light_no in self.light_names.keys()):
+                        self.state[self.light_names[light_no]] = 'off'
+            print(self.state)
         return parsed_m
 
     def turn_on(self, command, state):
@@ -32,8 +50,7 @@ class HueHub(object):
         #state['last_motion'][place] = state['timestamp']
         #if (int(state['photo'][place]) < state['min_photo'][place] and 
         #if (time.time() - self.last_on[light_no] > 1):
-        #if(self.state[command['value']]=='off'):
-        if(True):
+        if(self.state[command['value']]=='off' or self.state[command['value']]==''):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
             data = json.dumps({'on':True})
             self.state[command['value']] = 'on'
@@ -44,12 +61,13 @@ class HueHub(object):
         return
    
     def turn_off(self, command, state):
-        address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
-        data = json.dumps({'on':False})    
-        self.state[command['value']] = 'off'
-        print(self.state)
-        new_message = {'device_name':self.name, 'address':address, 'payload':data, 'type':'put'}
-        self.messager.publish('http-commands', json.dumps(new_message))
+        if(self.state[command['value']]=='on'):
+            address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
+            data = json.dumps({'on':False})    
+            self.state[command['value']] = 'off'
+            print(self.state)
+            new_message = {'device_name':self.name, 'address':address, 'payload':data, 'type':'put'}
+            self.messager.publish('http-commands', json.dumps(new_message))
         #print('Apagar hue light')
         return 
  

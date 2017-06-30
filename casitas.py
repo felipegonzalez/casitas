@@ -103,13 +103,14 @@ while True:
             from_device = message['device_name']
             try:
                 m_parsed = devices[from_device].parse(message)
+                for m in m_parsed:
+                    r.publish('events', json.dumps(m))
             except Exception as ex:
                 print("Error parsing message")
                 print("From device "+ from_device)
                 print(ex)
                 raise
-            for m in m_parsed:
-                r.publish('events', json.dumps(m))
+
 
     # get event and load data
     ev = events.get_message()
