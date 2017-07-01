@@ -67,6 +67,10 @@ device_settings = {
         'place':'escaleras_patio',
         'device_type':'virtual'
         },
+        'virtual-bano_visitas':{
+        'place':'bano_visitas',
+        'device_type':'virtual'
+        },
         'cajasala':{
         'place':'sala',
         'device_type':'xbeebox',

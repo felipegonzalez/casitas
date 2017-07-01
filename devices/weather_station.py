@@ -11,7 +11,7 @@ class WeatherStation(object):
         self.state = {}
         #self.children = init['children']
         self.messager = messager
-        self.polling = 10
+        self.polling = 120
         self.last_check = time.time()
         self.ip_address = init['ip_address']
         self.place = init['place']
