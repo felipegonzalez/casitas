@@ -51,7 +51,8 @@ def monitor():
                     req =  session.get('http://'+message_in['address']+'', 
                                     #data = message_in['payload'], 
                                     params = message_in['pars'],
-                                    background_callback =process_response)
+                                    background_callback =process_response,
+                                    timeout = 2)
                 except Exception as ex:
                     print('Error http request get')
                     print(format(ex))
@@ -62,7 +63,8 @@ def monitor():
                 try:
                     req = session.put('http://'+message_in['address'], 
                                     data=message_in['payload'], 
-                                    background_callback=process_response)
+                                    background_callback=process_response,
+                                    timeout = 2)
                 except:
                     print('Error http request put')
 

@@ -26,12 +26,12 @@ conn_names = ['xbee-events', 'http-events']
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
-        'exterior']
+        'exterior', 'estudiot']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
             'front_door_hall':60, 'escaleras_patio':60, 'patio':120,
-            'estudiof':120, 'jardin':80}
+            'estudiof':120, 'jardin':80,'estudiot':120}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
@@ -48,7 +48,8 @@ place_lights = { 'Living room foot 1':'sala',
                  'Front door':'front_door_hall',
                  'Patio stairs one':'escaleras_patio',
                  'Patio stairs two':'escaleras_patio',
-                 'Felipe Study':'estudiof'}
+                 'Felipe Study':'estudiof',
+                 'Study Tere':'estudiot'}
 # devices
 device_settings = {
         'virtual-jardin':{
@@ -116,6 +117,11 @@ device_settings = {
         'device_type':'xbeebox',
         'addr_long':'0013a20040bf06d4'
         },
+        'caja_estudiot':{
+        'place':'estudiot',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040be4592'
+        },
         'caja_goteo':{
         'place':'patio',
         'device_type':'xbeebox',
@@ -138,7 +144,7 @@ device_settings = {
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
         'Patio stairs one':'52', 'Patio stairs two':'53', 
-        'Entrance table':'48','Felipe Study':'36'},
+        'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43'},
         'place_lights':place_lights
         },
         'sonos':{
@@ -217,5 +223,6 @@ print(" ")
 
 state['lights'] = place_lights.keys()
 state['place_lights'] = place_lights
+state['alarm_cam'] = False
 #print(state['lights'])
 #apps_settings = ['app_motion']

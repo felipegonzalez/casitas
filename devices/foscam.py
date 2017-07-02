@@ -28,11 +28,14 @@ class FosCam(object):
         message_p = (message)['data']
         parsed_m = []
         out_dict = xmltodict.parse(message_p)['CGI_Result']
-        if('motionDetectAlarm' in out_dict.keys()):
-            motion = out_dict['motionDetectAlarm'] == '2'
+        if('sdFreeSpace' in out_dict.keys()):
+            #we assume this condition means a get for state (?)
             self.state = out_dict
-            #print(out_dict)
-            parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
+            if('motionDetectAlarm' in out_dict.keys()):
+                motion = out_dict['motionDetectAlarm'] == '2'
+                self.state = out_dict
+                print(self.state)
+                parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
         return parsed_m
 
     def get_state(self):
@@ -54,7 +57,21 @@ class FosCam(object):
     #         self.last_check = time.time()
     #     state_alarm = self.state['motionDetectAlarm']
     #     return state_alarm
-            
+    
+    def set_motion_detect(self, command, state):
+        pars = self.basic_payload
+        pars['cmd'] = 'setMotionDetectConfig'
+        value = command['value']
+        if(value=='on'):
+            val = 1
+        else:
+            val = 0
+        pars['isEnable'] = val 
+        pars['isMovAlarmEnable'] = val
+        new_message = {'device_name':self.name,
+            'address':self.get_address, 'pars':pars, 'payload':'',
+            'type':'get'}
+        self.messager.publish('http-commands', json.dumps(new_message))
 
     def update(self, global_state):
         if(global_state['timestamp']-self.last_check > self.polling):

@@ -34,15 +34,19 @@ class XbeeBox(object):
                 data = ev_content['content'].split('\r\n')
                 #print(data)
                 for elem in data:
-                    if(len(elem) > 0):
-                        ev_split = elem.split(',')
-                        event_type = ev_split[0]
-                        value = ev_split[3]
-                        if(event_type=='pir'):
-                            event_type ='motion'
-                            value = int(value)==1
-                        events.append({'device_name':self.name, 
-                            'event_type':event_type, 'value':value})
+                    try:
+                        if(len(elem) > 0):
+                            ev_split = elem.split(',')
+                            event_type = ev_split[0]
+                            value = ev_split[3]
+                            if(event_type=='pir'):
+                                event_type ='motion'
+                                value = int(value)==1
+                            events.append({'device_name':self.name, 
+                                'event_type':event_type, 'value':value})
+                    except:
+                        print("Error parsing element")
+                        print(elem)
             if(ev_content['type']=='samples'):
                 for elem in ev_content['content']:
                     for k in elem.keys():
@@ -52,6 +56,8 @@ class XbeeBox(object):
                          'event_type':event_type, 'value':value})
         except:
             print("Error parsing xbee message")
+            print(data)
+            raise
         return events
 
     def turn_on(self, command, state):
