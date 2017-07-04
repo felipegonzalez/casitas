@@ -126,7 +126,8 @@ while True:
                 #print(event_type)
                 #print(ev_content['value'])
                 state[event_type][place] = ev_content['value']
-        #print ev
+        #if(event_type == 'motion' and ev_content['device_name']=='cajarecamara'):
+        #    print("Motion registered **************")
 
     # get command and process using device class
     comm = commands.get_message()

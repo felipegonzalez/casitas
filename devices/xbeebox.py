@@ -42,6 +42,8 @@ class XbeeBox(object):
                             if(event_type=='pir'):
                                 event_type ='motion'
                                 value = int(value)==1
+                                #if(value):
+                                #    print("motion reg***********")
                             events.append({'device_name':self.name, 
                                 'event_type':event_type, 'value':value})
                     except:

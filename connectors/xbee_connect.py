@@ -46,9 +46,11 @@ def monitor():
                         'source':response['source_addr_long'], 'type':'rf_data',
                         'content':response['rf_data']})
                     r.publish('xbee-events', message)
+                    #if(json.loads(message)['device_name']=='cajarecamara'):
+                    #    print('\a')
                 except:
                     print("Error decoding xbee message")
-                    sys.exit("Stopping")
+                    raise
             if('samples' in response.keys()):
                 #response['samples'] = response['rf_data'].decode('utf-8')
                 message = json.dumps({'device_type':'xbeebox', 'device_name':xbee_dict[response['source_addr_long']],

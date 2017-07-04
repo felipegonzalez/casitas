@@ -26,15 +26,17 @@ conn_names = ['xbee-events', 'http-events']
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
-        'exterior', 'estudiot']
+        'exterior', 'estudiot' ,'comedor', 'pasillo_comedor']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
             'front_door_hall':60, 'escaleras_patio':60, 'patio':120,
-            'estudiof':120, 'jardin':80,'estudiot':120}
+            'estudiof':120, 'jardin':80,'estudiot':120, 'comedor':120,
+            'pasillo_comedor':120}
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
+                'Hue bloom 1':'sala',
                 'Downstairs bath 1':'bano_visitas',
                 'Main bath one':'bano_principal',
                 'Main bath two':'bano_principal',
@@ -49,7 +51,10 @@ place_lights = { 'Living room foot 1':'sala',
                  'Patio stairs one':'escaleras_patio',
                  'Patio stairs two':'escaleras_patio',
                  'Felipe Study':'estudiof',
-                 'Study Tere':'estudiot'}
+                 'Study Tere':'estudiot',
+                 'Dining room':'comedor',
+                 'Dining hall 1':'pasillo_comedor',
+                 'Dining hall 2':'pasillo_comedor'}
 # devices
 device_settings = {
         'virtual-jardin':{
@@ -128,6 +133,11 @@ device_settings = {
         'addr_long':'0013a20040caadda',
         'children':{'regar':'D2'}
         },
+        'caja_comedor':{
+        'place':'comedor',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040bf962c'
+        },
         #cajarecamara':{
         #'place':'recamara',
         #'device_type':'xbeebox',
@@ -144,7 +154,9 @@ device_settings = {
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
         'Patio stairs one':'52', 'Patio stairs two':'53', 
-        'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43'},
+        'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43',
+        'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
+        'Dining hall 2':'40'},
         'place_lights':place_lights
         },
         'sonos':{
@@ -184,7 +196,7 @@ for key in device_settings.keys():
         if('ip_address' in device_settings[key].keys()):
                 ip_dict[device_settings[key]['ip_address']] = key
 
-print(ip_dict)
+#print(ip_dict)
 
 
 #state definition, initial
@@ -197,7 +209,7 @@ state['last_motion'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 350
+        state['min_photo'][place] = 650
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
@@ -211,10 +223,10 @@ for place in places:
                 if place_lights[elem] == place:
                         place_dict[elem] = 'hue'
         state['groups_lights'][place] = place_dict
-print(" ")
+#print(" ")
 #print("Groups lights")
 #print(state['groups_lights'])
-print(" ")
+#print(" ")
 #state['groups_lights'] = { 
 #                'sala':{'Living room foot 1':'hue', 'Living room foot 2':'hue'},
 #                'bano_visitas':{'Downstairs bath 1':'hue'},

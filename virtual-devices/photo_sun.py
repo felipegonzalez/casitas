@@ -23,11 +23,11 @@ latitude = 18.956165
 def OutsidePhoto():
 
     print('Iniciar ciclo')
-    time_last = time.time()
+    time_last = 0
     while True:
         #response = xbee.wait_read_frame(timeout=0.10)
         #message = json.dumps({'type':'xbee', 'source':response['dest_addr_long'], 'content':response})
-        if(time.time() - time_last > 10):
+        if(time.time() - time_last > 120):
         	dt = datetime.datetime.now()
         	dt_local = pytz.timezone('America/Mexico_City').localize(dt)
         	sun = city.sun(date = dt, local = True)
@@ -42,8 +42,8 @@ def OutsidePhoto():
        		time_last = time.time()
 
 def sun_up(dt, sun):
-	min_dt = pytz.timezone('America/Mexico_City').localize(dt + datetime.timedelta(hours = 1))
-	max_dt = pytz.timezone('America/Mexico_City').localize(dt - datetime.timedelta(hours = 1))
+	min_dt = pytz.timezone('America/Mexico_City').localize(dt + datetime.timedelta(hours = 0.5))
+	max_dt = pytz.timezone('America/Mexico_City').localize(dt - datetime.timedelta(hours = 0.5))
 	sunup = False
 	if(max_dt > sun['dawn'] and min_dt < sun['sunset']):
 		sunup = True
