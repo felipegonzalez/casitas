@@ -209,7 +209,7 @@ state['last_motion'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 650
+        state['min_photo'][place] = 300
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
