@@ -37,14 +37,8 @@ class Dripper(object):
         #parsed_m = [{'device_name':self.name, 'event_type':'motion','value':motion}]
         return parsed_m
 
-    def calculate_water()
-        new_message = {'device_name':self.name,
-                'address':self.get_address, 'pars':'',
-                 'payload':'', 'type':'get'}
-        self.messager.publish('http-commands', json.dumps(new_message))
-        #req = requests.get(self.get_address, params = pars, timeout = 0.1)
-        #out_dict = xmltodict.parse(req.content)['CGI_Result']
-        #print(out_dict)
+    def calculate_water():
+        self.water_delivered
         return 
 
 

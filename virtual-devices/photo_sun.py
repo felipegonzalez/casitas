@@ -11,7 +11,8 @@ import datetime
 from astral import Astral
 import pytz
 devices_outside = ['virtual-jardin','virtual-patio', 
-	'virtual-front_door_hall', 'virtual-escaleras_patio', 'virtual-bano_visitas']
+	'virtual-front_door_hall', 'virtual-escaleras_patio', 
+    'virtual-bano_visitas', 'virtual-pasillo_recamaras']
 
 a = Astral()
 a.solar_depression = 'civil'

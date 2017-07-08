@@ -33,11 +33,13 @@ def monitor():
         response = {}
         response = xbee.wait_read_frame(timeout = 0.15)
         if(len(response)>0):
-            print(response)
+            #print(response)
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
-            print(response['source_addr_long'])
-            print(xbee_dict[response['source_addr_long']])
+            if(xbee_dict[response['source_addr_long']]=='caja_estudiot'):
+                print(response)
+                print(response['source_addr_long'])
+                print(xbee_dict[response['source_addr_long']])
             print("")
             if('rf_data' in response.keys()):
                 try:

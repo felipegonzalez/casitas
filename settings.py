@@ -80,6 +80,10 @@ device_settings = {
         'place':'bano_visitas',
         'device_type':'virtual'
         },
+        'virtual-pasillo_recamaras':{
+        'place':'pasillo_recamaras',
+        'device_type':'virtual'
+        },
         'cajasala':{
         'place':'sala',
         'device_type':'xbeebox',
@@ -182,7 +186,10 @@ device_settings = {
         'ip_address':'192.168.100.220',
         'port':'88',
         'user':'felipe',
-        'password':'valqui1'
+        'password':'valqui1',
+        'id_cam':'FI9821P_C4D6554064C4',
+        'img_path':'/Volumes/mmshared/img_entrada/',
+        'dest_path':'/Volumes/mmshared/imagenes/img_mov.jpg' 
         },
         'estacion_meteo':{
         'device_type':'meteo',
@@ -213,12 +220,12 @@ state['last_motion'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 300
+        state['min_photo'][place] = 200
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
         state['motion'][place] = False
-
+state['min_photo']['estudiot'] = 1000
 
 state['groups_lights'] = {}
 for place in places:

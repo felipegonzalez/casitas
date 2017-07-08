@@ -2,6 +2,8 @@ import json
 import time
 import os
 import xmltodict
+import glob
+from shutil import copyfile
 
 class FosCam(object):
 
@@ -17,6 +19,8 @@ class FosCam(object):
         self.user = init['user']
         self.password = init['password']
         self.place = init['place']
+        self.id_cam = init['id_cam']
+        self.path = init['img_path']
         self.get_address = self.ip_address + ':'+ self.port + '/cgi-bin/CGIProxy.fcgi'
         self.basic_payload = {'usr':self.user,'pwd':self.password}
         #self.state = self.get_state()
@@ -78,6 +82,9 @@ class FosCam(object):
             self.get_state()
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] == '2'):
                 global_state['alarm_cam'] = True
+                list_of_files = glob.glob(self.path+'snap/*') # * means all if need specific format then *.csv
+                latest_file = max(list_of_files, key = os.path.getctime)
+                copyfile(latest_file, self.dest_path)
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] != '2'):
                 global_state['alarm_cam'] = False
         #     else:

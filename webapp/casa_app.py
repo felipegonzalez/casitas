@@ -215,7 +215,7 @@ if __name__ == '__main__':
         },
         '/img':{
             'tools.staticdir.on' : True,
-            'tools.staticdir.dir' : "/Users/felipe/casitas/webapp/img"
+            'tools.staticdir.dir' : "/Volumes/mmshared/web_img"
         }
 }
     webapp = control()
