@@ -12,7 +12,7 @@ class WeatherStation(object):
         #self.children = init['children']
         self.messager = messager
         self.polling = 120
-        self.last_check = time.time()
+        self.last_check = 0
         self.ip_address = init['ip_address']
         self.place = init['place']
         self.get_address =  'estacionyun.local' + '/arduino/weather/0'
