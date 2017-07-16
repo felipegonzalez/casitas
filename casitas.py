@@ -135,7 +135,8 @@ while True:
                 state[event_type][place] = ev_content['value']
         # update central state
         if(event_type == 'motion'):
-            state['motion_value'][place] = 1.0
+            if(ev_content['value']):
+                state['motion_value'][place] = 1.0
 
     # get command and process using device class
     comm = commands.get_message()
