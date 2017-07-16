@@ -12,7 +12,7 @@ class FosCam(object):
         self.state = {}
         #self.children = init['children']
         self.messager = messager
-        self.polling = 5
+        self.polling = 10
         self.last_check = time.time()
         self.ip_address = init['ip_address']
         self.port = init['port']
@@ -38,7 +38,7 @@ class FosCam(object):
             if('motionDetectAlarm' in out_dict.keys()):
                 motion = out_dict['motionDetectAlarm'] == '2'
                 self.state = out_dict
-                print(self.state)
+                #print(self.state)
                 parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
         return parsed_m
 
