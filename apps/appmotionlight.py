@@ -26,7 +26,10 @@ class AppMotionLight():
             if(ev_content['event_type']=='motion' and ev_content['value']):
                 place = devices[ev_content['device_name']].place
                 state['last_motion'][place] = state['timestamp']
-                if(int(state['photo'][place]) < int(state['min_photo'][place])):
+                try: 
+                    if(int(state['photo'][place]) < int(state['min_photo'][place])):
+                        fire = True
+                except:
                     fire = True
         return fire
 
