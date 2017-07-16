@@ -68,7 +68,7 @@ while True:
     for pl in state['motion_value'].keys():
         state['motion_value'][pl] = state['motion_value'][pl]*math.exp(-coef*delta_time)
 
-
+    ########### Print reports
     if(time.time()-timer_print > 10):
         #print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
         for dev in state['devices']:
@@ -133,7 +133,8 @@ while True:
                 #print(event_type)
                 #print(ev_content['value'])
                 state[event_type][place] = ev_content['value']
-        # update central state
+        
+        # update central state depending on events #######
         if(event_type == 'motion'):
             if(ev_content['value']):
                 state['motion_value'][place] = 1.0
