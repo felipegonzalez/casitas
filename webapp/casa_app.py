@@ -83,6 +83,16 @@ class control(object):
     #     return mensaje
 
     @cherrypy.expose
+    def garage(self):
+        mensaje = 'Activando garage'
+        r.publish('commands', json.dumps({"device_name":"caja_garage",
+            "command":"turn_on", "value":"garage"}))
+        message_off =json.dumps({"device_name":"caja_garage",
+            "command":"turn_off", "value":"garage"})
+        r.publish("commands", json.dumps({"device_name":"timer_1",
+            "command":"add_timer", "interval":1.1, "value":message_off}))
+        return mensaje
+    @cherrypy.expose
     def regar(self, sw):
         mensaje = 'Sistema de goteo' + str(sw)
         if(sw=='1'):
@@ -95,7 +105,7 @@ class control(object):
                 'command':'turn_off', 'value':'regar'
                 })
             r.publish('commands', json.dumps({"device_name":"timer_1",
-                "command":"add_timer", "interval":60*10, 
+                "command":"add_timer", "interval":60*15, 
                 "value":message_off}))
             #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
             #    "command":"turn_off", "value":"regar"})))

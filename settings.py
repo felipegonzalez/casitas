@@ -140,6 +140,13 @@ device_settings = {
         'addr_long':'0013a20040caadda',
         'children':{'regar':'D2'}
         },
+        'caja_garage':{
+        'place':'patio',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040d6aa62',
+        'children':{'garage':'D1'},
+        'pins':{'dio-2':'timbre','dio-3':'puerta_garage_int'}
+        },
         'caja_comedor':{
         'place':'comedor',
         'device_type':'xbeebox',
@@ -161,6 +168,7 @@ device_settings = {
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
         'Patio stairs one':'52', 'Patio stairs two':'53', 
+        'Patio stairs three':'37',
         'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43',
         'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
         'Dining hall 2':'40', 'Living room wall':'60',
@@ -217,15 +225,17 @@ state['temperature'] = {}
 state['humidity'] = {}
 state['min_photo'] = {}
 state['last_motion'] = {}
+state['motion_value'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 200
+        state['min_photo'][place] = 300
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
         state['motion'][place] = False
-state['min_photo']['estudiot'] = 1000
+        state['motion_value'][place] = 0
+#state['min_photo']['estudiot'] = 1000
 
 state['groups_lights'] = {}
 for place in places:

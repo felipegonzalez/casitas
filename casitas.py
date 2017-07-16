@@ -5,7 +5,7 @@ import json
 import time
 from termcolor import colored
 import logdata
-
+import math
 #import apps
 from apps.appmotionlight import AppMotionLight 
 from apps.appnomotion import AppNoMotionLight
@@ -55,6 +55,7 @@ timer_print = time.time()
 
 ########### main loop ############################################
 delta_time = 0
+coef = 0.01
 initial_time=time.time()
 max_time = 0
 while True:
@@ -62,6 +63,11 @@ while True:
     if(delta_time > max_time):
         max_time = delta_time
     initial_time = time.time()
+
+    state['timestamp'] = time.time()
+    for pl in state['motion_value'].keys():
+        state['motion_value'][pl] = state['motion_value'][pl]*math.exp(-coef*delta_time)
+
 
     if(time.time()-timer_print > 10):
         #print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
@@ -81,13 +87,14 @@ while True:
         print(colored('Delta max :' + str(max_time), 'green'))
         print(colored('Outside: ', 'blue'))
         print(state['devices_state']['estacion_meteo'])
+        print(state['motion_value'])
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
     if(time.time()-timer_print > 3):
        logdata.log(state,r)
 
-    state['timestamp'] = time.time()
+
 
     ev_content = None
 
@@ -126,8 +133,9 @@ while True:
                 #print(event_type)
                 #print(ev_content['value'])
                 state[event_type][place] = ev_content['value']
-        #if(event_type == 'motion' and ev_content['device_name']=='cajarecamara'):
-        #    print("Motion registered **************")
+        # update central state
+        if(event_type == 'motion'):
+            state['motion_value'][place] = 1.0
 
     # get command and process using device class
     comm = commands.get_message()

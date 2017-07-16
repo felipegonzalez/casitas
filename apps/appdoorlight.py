@@ -5,7 +5,8 @@ class AppDoorLight():
     def __init__(self, place_lights):
         self.place_lights = place_lights
         self.door_mapping = {'hall_entrada':['Entrance hall','Front door',
-        'Patio stairs one', 'Patio stairs two', 'Entrance table']}
+        'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
+        'Entrance table']}
         #self.device = device
 
     def activate(self, ev_content, state, r):
