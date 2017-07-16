@@ -36,7 +36,8 @@ def monitor():
             #print(response)
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
-            if(xbee_dict[response['source_addr_long']]=='caja_estudiot'):
+            #if(xbee_dict[response['source_addr_long']]=='caja_estudiot'):
+            if(True):
                 print(response)
                 print(response['source_addr_long'])
                 print(xbee_dict[response['source_addr_long']])
