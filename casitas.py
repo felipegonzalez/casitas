@@ -6,16 +6,12 @@ import time
 from termcolor import colored
 import logdata
 import math
-#import apps
-#from apps.appmotionlight import AppMotionLight 
-#from apps.appnomotion import AppNoMotionLight
+
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 
 
 #create instances for apps #############
-#app_motion = AppMotionLight()
-#app_nomotion = AppNoMotionLight(delays)
 app_doorlight = AppDoorLight(place_lights)
 app_autolight = AutoLight(delays)
 

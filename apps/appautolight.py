@@ -4,7 +4,9 @@ import json
 class AutoLight():
     def __init__(self, delays):
         self.delays = delays
+        self.base_delays = delays
         self.candidates_off = []
+        self.last_auto_off = {}
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -40,13 +42,22 @@ class AutoLight():
                 except:
                     fire = True
                     value = 'on'
+                if(place in self.last_auto_off):
+                    if(state['timestamp'] - self.last_auto_off[place] < 5):
+                        self.delays[place] = min(self.base_delays[place]*1.5, 60*8)
+                    if(state['timestamp'] - self.last_auto_off[place] > 60):
+                        self.delays[place] = self.base_delays[place]
+
             # at heartbeat, check what needs to be turned off
             if(ev_content['event_type']=='heartbeat'):
                 self.candidates_off = []
                 for place in self.delays.keys():
                     if(state['timestamp'] - state['last_motion'][place] > self.delays[place]):
                         self.candidates_off.append(place)
-                fire = True
-                value = 'off'
+                        self.last_auto_off[place] = state['timestamp']
+                if(len(self.candidates_off) > 0):
+                    fire = True
+                    value = 'off'
+
         return fire, value
 
