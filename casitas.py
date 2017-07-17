@@ -7,9 +7,17 @@ from termcolor import colored
 import logdata
 import math
 #import apps
-from apps.appmotionlight import AppMotionLight 
-from apps.appnomotion import AppNoMotionLight
+#from apps.appmotionlight import AppMotionLight 
+#from apps.appnomotion import AppNoMotionLight
+from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
+
+
+#create instances for apps #############
+#app_motion = AppMotionLight()
+#app_nomotion = AppNoMotionLight(delays)
+app_doorlight = AppDoorLight(place_lights)
+app_autolight = AutoLight(delays)
 
 # subscribe to events ###############
 events = r.pubsub()
@@ -33,10 +41,6 @@ for dev_name in device_settings.keys():
     state['devices_state'][dev_name] = {}
 #print(state['devices_state'])
 
-#create instances for apps #############
-app_motion = AppMotionLight()
-app_nomotion = AppNoMotionLight(delays)
-app_doorlight = AppDoorLight(place_lights)
 
 
 #subscribe to connections #############
@@ -52,6 +56,7 @@ for con in conn_names:
 
 #print(state['groups_lights'])
 timer_print = time.time()
+timer_heartbeat = time.time()
 
 ########### main loop ############################################
 delta_time = 0
@@ -67,6 +72,12 @@ while True:
     state['timestamp'] = time.time()
     for pl in state['motion_value'].keys():
         state['motion_value'][pl] = state['motion_value'][pl]*math.exp(-coef*delta_time)
+    #heartbeat
+    if(time.time() - timer_heartbeat > 1):
+        timer_heartbeat = time.time()
+        heartbeat_message = json.dumps({'device_name':'heartbeat', 
+            'place':'casa','event_type':'heartbeat','value':time.time()})
+        r.publish('events', heartbeat_message)
 
     ########### Print reports
     if(time.time()-timer_print > 10):
@@ -153,22 +164,29 @@ while True:
     app_messages = []
     appcomms = []
 
-    ### motion app
-    if (ev and ev_content):
-        if (app_motion.check(ev_content, state)):
-            #print('Activar app luces')
-            appcomms = app_motion.activate(ev_content, state, r)
-            app_messages = app_messages + appcomms
+    # ### motion app
+    # if (ev and ev_content):
+    #     if (app_motion.check(ev_content, state)):
+    #         #print('Activar app luces')
+    #         appcomms = app_motion.activate(ev_content, state, r)
+    #         app_messages = app_messages + appcomms
     
-    ## no motion app
-    if(app_nomotion.check(ev_content, state)):
-        #print('Apagar por falta de movimiento')
-        appcomms = app_nomotion.activate(ev_content, state, r)
-        app_messages = app_messages + appcomms
+    # ## no motion app
+    # if(app_nomotion.check(ev_content, state)):
+    #     #print('Apagar por falta de movimiento')
+    #     appcomms = app_nomotion.activate(ev_content, state, r)
+    #     app_messages = app_messages + appcomms
     ## door light app
     if(app_doorlight.check(ev_content, state)):
         appcomms = app_doorlight.activate(ev_content, state, r)
         app_messages = app_messages + appcomms
+
+    fire, value = app_autolight.check(ev_content, state) 
+    if(fire):
+        appcomms = app_autolight.activate(ev_content, state, r, value)
+        app_messages = app_messages + appcomms
+
+
     ## timer app
     ####################################################################
 

@@ -26,7 +26,7 @@ conn_names = ['xbee-events', 'http-events']
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
-        'exterior', 'estudiot' ,'comedor', 'pasillo_comedor']
+        'exterior', 'estudiot' ,'comedor', 'pasillo_comedor','casa']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
@@ -203,6 +203,10 @@ device_settings = {
         'device_type':'meteo',
         'place':'exterior',
         'ip_address':'estacionyun.local'
+        },
+        'heartbeat':{
+        'device_type':'virtual',
+        'place':'casa'
         }
 }
 #xbee_dict
