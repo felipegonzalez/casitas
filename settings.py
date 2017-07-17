@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import redis
 import time
+
 # pubsub redis settings
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -14,10 +15,11 @@ from devices.virtual import Virtual
 from devices.timer import Timer
 from devices.foscam import FosCam
 from devices.weather_station import WeatherStation
-
+from devices.pushover_service import PushMessenger
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
-    'virtual':Virtual, 'timer':Timer, 'foscam':FosCam ,'meteo':WeatherStation}
+    'virtual':Virtual, 'timer':Timer, 'foscam':FosCam , 'meteo':WeatherStation,
+    'push_messenger':PushMessenger}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -145,7 +147,7 @@ device_settings = {
         'device_type':'xbeebox',
         'addr_long':'0013a20040d6aa62',
         'children':{'garage':'D1'},
-        'pins':{'dio-2':'timbre','dio-3':'puerta_garage_int'}
+        'pins':{'dio-2':'timbre_interior','dio-3':'garage_interior'}
         },
         'caja_comedor':{
         'place':'comedor',
@@ -160,7 +162,7 @@ device_settings = {
         #},
         'hue':{
         'ip_address':'192.168.100.203',
-        'place':'home',
+        'place':'casa',
         'device_type':'hue',
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
         'Patio stairs three':'37' ,'Main bath one':'57' ,
@@ -206,6 +208,10 @@ device_settings = {
         },
         'heartbeat':{
         'device_type':'virtual',
+        'place':'casa'
+        },
+        'pushover':{
+        'device_type':'push_messenger',
         'place':'casa'
         }
 }

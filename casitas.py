@@ -6,7 +6,7 @@ import time
 from termcolor import colored
 import logdata
 import math
-
+import os
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 
@@ -59,6 +59,12 @@ delta_time = 0
 coef = 0.01
 initial_time=time.time()
 max_time = 0
+
+r.publish('commands', 
+    json.dumps({'device_name':'pushover', 
+        'command':'send_message',
+        'value':'Iniciando sistema.'}))
+
 while True:
     delta_time = time.time() - initial_time
     if(delta_time > max_time):
