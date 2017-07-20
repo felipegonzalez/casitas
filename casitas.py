@@ -7,13 +7,21 @@ from termcolor import colored
 import logdata
 import math
 import os
+import logging
+import logging.handlers
+
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
-
+from apps.appdoorbell import DoorBell
 
 #create instances for apps #############
 app_doorlight = AppDoorLight(place_lights)
 app_autolight = AutoLight(delays)
+app_doorbell = DoorBell()
+
+#start logging
+
+
 
 # subscribe to events ###############
 events = r.pubsub()
@@ -21,6 +29,8 @@ events.subscribe('events')
 # subscribe to commands
 commands = r.pubsub()
 commands.subscribe('commands')
+
+
 
 
 #create instances for devices ###############
@@ -164,22 +174,10 @@ while True:
 
     # include app code here ####################################################
     app_messages = []
-    appcomms = []
+    appcomms = [] 
 
-    # ### motion app
-    # if (ev and ev_content):
-    #     if (app_motion.check(ev_content, state)):
-    #         #print('Activar app luces')
-    #         appcomms = app_motion.activate(ev_content, state, r)
-    #         app_messages = app_messages + appcomms
-    
-    # ## no motion app
-    # if(app_nomotion.check(ev_content, state)):
-    #     #print('Apagar por falta de movimiento')
-    #     appcomms = app_nomotion.activate(ev_content, state, r)
-    #     app_messages = app_messages + appcomms
-    ## door light app
-    if(app_doorlight.check(ev_content, state)):
+    fire = app_doorlight.check(ev_content, state) 
+    if(fire):
         appcomms = app_doorlight.activate(ev_content, state, r)
         app_messages = app_messages + appcomms
 
@@ -188,6 +186,10 @@ while True:
         appcomms = app_autolight.activate(ev_content, state, r, value)
         app_messages = app_messages + appcomms
 
+    fire, value = app_doorbell.check(ev_content, state) 
+    if(fire):
+        appcomms = app_doorbell.activate(ev_content, state, r, value)
+        app_messages = app_messages + appcomms
 
     ## timer app
     ####################################################################

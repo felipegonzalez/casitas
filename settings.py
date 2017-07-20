@@ -145,9 +145,9 @@ device_settings = {
         'caja_garage':{
         'place':'patio',
         'device_type':'xbeebox',
-        'addr_long':'0013a20040d6aa62',
+        'addr_long':'0013a20040c059bc',
         'children':{'garage':'D1'},
-        'pins':{'dio-2':'timbre_interior','dio-3':'garage_interior'}
+        'pins':{'dio-1':'garage','dio-2':'timbre','dio-3':'garage_interior'}
         },
         'caja_comedor':{
         'place':'comedor',

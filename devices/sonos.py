@@ -22,6 +22,8 @@ class Sonos(object):
         self.zones = zones
 
         self.state = {}
+
+        self.prev_state = {'volume':self.sonos.volume}
         #self.children = init['children']
         self.messager = messager
         self.polling = 60
@@ -37,14 +39,32 @@ class Sonos(object):
         parsed_m = ''
         return parsed_m
 
+    def set_volume(self, command, state):
+        try:
+            self.sonos.volume = command['value']
+        except:
+            print('Error setting sonos volume')
+        return
+
+
     def say(self, command, state):
         #data = json.loads(command['data']) 
         state_s = {}
         
         text = command['value']
+        self.prev_state['volume'] = self.sonos.volume
         #try:
+        self.sonos.volume = 80
         os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
         state_s = self.play("voz.mp4")
+        duration_txt = self.sonos.get_current_track_info()['duration']
+        alertDuration = 60*int(duration_txt.split(':')[1])  +  int(duration_txt.split(':')[2])
+        r = self.messager
+        com = json.dumps({'device_name':'sonos', 'command':'set_volume',
+            'value':self.prev_state['volume']})
+        r.publish('commands', 
+            json.dumps({'device_name':'timer_1', 'command':'add_timer',
+                'interval':alertDuration + 2, 'value':com}))
             #sonos.play_uri('x-file-cifs:%s' % '//homeserver/sonidos/voz.mp4')
         #except:
         #    print("Error say!")
@@ -67,7 +87,7 @@ class Sonos(object):
             volumen = self.sonos.volume
             self.sonos.play_uri('x-file-cifs://homeserver/sonidos/' + file)
             duration_txt = self.sonos.get_current_track_info()['duration']
-            alertDuration = int(duration_txt.split(':')[2])
+            #alertDuration = 60*int(duration_txt.split(':')[2]) + 
             #sleepTime=2
             #time.sleep(sleepTime)
             #if len(zp.get_queue()) > 0 and playlistPos > 0:
