@@ -41,13 +41,15 @@ class XbeeBox(object):
                             ev_split = elem.split(',')
                             event_type = ev_split[0]
                             value = ev_split[3]
+                            internal_id = ev_split[2]
                             if(event_type=='pir'):
                                 event_type ='motion'
                                 value = int(value)==1
                                 #if(value):
                                 #    print("motion reg***********")
                             events.append({'device_name':self.name, 
-                                'event_type':event_type, 'value':value})
+                                'event_type':event_type, 'value':value,
+                                'internal_id':internal_id})
                     except:
                         print("Error parsing element")
                         print(elem)
