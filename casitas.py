@@ -20,7 +20,16 @@ app_autolight = AutoLight(delays)
 app_doorbell = DoorBell()
 
 #start logging
-
+format_logging = logging.Formatter(fmt='%(levelname)s|%(asctime)s|%(name)s| %(message)s ', datefmt="%Y-%m-%d %H:%M:%S")
+h = logging.handlers.TimedRotatingFileHandler('/Volumes/mmshared/bdatos/log/monitor_casitas/casa_monitor.log', encoding='utf8',
+        interval=1, when='midnight', backupCount=4000)
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.DEBUG)
+h.setFormatter(format_logging)
+h.setLevel(logging.DEBUG)
+root_logger.addHandler(h)
+### end loggig handler
+print('Creado logging')
 
 
 # subscribe to events ###############
@@ -74,6 +83,9 @@ r.publish('commands',
     json.dumps({'device_name':'pushover', 
         'command':'send_message',
         'value':'Iniciando sistema.'}))
+
+logging.info('Iniciando sistema')
+
 
 while True:
     delta_time = time.time() - initial_time
@@ -147,6 +159,7 @@ while True:
     if (ev and (ev['type']=='message')):
         #print(colored(ev , 'blue'))
         ev_content = json.loads(ev['data'])
+        logging.info(ev['data'])
         state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value']
         place = device_settings[ev_content['device_name']]['place']
         event_type = ev_content['event_type']
@@ -167,6 +180,7 @@ while True:
     if comm:
         if (comm['type']=='message'):
             print(colored(comm, 'red'))
+            logging.info(comm)
             c = json.loads(comm['data'])
             getattr(devices[c['device_name']], c['command'])(c, state)
 
