@@ -86,11 +86,7 @@ class control(object):
     def garage(self):
         mensaje = 'Activando garage'
         r.publish('commands', json.dumps({"device_name":"caja_garage",
-            "command":"turn_on", "value":"garage"}))
-        message_off =json.dumps({"device_name":"caja_garage",
-            "command":"turn_off", "value":"garage"})
-        r.publish("commands", json.dumps({"device_name":"timer_1",
-            "command":"add_timer", "interval":1.2, "value":message_off}))
+            "command":"send_command", "value":"garage_open"}))
         return mensaje
     @cherrypy.expose
     def regar(self, sw):

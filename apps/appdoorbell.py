@@ -26,7 +26,7 @@ class DoorBell():
             if(ev_content['event_type']=='timbre'):
                 print("Tinmbre")
                 print(ev_content)
-            if(ev_content['event_type']=='timbre' and not(ev_content['value'])):
+            if(ev_content['event_type']=='timbre' and (ev_content['value'])):
                 place = devices[ev_content['device_name']].place
                 fire = True
         return fire, value

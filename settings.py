@@ -146,8 +146,7 @@ device_settings = {
         'place':'patio',
         'device_type':'xbeebox',
         'addr_long':'0013a20040c059bc',
-        'children':{'garage':'D1'},
-        'pins':{'dio-1':'garage','dio-2':'timbre','dio-3':'garage_interior'}
+        'txcommands':{'garage_open':'g'},
         },
         'caja_comedor':{
         'place':'comedor',

@@ -14,6 +14,8 @@ class XbeeBox(object):
             self.pins = init['pins']
         else:
             self.pins = {}
+        if('txcommands' in init):
+            self.txcommands = init['txcommands']
 
         if ('children' in init.keys()):
             self.children = init['children'] #dictionary {'luzchica':'D2', ...}
@@ -61,6 +63,12 @@ class XbeeBox(object):
             print(data)
             raise
         return events
+
+    def send_command(self, command, state):
+        new_message = {'addr_long': self.addr_long, 'mode':'tx',
+            'data':self.txcommands[command['value']]}
+        self.messager.publish('xbee-commands', json.dumps(new_message))
+        return
 
     def turn_on(self, command, state):
         #command = json.loads(command['data']) should be done before
