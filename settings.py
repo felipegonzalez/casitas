@@ -136,6 +136,11 @@ device_settings = {
         'device_type':'xbeebox',
         'addr_long':'0013a20040be4592'
         },
+        'caja_pasillo_comedor':{
+        'place':'pasillo_comedor',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040c4190d'
+        },
         'caja_goteo':{
         'place':'patio',
         'device_type':'xbeebox',
@@ -173,7 +178,8 @@ device_settings = {
         'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43',
         'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
         'Dining hall 2':'40', 'Living room wall':'60',
-        'Downstairs bath':'59' ,'Stairs':'61'},
+        'Downstairs bath':'59' ,'Stairs':'61', 'Dining hall 1':'41',
+        'Dining hall 2':'40', 'Caballeriza uno':'62',' Caballeriza dos':'63'},
         'place_lights':place_lights
         },
         'sonos':{

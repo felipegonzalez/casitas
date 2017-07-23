@@ -97,7 +97,7 @@ while True:
     for pl in state['motion_value'].keys():
         state['motion_value'][pl] = state['motion_value'][pl]*math.exp(-coef*delta_time)
     #heartbeat
-    if(time.time() - timer_heartbeat > 1):
+    if(time.time() - timer_heartbeat > 2):
         timer_heartbeat = time.time()
         heartbeat_message = json.dumps({'device_name':'heartbeat', 
             'place':'casa','event_type':'heartbeat','value':time.time()})

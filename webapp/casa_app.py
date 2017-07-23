@@ -19,6 +19,9 @@ class control(object):
     def controlcasa(self):
         return open('index_main.html')
 
+    @cherrypy.expose
+    def llegada(self):
+        return "Veo llegada"    
 
     @cherrypy.expose
     def autoluz(self):
@@ -87,6 +90,10 @@ class control(object):
         mensaje = 'Activando garage'
         r.publish('commands', json.dumps({"device_name":"caja_garage",
             "command":"send_command", "value":"garage_open"}))
+        r.publish('commands', json.dumps({"device_name":"sonos",
+                "command":"say", "value":"Puerta de garage activada"})) 
+        r.publish('commands', json.dumps({"device_name":"pushover",
+                "command":"send_message", "value":"Puerta de garage activada"})) 
         return mensaje
     @cherrypy.expose
     def regar(self, sw):

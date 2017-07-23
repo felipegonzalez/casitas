@@ -1,0 +1,1 @@
+~/Downloads/ngrok-2 http -subdomain=casatf -auth="momo:cuca" -inspect=false 8090
