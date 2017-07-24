@@ -3,6 +3,8 @@ import time
 from soco import SoCo
 import soco
 import os
+from soco.snapshot import Snapshot
+
 
 class Sonos(object):
 
@@ -11,16 +13,19 @@ class Sonos(object):
         self.pref_zone = init['children']['1']
         sonos_list = soco.discover()
         zones = {}
+        self.prev_snapshot = {}
         while(len(sonos_list) > 0):
             player = sonos_list.pop()
             zones[player.player_name] = player
+            snap = Snapshot(player)
+            self.prev_snapshot[player.player_name] = snap
+            self.prev_snapshot[player.player_name].snapshot()
             if(player.player_name == self.pref_zone):
                 self.sonos = player
         self.zones = zones
 
         self.state = {}
 
-        self.prev_state = {'volume':self.sonos.volume}
         #self.children = init['children']
         self.messager = messager
         self.polling = 60
@@ -64,34 +69,25 @@ class Sonos(object):
         #    print("Error say!")
         return
 
+    def resume(self, command, state):
+        self.prev_snapshot[command['value']].restore(fade = True)
 
    
-    def _play(self, file, volume = 100, player_name = None):
+    def _play(self, file, volume = 80, player_name = None):
         if(player_name is None):
             player = self.sonos
+            player_name = self.sonos.player_name
         else:
             player = self.zones[player_name]
         try:
-            #sonos = self.zones[0]
-            track = player.get_current_track_info()
-            playlistPos = int(track['playlist_position'])-1
-            trackPos = track['position']
-            trackURI = track['uri']
-
-            # This information allows us to resume services like Pandora
-            mediaInfo = player.avTransport.GetMediaInfo([('InstanceID', 0)])
-            #mediaURI = mediaInfo['CurrentURI']
-            #mediaMeta = mediaInfo['CurrentURIMetaData']
-            transport_state = player.get_current_transport_info()['current_transport_state']
-            volume_before = player.volume
+            self.prev_snapshot[player_name].snapshot()          
             player.volume = volume
             player.play_uri('x-file-cifs://homeserver/sonidos/' + file)
             duration_txt = self.sonos.get_current_track_info()['duration']
             alertDuration = 60*int(duration_txt.split(':')[1])  +  int(duration_txt.split(':')[2])
             r = self.messager
-            # go back to previous values
-            com = json.dumps({'device_name':'sonos', 'command':'set_volume',
-                'value':volume})
+            com = json.dumps({'device_name':'sonos', 'command':'resume',
+                'value':player_name})
             r.publish('commands', 
                 json.dumps({'device_name':'timer_1', 'command':'add_timer',
                 'interval':alertDuration + 2, 'value':com}))
