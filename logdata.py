@@ -9,5 +9,7 @@ def log(state, r):
 	#print(state['temperature'])
 	r.hmset('humidity', state['humidity'])
 	r.hmset('motion', state['motion'])
+	if(len(state['devices_state']['caja_consumo_electrico']) > 0):
+		r.hmset('power usage', state['devices_state']['caja_consumo_electrico'])
 	r.set('riego', state['devices']['caja_goteo'].state['regar'])
 	return

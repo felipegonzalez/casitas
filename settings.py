@@ -131,6 +131,11 @@ device_settings = {
         'device_type':'xbeebox',
         'addr_long':'0013a20040bf06d4'
         },
+        'caja_consumo_electrico':{
+        'place':'casa',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040c4605b'
+        },
         'caja_estudiot':{
         'place':'estudiot',
         'device_type':'xbeebox',

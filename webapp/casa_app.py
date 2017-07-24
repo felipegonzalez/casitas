@@ -164,6 +164,10 @@ class infoBasica(object):
             temp = r.hget('temperature', lugar).decode('utf-8')
             if(float(temp) != 0):
                 out.append((lugar, 'Temperatura', temp))
+        #for lugar in lugares:
+        #    temp = r.hget('temperature', lugar).decode('utf-8')
+        #    if(float(temp) != 0):
+        #        out.append((lugar, 'Temperatura', temp))
         for lugar in lugares:
             humd = r.hget('humidity', lugar).decode('utf-8')
             if(float(humd) != 0):
@@ -172,6 +176,10 @@ class infoBasica(object):
             motion = r.hget('motion', lugar).decode('utf-8')
             if(motion=='True'):
                 out.append((lugar, 'Movimiento', motion))
+        kw = r.hget('power usage', 'ct kW').decode('utf-8')
+        out.append(('Casa', 'Consumo (kW)', kw))
+        amps = r.hget('power usage', 'ct A').decode('utf-8')
+        out.append(('Casa', 'Consumo (A)', kw))
             
         riego = r.get('riego').decode('utf8')
         out.append(('patio', 'Riego por goteo', riego))
