@@ -10,15 +10,12 @@ class Sonos(object):
         self.name = name
         self.pref_zone = init['children']['1']
         sonos_list = soco.discover()
-        zones = []
+        zones = {}
         while(len(sonos_list) > 0):
             player = sonos_list.pop()
-            zones.append(player)
+            zones[player.player_name] = player
             if(player.player_name == self.pref_zone):
                 self.sonos = player
-
-        print(zones[0].player_name)
-        print(zones[1].player_name)
         self.zones = zones
 
         self.state = {}
@@ -46,47 +43,61 @@ class Sonos(object):
             print('Error setting sonos volume')
         return
 
+    def play(self, command, state):
+        if('zone' in command.keys()):
+            zone = command['zone']
+        else:
+            zone = self.sonos.player_name
+        self._play(command['value'], volume = command['volume'], player_name = zone)
+        return
 
     def say(self, command, state):
-        #data = json.loads(command['data']) 
-        state_s = {}
-        
+        #data = json.loads(command['data'])         
         text = command['value']
         self.prev_state['volume'] = self.sonos.volume
         #try:
-        self.sonos.volume = 80
         os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
-        state_s = self.play("voz.mp4")
-        duration_txt = self.sonos.get_current_track_info()['duration']
-        alertDuration = 60*int(duration_txt.split(':')[1])  +  int(duration_txt.split(':')[2])
-        r = self.messager
-        com = json.dumps({'device_name':'sonos', 'command':'set_volume',
-            'value':self.prev_state['volume']})
-        r.publish('commands', 
-            json.dumps({'device_name':'timer_1', 'command':'add_timer',
-                'interval':alertDuration + 2, 'value':com}))
+        self._play("voz.mp4", volume = 80)        
+        
             #sonos.play_uri('x-file-cifs:%s' % '//homeserver/sonidos/voz.mp4')
         #except:
         #    print("Error say!")
         return
+
+
    
-    def play(self, file):
+    def _play(self, file, volume = 100, player_name = None):
+        if(player_name is None):
+            player = self.sonos
+        else:
+            player = self.zones[player_name]
         try:
             #sonos = self.zones[0]
-
-            track = self.sonos.get_current_track_info()
+            track = player.get_current_track_info()
             playlistPos = int(track['playlist_position'])-1
             trackPos = track['position']
             trackURI = track['uri']
 
             # This information allows us to resume services like Pandora
-            mediaInfo = self.sonos.avTransport.GetMediaInfo([('InstanceID', 0)])
+            mediaInfo = player.avTransport.GetMediaInfo([('InstanceID', 0)])
             #mediaURI = mediaInfo['CurrentURI']
             #mediaMeta = mediaInfo['CurrentURIMetaData']
-            transport_state = self.sonos.get_current_transport_info()['current_transport_state']
-            volumen = self.sonos.volume
-            self.sonos.play_uri('x-file-cifs://homeserver/sonidos/' + file)
+            transport_state = player.get_current_transport_info()['current_transport_state']
+            volume_before = player.volume
+            player.volume = volume
+            player.play_uri('x-file-cifs://homeserver/sonidos/' + file)
             duration_txt = self.sonos.get_current_track_info()['duration']
+            alertDuration = 60*int(duration_txt.split(':')[1])  +  int(duration_txt.split(':')[2])
+            r = self.messager
+            # go back to previous values
+            com = json.dumps({'device_name':'sonos', 'command':'set_volume',
+                'value':volume})
+            r.publish('commands', 
+                json.dumps({'device_name':'timer_1', 'command':'add_timer',
+                'interval':alertDuration + 2, 'value':com}))
+
+
+   
             #alertDuration = 60*int(duration_txt.split(':')[2]) + 
             #sleepTime=2
             #time.sleep(sleepTime)
