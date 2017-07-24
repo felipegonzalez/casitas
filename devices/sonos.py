@@ -57,16 +57,10 @@ class Sonos(object):
         return
 
     def say(self, command, state):
-        #data = json.loads(command['data'])         
         text = command['value']
-        self.prev_state['volume'] = self.sonos.volume
-        #try:
         os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
         self._play("voz.mp4", volume = 80)        
-        
-            #sonos.play_uri('x-file-cifs:%s' % '//homeserver/sonidos/voz.mp4')
-        #except:
-        #    print("Error say!")
+
         return
 
     def resume(self, command, state):
