@@ -129,6 +129,11 @@ device_settings = {
         'addr_long':'0013a20040caadda',
         'children':{'regar':'D2'}
         },
+        'caja_terraza':{
+        'place':'jardin',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040caacd7',
+        },
         'caja_garage':{
         'place':'patio',
         'device_type':'xbeebox',
@@ -221,8 +226,9 @@ place_lights = { 'Living room foot 1':'sala',
                  'Dining hall 1':'pasillo_comedor',
                  'Dining hall 2':'pasillo_comedor',
                  'Caballeriza uno':'patio',
-                 'Caballeriza dos':'patio'}
-                 
+                 'Caballeriza dos':'patio',
+                 'Backyard':'jardin'}
+
 device_settings['hue'] = {
         'ip_address':'192.168.100.203',
         'place':'casa',
@@ -238,7 +244,8 @@ device_settings['hue'] = {
         'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
         'Dining hall 2':'40', 'Living room wall':'60',
         'Downstairs bath':'59' ,'Stairs':'61', 'Dining hall 1':'41',
-        'Dining hall 2':'40', 'Caballeriza uno':'62','Caballeriza dos':'63'},
+        'Dining hall 2':'40', 'Caballeriza uno':'62','Caballeriza dos':'63',
+        'Backyard':'55'},
         'place_lights':place_lights
         }
 #xbee_dict
@@ -265,7 +272,7 @@ state['motion_value'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 300
+        state['min_photo'][place] = 200
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
