@@ -6,8 +6,7 @@ class AppDoorLight():
         self.place_lights = place_lights
         self.door_mapping = {'hall_entrada':['Entrance hall','Front door',
         'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
-        'Entrance table']}
-        #self.device = device
+        'Entrance table', 'Caballeriza uno', 'Caballeriza dos']}
 
     def activate(self, ev_content, state, r):
         devices = state['devices']
@@ -34,7 +33,6 @@ class AppDoorLight():
         fire = False
         devices = state['devices']
         #print ev_content
-
         if ev_content:
             if(ev_content['event_type']=='door' and not(ev_content['value'])):
                 place = devices[ev_content['device_name']].place

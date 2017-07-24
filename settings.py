@@ -59,7 +59,9 @@ place_lights = { 'Living room foot 1':'sala',
                  'Study Tere':'estudiot',
                  'Dining room':'comedor',
                  'Dining hall 1':'pasillo_comedor',
-                 'Dining hall 2':'pasillo_comedor'}
+                 'Dining hall 2':'pasillo_comedor',
+                 'Caballeriza uno':'patio',
+                 'Caballeriza dos':'patio'}
 # devices
 device_settings = {
         'virtual-jardin':{
@@ -169,24 +171,6 @@ device_settings = {
         #'addr_long':'0013a20040c45639',
         #'children':{'luzchica':'D2'} #pin number
         #},
-        'hue':{
-        'ip_address':'192.168.100.203',
-        'place':'casa',
-        'device_type':'hue',
-        'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
-        'Patio stairs three':'37' ,'Main bath one':'57' ,
-        'Main bath two':'56', 'Kitchen one':'42',
-        'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
-        'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
-        'Patio stairs one':'52', 'Patio stairs two':'53', 
-        'Patio stairs three':'37',
-        'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43',
-        'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
-        'Dining hall 2':'40', 'Living room wall':'60',
-        'Downstairs bath':'59' ,'Stairs':'61', 'Dining hall 1':'41',
-        'Dining hall 2':'40', 'Caballeriza uno':'62',' Caballeriza dos':'63'},
-        'place_lights':place_lights
-        },
         'sonos':{
         'place':'home',
         'device_type':'sonos',
@@ -236,6 +220,25 @@ device_settings = {
         'place':'casa'
         }
 }
+
+device_settings['hue'] = {
+        'ip_address':'192.168.100.203',
+        'place':'casa',
+        'device_type':'hue',
+        'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
+        'Patio stairs three':'37' ,'Main bath one':'57' ,
+        'Main bath two':'56', 'Kitchen one':'42',
+        'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
+        'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
+        'Patio stairs one':'52', 'Patio stairs two':'53', 
+        'Patio stairs three':'37',
+        'Entrance table':'48','Felipe Study':'36', 'Study Tere':'43',
+        'Dining room':'38', 'Hue bloom 1':'58' ,'Dining hall 1':'41',
+        'Dining hall 2':'40', 'Living room wall':'60',
+        'Downstairs bath':'59' ,'Stairs':'61', 'Dining hall 1':'41',
+        'Dining hall 2':'40', 'Caballeriza uno':'62','Caballeriza dos':'63'},
+        'place_lights':place_lights
+        }
 #xbee_dict
 xbee_dict = {}
 for key in device_settings.keys():
