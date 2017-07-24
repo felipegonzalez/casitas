@@ -15,14 +15,12 @@ from apps.appdoorlight import AppDoorLight
 from apps.appdoorbell import DoorBell
 
 #create instances for apps #############
-app_doorlight = AppDoorLight(place_lights)
-app_autolight = AutoLight(delays)
-app_doorbell = DoorBell()
+
 ## Add to dictionary
 apps = {}
-apps['app doorlight'] = app_doorlight
-apps['app_autolight'] = app_autolight
-apps['app_doorbell'] = app_doorbell
+apps['app doorlight'] = AppDoorLight(place_lights)
+apps['app_autolight'] = AutoLight(delays)
+apps['app_doorbell'] = DoorBell()
 
 
 #start logging
