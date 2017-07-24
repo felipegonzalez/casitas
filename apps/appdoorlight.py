@@ -29,7 +29,7 @@ class AppDoorLight():
 
 
 
-    def check(self, ev_content,  state):
+    def check_event(self, ev_content,  state):
         fire = False
         devices = state['devices']
         value =''
@@ -44,4 +44,7 @@ class AppDoorLight():
                         fire = fire or True
         return fire, value
 
-
+    def check_command(self, comm_content,  state):
+        fire = False
+        value = ''
+        return fire, value

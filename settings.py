@@ -36,32 +36,7 @@ delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'estudiof':120, 'jardin':80,'estudiot':120, 'comedor':120,
             'pasillo_comedor':120}
 
-place_lights = { 'Living room foot 1':'sala', 
-                'Living room foot 2':'sala',
-                'Hue bloom 1':'sala',
-                'Living room wall':'sala',
-                'Downstairs bath':'bano_visitas',
-                'Main bath one':'bano_principal',
-                'Main bath two':'bano_principal',
-                 'Kitchen one':'cocina',
-                 'Kitchen two':'cocina',
-                 'Entrance hall':'hall_entrada',
-                 'Entrance table':'hall_entrada',
-                 'Bedroom one':'recamara_principal',
-                 'Bedroom two':'recamara_principal',
-                 'Bedroom hall':'pasillo_recamaras',
-                 'Stairs':'pasillo_recamaras',
-                 'Front door':'front_door_hall',
-                 'Patio stairs one':'escaleras_patio',
-                 'Patio stairs two':'escaleras_patio',
-                 'Patio stairs three':'escaleras_patio',
-                 'Felipe Study':'estudiof',
-                 'Study Tere':'estudiot',
-                 'Dining room':'comedor',
-                 'Dining hall 1':'pasillo_comedor',
-                 'Dining hall 2':'pasillo_comedor',
-                 'Caballeriza uno':'patio',
-                 'Caballeriza dos':'patio'}
+
 # devices
 device_settings = {
         'virtual-jardin':{
@@ -221,6 +196,33 @@ device_settings = {
         }
 }
 
+place_lights = { 'Living room foot 1':'sala', 
+                'Living room foot 2':'sala',
+                'Hue bloom 1':'sala',
+                'Living room wall':'sala',
+                'Downstairs bath':'bano_visitas',
+                'Main bath one':'bano_principal',
+                'Main bath two':'bano_principal',
+                 'Kitchen one':'cocina',
+                 'Kitchen two':'cocina',
+                 'Entrance hall':'hall_entrada',
+                 'Entrance table':'hall_entrada',
+                 'Bedroom one':'recamara_principal',
+                 'Bedroom two':'recamara_principal',
+                 'Bedroom hall':'pasillo_recamaras',
+                 'Stairs':'pasillo_recamaras',
+                 'Front door':'front_door_hall',
+                 'Patio stairs one':'escaleras_patio',
+                 'Patio stairs two':'escaleras_patio',
+                 'Patio stairs three':'escaleras_patio',
+                 'Felipe Study':'estudiof',
+                 'Study Tere':'estudiot',
+                 'Dining room':'comedor',
+                 'Dining hall 1':'pasillo_comedor',
+                 'Dining hall 2':'pasillo_comedor',
+                 'Caballeriza uno':'patio',
+                 'Caballeriza dos':'patio'}
+                 
 device_settings['hue'] = {
         'ip_address':'192.168.100.203',
         'place':'casa',

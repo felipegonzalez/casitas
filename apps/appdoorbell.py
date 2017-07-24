@@ -18,7 +18,7 @@ class DoorBell():
             'volume':10 }))
         return messages
 
-    def check(self, ev_content,  state):
+    def check_event(self, ev_content,  state):
         fire = False
         value = ''
         devices = state['devices']
@@ -29,4 +29,9 @@ class DoorBell():
             if(ev_content['event_type']=='timbre' and (ev_content['value'])):
                 place = devices[ev_content['device_name']].place
                 fire = True
+        return fire, value
+
+    def check_command(self, comm_content,  state):
+        fire = False
+        value = ''
         return fire, value

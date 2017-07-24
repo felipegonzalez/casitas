@@ -25,7 +25,7 @@ class AutoLight():
                     messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 'command':'turn_off'}))
         return messages
 
-    def check(self, ev_content,  state):
+    def check_event(self, ev_content,  state):
         fire = False
         value = ''
         devices = state['devices']
@@ -61,3 +61,7 @@ class AutoLight():
 
         return fire, value
 
+    def check_command(self, comm_content,  state):
+        fire = False
+        value = ''
+        return fire, value

@@ -189,8 +189,9 @@ while True:
         if (comm['type']=='message'):
             print(colored(comm, 'red'))
             logging.info(comm)
-            c = json.loads(comm['data'])
-            getattr(devices[c['device_name']], c['command'])(c, state)
+            comm_content = json.loads(comm['data'])
+            getattr(devices[comm_content['device_name']], 
+                comm_content['command'])(comm_content, state)
 
     # update home state?
 
@@ -199,9 +200,14 @@ while True:
     appcomms = [] 
 
     for app in apps.keys():
-        fire, value = apps[app].check(ev_content, state)
+        # check for events
+        fire, value = apps[app].check_event(ev_content, state)
         if(fire):
             appcomms = apps[app].activate(ev_content, state, r, value)
+            app_messages = app_messages + appcomms
+        fire, value = apps[app].check_command(comm_content, state)
+        if(fire):
+            appcomms = apps[app].activate(comm_content, state, r, value)
             app_messages = app_messages + appcomms
 
     ######## send commands of apps 
