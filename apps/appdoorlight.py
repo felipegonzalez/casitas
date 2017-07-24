@@ -47,4 +47,11 @@ class AppDoorLight():
     def check_command(self, comm_content,  state):
         fire = False
         value = ''
+        if comm_content:
+            if(comm_content['value']=='garage_open'):
+                places_fire = self.door_mapping['hall_entrada']
+                for ll in places_fire:
+                    pl = self.place_lights[ll]
+                    if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
+                        fire = fire or True
         return fire, value

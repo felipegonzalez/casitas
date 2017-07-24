@@ -200,15 +200,17 @@ while True:
     appcomms = [] 
 
     for app in apps.keys():
-        # check for events
-        fire, value = apps[app].check_event(ev_content, state)
-        if(fire):
-            appcomms = apps[app].activate(ev_content, state, r, value)
-            app_messages = app_messages + appcomms
-        fire, value = apps[app].check_command(comm_content, state)
-        if(fire):
-            appcomms = apps[app].activate(comm_content, state, r, value)
-            app_messages = app_messages + appcomms
+        if('ev_content' in locals()):
+            # check for events
+            fire, value = apps[app].check_event(ev_content, state)
+            if(fire):
+                appcomms = apps[app].activate(ev_content, state, r, value)
+                app_messages = app_messages + appcomms
+        if('comm_content' in locals()):
+            fire, value = apps[app].check_command(comm_content, state)
+            if(fire):
+                appcomms = apps[app].activate(comm_content, state, r, value)
+                app_messages = app_messages + appcomms
 
     ######## send commands of apps 
 
