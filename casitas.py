@@ -18,6 +18,12 @@ from apps.appdoorbell import DoorBell
 app_doorlight = AppDoorLight(place_lights)
 app_autolight = AutoLight(delays)
 app_doorbell = DoorBell()
+## Add to dictionary
+apps = {}
+apps['app doorlight'] = app_doorlight
+apps['app_autolight'] = app_autolight
+apps['app_doorbell'] = app_doorbell
+
 
 #start logging
 format_logging = logging.Formatter(fmt='%(levelname)s|%(asctime)s|%(name)s| %(message)s ', datefmt="%Y-%m-%d %H:%M:%S")
@@ -194,23 +200,11 @@ while True:
     app_messages = []
     appcomms = [] 
 
-    fire = app_doorlight.check(ev_content, state) 
-    if(fire):
-        appcomms = app_doorlight.activate(ev_content, state, r)
-        app_messages = app_messages + appcomms
-
-    fire, value = app_autolight.check(ev_content, state) 
-    if(fire):
-        appcomms = app_autolight.activate(ev_content, state, r, value)
-        app_messages = app_messages + appcomms
-
-    fire, value = app_doorbell.check(ev_content, state) 
-    if(fire):
-        appcomms = app_doorbell.activate(ev_content, state, r, value)
-        app_messages = app_messages + appcomms
-
-    ## timer app
-    ####################################################################
+    for app in apps.keys():
+        fire, value = apps[app].check(ev_content, state)
+        if(fire):
+            appcomms = apps[app].activate(ev_content, state, r, value)
+            app_messages = app_messages + appcomms
 
     ######## send commands of apps 
 

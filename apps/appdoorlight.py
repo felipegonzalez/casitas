@@ -8,7 +8,7 @@ class AppDoorLight():
         'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
         'Entrance table', 'Caballeriza uno', 'Caballeriza dos']}
 
-    def activate(self, ev_content, state, r):
+    def activate(self, ev_content, state, r, value):
         devices = state['devices']
         place = devices[ev_content['device_name']].place
         #state['last_motion'][place] = state['timestamp']
@@ -32,6 +32,7 @@ class AppDoorLight():
     def check(self, ev_content,  state):
         fire = False
         devices = state['devices']
+        value =''
         #print ev_content
         if ev_content:
             if(ev_content['event_type']=='door' and not(ev_content['value'])):
@@ -41,6 +42,6 @@ class AppDoorLight():
                     pl = self.place_lights[ll]
                     if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
                         fire = fire or True
-        return fire
+        return fire, value
 
 
