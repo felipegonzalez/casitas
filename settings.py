@@ -204,7 +204,18 @@ device_settings = {
         'password':'valqui1',
         'id_cam':'FI9821P_C4D6554064C4',
         'img_path':'/Volumes/mmshared/img_entrada/',
-        'dest_path':'/Volumes/mmshared/imagenes/img_mov.jpg' 
+        'dest_path':'/Volumes/mmshared/imagenes/img_mov_entrada.jpg' 
+        },
+        'cam_patio':{
+        'device_type':'foscam',
+        'place':'patio',
+        'ip_address':'192.168.100.221',
+        'port':'88',
+        'user':'felipe',
+        'password':'valqui1',
+        'id_cam':'AMBIENTCAMHD_00626E564319',
+        'img_path':'/Volumes/mmshared/img_patio/',
+        'dest_path':'/Volumes/mmshared/imagenes/img_mov_patio.jpg' 
         },
         'estacion_meteo':{
         'device_type':'meteo',

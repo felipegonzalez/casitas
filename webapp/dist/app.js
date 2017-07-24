@@ -102,6 +102,20 @@
             e.preventDefault();
            setTimeout(function(){location.reload()}, 2000);
          });
+        $("#mov-on").click(function(e) {
+           $.post("/detecta_movimiento/1", {}).done(function(string) {
+               $("#respuesta input").val(string);
+            });
+           e.preventDefault();
+           setTimeout(function(){location.reload()}, 2000);
+         });
+        $("#mov-off").click(function(e) {   
+         $.post("/detecta_movimiento/0", {}).done(function(string) {
+               $("#respuesta input").val(string);
+            }); 
+            e.preventDefault();
+           setTimeout(function(){location.reload()}, 2000);
+         });
 
 
      

@@ -95,6 +95,29 @@ class control(object):
         r.publish('commands', json.dumps({"device_name":"pushover",
                 "command":"send_message", "value":"Puerta de garage activada"})) 
         return mensaje
+
+    @cherrypy.expose
+    def detecta_movimiento(self, sw):
+        mensaje = 'Detector mov ' + str(sw)
+        if(sw=='1'):
+            r.publish('commands', json.dumps({"device_name":"cam_entrada",
+                "command":"set_motion_detect", "value":"on"
+                }))
+            r.publish('commands', json.dumps({"device_name":"cam_patio",
+                "command":"set_motion_detect", "value":"on"
+                }))
+            #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
+            #    "command":"turn_off", "value":"regar"})))
+        if(sw=='0'):
+            print("apagando")
+            r.publish('commands', json.dumps({"device_name":"cam_entrada",
+                "command":"set_motion_detect", "value":"off"
+                }))
+            r.publish('commands', json.dumps({"device_name":"cam_patio",
+                "command":"set_motion_detect", "value":"off"
+                })) 
+        return mensaje
+
     @cherrypy.expose
     def regar(self, sw):
         mensaje = 'Sistema de goteo' + str(sw)

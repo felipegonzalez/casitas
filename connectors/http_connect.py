@@ -15,7 +15,9 @@ import json
 
 def process_response(session, response):
     #print("Calling process_response")
+    print(" ")
     print(response.content) 
+    print(" ")
     data = response.content
     ip_addr = str(urlparse(response.url).hostname)
     new_message = json.dumps({'device_name':ip_dict[ip_addr], 

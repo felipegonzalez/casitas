@@ -4,6 +4,7 @@ import os
 import xmltodict
 import glob
 from shutil import copyfile
+import math
 
 class FosCam(object):
 
@@ -63,6 +64,8 @@ class FosCam(object):
     #     return state_alarm
     
     def set_motion_detect(self, command, state):
+        print("config mov")
+        print(command)
         pars = self.basic_payload
         pars['cmd'] = 'setMotionDetectConfig'
         value = command['value']
@@ -72,6 +75,15 @@ class FosCam(object):
             val = 0
         pars['isEnable'] = val 
         pars['isMovAlarmEnable'] = val
+        pars['linkage'] = 12
+        pars['snapInterval'] = 2
+        pars['sensitivity'] = 2
+        pars['triggerInterval'] = 10
+        pars['isPirAlarmEnable'] = 1
+        for j in range(0,7):
+            pars['schedule'+str(j)] = pow(2, 48) - 1
+        for j in range(0,10):
+            pars['area'+str(j)] = 1023
         new_message = {'device_name':self.name,
             'address':self.get_address, 'pars':pars, 'payload':'',
             'type':'get'}
@@ -80,14 +92,24 @@ class FosCam(object):
     def update(self, global_state):
         if(global_state['timestamp']-self.last_check > self.polling):
             self.get_state()
+            self.last_check = time.time()
+            if('motionDetectAlarm' in self.state.keys()):
+                print('Motion '+self.name+' '+self.state['motionDetectAlarm'])
+
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] == '2'):
                 global_state['alarm_cam'] = True
-                list_of_files = glob.glob(self.path+'snap/*') # * means all if need specific format then *.csv
-                latest_file = max(list_of_files, key = os.path.getctime)
-                copyfile(latest_file, self.dest_path)
+                #new_message = {'device_name':'pushover',
+                #    'command':'send_message', 'value':'Movimiento en ' + self.name}
+                #self.messager.publish('http_commands',
+                #a    json.dumps(new_message))
+                list_of_files = glob.glob(self.path+'snap/*') 
+                try:
+                    latest_file = max(list_of_files, key = os.path.getctime)
+                    copyfile(latest_file, self.dest_path)
+                except:
+                    print("could not copy file")
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] != '2'):
                 global_state['alarm_cam'] = False
         #     else:
         #         global_state['alarm_cam'] = False
-            self.last_check = time.time()
         return
