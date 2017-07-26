@@ -50,9 +50,13 @@ class HueHub(object):
         #state['last_motion'][place] = state['timestamp']
         #if (int(state['photo'][place]) < state['min_photo'][place] and 
         #if (time.time() - self.last_on[light_no] > 1):
+        if('brightness' in command.keys()):
+            bri = command['brightness']
+        else:
+            bri = 254
         if(self.state[command['value']]=='off' or self.state[command['value']]==''):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
-            data = json.dumps({'on':True})
+            data = json.dumps({'on':True, 'bri':bri})
             self.state[command['value']] = 'on'
             new_message = {'device_name':self.name, 'address':address, 'payload':data, 'type':'put'}
             self.messager.publish('http-commands', json.dumps(new_message))
