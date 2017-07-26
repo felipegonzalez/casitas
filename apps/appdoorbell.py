@@ -4,7 +4,7 @@ import json
 class DoorBell():
     def __init__(self):
         self.bells = {'patio':'two_tone_doorbell.wav'}
-        self.state = 'on'
+        self.status = 'on'
         pass
 
 
@@ -25,15 +25,14 @@ class DoorBell():
     def check_event(self, ev_content,  state):
         fire = False
         value = ''
-        if(self.state=='on'):
-            devices = state['devices']
-            if ev_content:
-                if(ev_content['event_type']=='timbre'):
-                    print("Tinmbre")
-                    print(ev_content)
-                if(ev_content['event_type']=='timbre' and (ev_content['value'])):
-                    place = devices[ev_content['device_name']].place
-                    fire = True
+        devices = state['devices']
+        if ev_content:
+            if(ev_content['event_type']=='timbre'):
+                print("Tinmbre")
+                print(ev_content)
+            if(ev_content['event_type']=='timbre' and (ev_content['value'])):
+                place = devices[ev_content['device_name']].place
+                fire = True
         return fire, value
 
     def check_command(self, comm_content,  state):

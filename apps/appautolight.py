@@ -7,7 +7,7 @@ class AutoLight():
         self.base_delays = delays
         self.candidates_off = []
         self.last_auto_off = {}
-        self.state = 'on'
+        self.status = 'on'
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']

@@ -159,6 +159,7 @@ class infoBasica(object):
     def GET(self, resp=''):
         lugares = ['recamara_principal', 'sala', 'estudiof','cocina',
             'hall_entrada', 'patio', 'exterior']
+        apps_mon = ['app_doorlight', 'app_autolight', 'app_doorbell']
         out = []
         for lugar in lugares:
             temp = r.hget('temperature', lugar).decode('utf-8')
@@ -177,12 +178,18 @@ class infoBasica(object):
             if(motion=='True'):
                 out.append((lugar, 'Movimiento', motion))
         kw = r.hget('power usage', 'ct kW').decode('utf-8')
-        out.append(('Casa', 'Consumo (kW)', kw))
+        out.append(('casa', 'Consumo (kW)', kw))
         amps = r.hget('power usage', 'ct A').decode('utf-8')
-        out.append(('Casa', 'Consumo (A)', kw))
+        out.append(('casa', 'Consumo (A)', kw))
             
         riego = r.get('riego').decode('utf8')
         out.append(('patio', 'Riego por goteo', riego))
+
+        for appname in apps_mon:
+            app_status = r.hget('apps', appname).decode('utf-8')
+            out.append(('app', appname, app_status))
+
+
         # con2 = lite.connect('/Volumes/mmshared/bdatos/ultimas.db')
         # with con2:
         #     cur = con2.cursor()

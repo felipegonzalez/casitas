@@ -18,9 +18,10 @@ from apps.appdoorbell import DoorBell
 
 ## Add to dictionary
 apps = {}
-apps['app doorlight'] = AppDoorLight(place_lights)
+apps['app_doorlight'] = AppDoorLight(place_lights)
 apps['app_autolight'] = AutoLight(delays)
 apps['app_doorbell'] = DoorBell()
+state['apps'] = apps
 
 
 #start logging
@@ -76,7 +77,7 @@ for con in conn_names:
 #print(state['groups_lights'])
 timer_print = time.time()
 timer_heartbeat = time.time()
-
+timer_log = 0
 ########### main loop ############################################
 delta_time = 0
 coef = 0.01
@@ -130,8 +131,9 @@ while True:
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
-    if(time.time()-timer_print > 3):
+    if(time.time()-timer_log > 3):
        logdata.log(state,r)
+       timer_log = time.time()
 
 
 
@@ -198,15 +200,15 @@ while True:
     # include app code here ####################################################
     app_messages = []
     appcomms = [] 
-
-    for app in apps.keys():
-        if('ev_content' in locals() and apps[app].state == 'on'):
+    apps = state['apps']
+    for app in state['apps'].keys():
+        if('ev_content' in locals() and state['apps'][app].status == 'on'):
             # check for events
             fire, value = apps[app].check_event(ev_content, state)
             if(fire):
                 appcomms = apps[app].activate(ev_content, state, r, value)
                 app_messages = app_messages + appcomms
-        if('comm_content' in locals() and apps[app].state == 'on'):
+        if('comm_content' in locals() and state['apps'][app].status == 'on'):
             fire, value = apps[app].check_command(comm_content, state)
             if(fire):
                 appcomms = apps[app].activate(comm_content, state, r, value)
