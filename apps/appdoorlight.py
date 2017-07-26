@@ -9,6 +9,7 @@ class AppDoorLight():
         'Entrance table', 'Caballeriza uno', 'Caballeriza dos'],
         'patio':['Caballeriza uno',' Caballeriza dos', 'Patio stairs one',
         'Patio stairs two', 'Patio stairs three']}
+        self.state = 'on'
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']

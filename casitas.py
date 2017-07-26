@@ -200,13 +200,13 @@ while True:
     appcomms = [] 
 
     for app in apps.keys():
-        if('ev_content' in locals()):
+        if('ev_content' in locals() and apps[app].state == 'on'):
             # check for events
             fire, value = apps[app].check_event(ev_content, state)
             if(fire):
                 appcomms = apps[app].activate(ev_content, state, r, value)
                 app_messages = app_messages + appcomms
-        if('comm_content' in locals()):
+        if('comm_content' in locals() and apps[app].state == 'on'):
             fire, value = apps[app].check_command(comm_content, state)
             if(fire):
                 appcomms = apps[app].activate(comm_content, state, r, value)
