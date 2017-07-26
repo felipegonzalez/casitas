@@ -9,12 +9,16 @@ class HueHub(object):
         self.place = init['place']
         self.place_lights = init['place_lights']
         self.state = {}
+        self.bri = {}
+        self.reachable = {}
         self.children = init['children']
         self.light_names = {}
         for k in self.children.keys() :
             self.light_names[self.children[k]] = k
         for k in self.children.keys():
             self.state[k] = ''
+            self.bri[k] = 254
+            self.reachable[k] = False
         print(self.light_names)
         print(self.state)
         self.messager = messager
@@ -33,13 +37,16 @@ class HueHub(object):
         #print(message_p)
         if(isinstance(message_p, dict)):
             for light_no in message_p.keys():
-                if(message_p[light_no]['state']['on']):
-                    if(light_no in self.light_names.keys()):
+                if(light_no in self.light_names.keys()):
+                    self.bri[self.light_names[light_no]] = message_p[light_no]['state']['bri']
+                    self.reachable[self.light_names[light_no]] = message_p[light_no]['state']['reachable']
+
+                    if(message_p[light_no]['state']['on']):
                         self.state[self.light_names[light_no]] = 'on'
-                else:
-                    if(light_no in self.light_names.keys()):
+                    else:
                         self.state[self.light_names[light_no]] = 'off'
             print(self.state)
+            print(self.bri)
         return parsed_m
 
     def turn_on(self, command, state):
