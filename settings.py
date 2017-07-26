@@ -279,7 +279,7 @@ for place in places :
         state['motion'][place] = False
         state['motion_value'][place] = 0
 #state['min_photo']['estudiot'] = 1000
-
+state['min_photo']['pasillo_comedor'] = 100
 state['groups_lights'] = {}
 for place in places:
         place_dict = {}
