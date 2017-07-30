@@ -75,8 +75,8 @@ class XbeeBox(object):
 
     def turn_on(self, command, state):
         #command = json.loads(command['data']) should be done before
-        if (self.children[command['value']] in state['lights']):
-            state['last_motion'][self.place] = state['timestamp']
+        #if (self.children[command['value']] in state['lights']):
+        #    state['last_motion'][self.place] = state['timestamp']
         new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
                        "parameter":"05", "mode":"pin"}
         self.state[command['value']] = 'on'

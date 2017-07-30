@@ -7,9 +7,10 @@ class AppDoorLight():
         self.door_mapping = {'hall_entrada':['Entrance hall','Front door',
         'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
         'Entrance table', 'Caballeriza uno', 'Caballeriza dos'],
-        'patio':['Caballeriza uno',' Caballeriza dos', 'Patio stairs one',
+        'patio':['Caballeriza uno','Caballeriza dos', 'Patio stairs one',
         'Patio stairs two', 'Patio stairs three']}
         self.status = 'on'
+        self.name = "app_doorlight"
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -27,7 +28,8 @@ class AppDoorLight():
         #print(to_light)
         mensajes = []
         for dd in to_light:
-            mensajes.append(json.dumps({'device_name':'hue', 'value':dd, 'command':'turn_on'}))
+            mensajes.append(json.dumps({'device_name':'hue', 'value':dd, 
+                'command':'turn_on', 'origin':self.name}))
         return mensajes
 
 

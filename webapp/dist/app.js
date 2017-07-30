@@ -75,14 +75,14 @@
            e.preventDefault();
          });
         $("#lock-a").click(function(e) {   
-         $.post("/chapa/1", {}).done(function(string) {
+         $.post("/filtro_alberca/0", {}).done(function(string) {
                $("#respuesta input").val(string);
             }); 
             e.preventDefault();
            setTimeout(function(){location.reload()}, 2000);
          });
         $("#unlock-a").click(function(e) {
-           $.post("/chapa/0", {}).done(function(string) {
+           $.post("/filtro_alberca/1", {}).done(function(string) {
                $("#respuesta input").val(string);
             });
            e.preventDefault();

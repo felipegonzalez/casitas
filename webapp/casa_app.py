@@ -21,7 +21,17 @@ class control(object):
 
     @cherrypy.expose
     def llegada(self):
-        return "Veo llegada"    
+        return "Veo llegada"
+
+    @cherrypy.expose
+    def ring(self, lugar):
+        print("ring")
+        #r.publish('commands', json.dumps({'device_name':'sonos',
+        #    'command':'play','value':'store_bell.wav',
+        #    'volume':100, 'zone':'Estudio' }))
+        r.publish('events', json.dumps({'device_name':'caja_cocina_timbre',
+            'event_type':'timbre', 'value':True}))
+        return 'Ring!!'    
 
     @cherrypy.expose
     def autoluz(self):
@@ -84,12 +94,21 @@ class control(object):
     #             mensaje = 'Abrir chapa'
     #         cur.execute(commandx)
     #     return mensaje
+    @cherrypy.expose
+    def filtro_alberca(self, sw):
+        if(sw=='0'):
+            r.publish('commands', json.dumps({"device_name":"caja_filtro_alberca",
+            "command":"turn_off", "value":"bomba", "origin":"webapp"}))
+        if(sw=='1'):
+            r.publish('commands', json.dumps({"device_name":"caja_filtro_alberca",
+            "command":"turn_on", "value":"bomba", "origin":"webapp"}))
+        return 'Bomba alberca'
 
     @cherrypy.expose
     def garage(self):
         mensaje = 'Activando garage'
         r.publish('commands', json.dumps({"device_name":"caja_garage",
-            "command":"send_command", "value":"garage_open"}))
+            "command":"send_command", "value":"garage_open", "origin":"webapp"}))
         r.publish('commands', json.dumps({"device_name":"sonos",
                 "command":"say", "value":"Puerta de garage activada"})) 
         r.publish('commands', json.dumps({"device_name":"pushover",
@@ -101,20 +120,20 @@ class control(object):
         mensaje = 'Detector mov ' + str(sw)
         if(sw=='1'):
             r.publish('commands', json.dumps({"device_name":"cam_entrada",
-                "command":"set_motion_detect", "value":"on"
+                "command":"set_motion_detect", "value":"on", "origin":"webapp"
                 }))
             r.publish('commands', json.dumps({"device_name":"cam_patio",
-                "command":"set_motion_detect", "value":"on"
+                "command":"set_motion_detect", "value":"on","origin":"webapp"
                 }))
             #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
             #    "command":"turn_off", "value":"regar"})))
         if(sw=='0'):
             print("apagando")
             r.publish('commands', json.dumps({"device_name":"cam_entrada",
-                "command":"set_motion_detect", "value":"off"
+                "command":"set_motion_detect", "value":"off", "origin":"webapp"
                 }))
             r.publish('commands', json.dumps({"device_name":"cam_patio",
-                "command":"set_motion_detect", "value":"off"
+                "command":"set_motion_detect", "value":"off", "origin":"webapp"
                 })) 
         return mensaje
 
@@ -123,24 +142,23 @@ class control(object):
         mensaje = 'Sistema de goteo' + str(sw)
         if(sw=='1'):
             r.publish('commands', json.dumps({"device_name":"caja_goteo",
-                "command":"turn_on", "value":"regar"
+                "command":"turn_on", "value":"regar", "origin":"webapp"
                 }))
             r.publish('commands', json.dumps({"device_name":"sonos",
-                "command":"say", "value":"Regando ahora"}))
+                "command":"say", "value":"Regando ahora", "origin":"webapp"}))
             message_off =json.dumps({'device_name':'caja_goteo',
-                'command':'turn_off', 'value':'regar'
-                })
+                'command':'turn_off', 'value':'regar', "origin":"timer"})
             r.publish('commands', json.dumps({"device_name":"timer_1",
                 "command":"add_timer", "interval":60*30, 
-                "value":message_off}))
+                "value":message_off, "origin":"webapp"}))
             #app_timer.add_timer((20, json.dumps({"device_name":"caja_goteo",
             #    "command":"turn_off", "value":"regar"})))
         if(sw=='0'):
             r.publish('commands', json.dumps({'device_name':'caja_goteo',
-                'command':'turn_off', 'value':'regar'
+                'command':'turn_off', 'value':'regar', "origin":"webapp"
                 }))
             r.publish('commands', json.dumps({"device_name":"sonos",
-                "command":"say", "value":"Riego apagado"}))  
+                "command":"say", "value":"Riego apagado", "origin":"webapp"}))  
         # con = lite.connect('/Volumes/mmshared/bdatos/comandos.db')
         # with con:
         #     cur = con.cursor()

@@ -8,6 +8,7 @@ class AutoLight():
         self.candidates_off = []
         self.last_auto_off = {}
         self.status = 'on'
+        self.name = 'app_autolight'
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -17,13 +18,15 @@ class AutoLight():
             place = devices[ev_content['device_name']].place
             ll = state['groups_lights'][place]
             for dd in ll.keys():
-                messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 'command':'turn_on'}))
+                messages.append(json.dumps({'device_name':ll[dd], 
+                    'value':dd, 'command':'turn_on', 'origin':self.name}))
         else:       
             for place in self.candidates_off:
                 state['last_motion'][place] = state['timestamp']
                 ll = state['groups_lights'][place]
                 for dd in ll.keys():
-                    messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 'command':'turn_off'}))
+                    messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 
+                        'command':'turn_off', 'origin':self.name}))
         return messages
 
     def check_event(self, ev_content,  state):

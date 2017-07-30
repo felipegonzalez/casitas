@@ -3,11 +3,10 @@ import json
 
 class DoorBell():
     def __init__(self):
-        self.bells = {'patio':'two_tone_doorbell.wav'}
+        self.bells = {'patio':'two_tone_doorbell.wav', 'calle_frente':'store_bell.wav'}
         self.status = 'on'
+        self.name = 'app_doorbell'
         pass
-
-
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -16,10 +15,7 @@ class DoorBell():
         text = 'Timbre en ' + place
         print(text)
         messages.append(json.dumps({'device_name':'pushover',
-            'command':'send_message', 'value':text}))
-        messages.append(json.dumps({'device_name':'sonos',
-            'command':'play', 'value':self.bells[place],
-            'volume':100, 'zone':'Estudio' }))
+            'command':'send_message', 'value':text, 'origin':self.name}))
         return messages
 
     def check_event(self, ev_content,  state):

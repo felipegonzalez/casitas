@@ -16,10 +16,11 @@ from devices.timer import Timer
 from devices.foscam import FosCam
 from devices.weather_station import WeatherStation
 from devices.pushover_service import PushMessenger
+from devices.esp6288 import Esp6288
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
     'virtual':Virtual, 'timer':Timer, 'foscam':FosCam , 'meteo':WeatherStation,
-    'push_messenger':PushMessenger}
+    'push_messenger':PushMessenger, 'esp6288':Esp6288}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -28,7 +29,8 @@ conn_names = ['xbee-events', 'http-events']
 places = ['sala', 'bano_visitas', 'bano_principal', 'cocina', 
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
-        'exterior', 'estudiot' ,'comedor', 'pasillo_comedor','casa']
+        'exterior', 'estudiot' ,'comedor', 'pasillo_comedor','casa',
+        'calle_frente']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
@@ -145,6 +147,12 @@ device_settings = {
         'device_type':'xbeebox',
         'addr_long':'0013a20040bf962c'
         },
+        'caja_filtro_alberca':{
+        'place':'patio',
+        'device_type':'xbeebox',
+        'addr_long':'0013a20040bef862',
+        'children':{'bomba':'D2'}
+        },
         #cajarecamara':{
         #'place':'recamara',
         #'device_type':'xbeebox',
@@ -198,6 +206,11 @@ device_settings = {
         'pushover':{
         'device_type':'push_messenger',
         'place':'casa'
+        },
+        'caja_cocina_timbre':{
+        'device_type':'esp6288',
+        'ip_address':'192.168.100.152',
+        'place':'calle_frente'
         }
 }
 
