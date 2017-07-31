@@ -8,6 +8,7 @@ import cherrypy
 import os, sys
 sys.path.insert(0,os.path.pardir)
 from settings import r 
+from settings import ip_dict
 #from casitas import app_timer
 
 cherrypy.server.socket_host = '0.0.0.0'
@@ -22,6 +23,18 @@ class control(object):
     @cherrypy.expose
     def llegada(self):
         return "Veo llegada"
+
+    @cherrypy.expose
+    def send_event(self, event_type, value):
+        ip_origin = cherrypy.request.remote.ip
+        if(ip_origin in ip_dict.keys()):
+            device_name = ip_dict[ip_origin]
+        else:
+            device_name = 'unknown'
+        ev = {'device_name':device_name, 'event_type':event_type, 
+            'value':value}
+        #r.publish('events', json.dumps(ev))
+        return json.dumps(ev)
 
     @cherrypy.expose
     def ring(self, lugar):

@@ -17,10 +17,11 @@ from devices.foscam import FosCam
 from devices.weather_station import WeatherStation
 from devices.pushover_service import PushMessenger
 from devices.esp6288 import Esp6288
+from devices.general import GeneralDevice
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
     'virtual':Virtual, 'timer':Timer, 'foscam':FosCam , 'meteo':WeatherStation,
-    'push_messenger':PushMessenger, 'esp6288':Esp6288}
+    'push_messenger':PushMessenger, 'esp6288':Esp6288, 'general':GeneralDevice}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -211,6 +212,10 @@ device_settings = {
         'device_type':'esp6288',
         'ip_address':'192.168.100.152',
         'place':'calle_frente'
+        },
+        'homeserver':{
+        'device_type':'general',
+        'ip_address':'192.168.100.50'
         }
 }
 
