@@ -33,7 +33,7 @@ class control(object):
             device_name = 'unknown'
         ev = {'device_name':device_name, 'event_type':event_type, 
             'value':value}
-        #r.publish('events', json.dumps(ev))
+        r.publish('events', json.dumps(ev))
         return json.dumps(ev)
 
     @cherrypy.expose

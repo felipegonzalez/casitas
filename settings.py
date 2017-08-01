@@ -215,7 +215,8 @@ device_settings = {
         },
         'homeserver':{
         'device_type':'general',
-        'ip_address':'192.168.100.50'
+        'ip_address':'192.168.100.50',
+        'place':'unknown'
         }
 }
 

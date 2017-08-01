@@ -11,7 +11,10 @@ class DoorBell():
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
         place = devices[ev_content['device_name']].place
-        sound_file = self.bells[place]
+        if(place in self.bells.keys()):
+            sound_file = self.bells[place]
+        else:
+            sound_file = 'store_bell.wav'
         messages = []
         text = 'Timbre en ' + place
         print(text)

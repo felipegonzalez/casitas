@@ -6,7 +6,7 @@ class GeneralDevice(object):
     def __init__(self, name, init, messager):
         self.ip_address= init['ip_address']
         self.name = name
-        #self.place = init['place']
+        self.place = init['place']
         self.state = {}
         self.messager = messager
         self.polling = 30
