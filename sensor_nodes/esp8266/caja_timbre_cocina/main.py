@@ -30,7 +30,7 @@ while True:
     led.on()
 
     if(send==1):
-        http_get('ring?lugar=patio')
+        http_get('send_event?event_type=timbre&value=True')
         print("sent rising")
         led.off()
         send = 0
