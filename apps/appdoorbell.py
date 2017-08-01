@@ -11,11 +11,14 @@ class DoorBell():
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
         place = devices[ev_content['device_name']].place
+        sound_file = self.bells[place]
         messages = []
         text = 'Timbre en ' + place
         print(text)
         messages.append(json.dumps({'device_name':'pushover',
             'command':'send_message', 'value':text, 'origin':self.name}))
+        messages.append(json.dumps({'device_name':'sonos', 'command':'play',
+            'value':sound_file,'zone':'Estudio','volume':95}))
         return messages
 
     def check_event(self, ev_content,  state):
