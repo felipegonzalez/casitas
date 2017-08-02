@@ -215,7 +215,11 @@ class infoBasica(object):
             
         riego = r.get('riego').decode('utf8')
         out.append(('patio', 'Riego por goteo', riego))
-
+        try:
+            dist = r.get('Nivel cisterna').decode('utf8')
+            out.append(('cisterna', 'Nivel', dist))
+        except:
+            pass
         for appname in apps_mon:
             app_status = r.hget('apps', appname).decode('utf-8')
             out.append(('app', appname, app_status))

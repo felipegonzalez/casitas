@@ -213,6 +213,11 @@ device_settings = {
         'ip_address':'192.168.100.152',
         'place':'calle_frente'
         },
+        'caja_cisterna':{
+        'device_type':'esp6288',
+        'ip_address':'192.168.100.153',
+        'place':'patio'
+        },
         'homeserver':{
         'device_type':'general',
         'ip_address':'192.168.100.50',

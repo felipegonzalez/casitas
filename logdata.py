@@ -11,9 +11,15 @@ def log(state, r):
 	r.hmset('motion', state['motion'])
 	if(len(state['devices_state']['caja_consumo_electrico']) > 0):
 		r.hmset('power usage', state['devices_state']['caja_consumo_electrico'])
-	r.set('riego', state['devices']['caja_goteo'].state['regar'])
+	print(state['devices_state']['caja_goteo'])
+	try:
+		r.set('riego', state['devices_state']['caja_goteo']['regar'])
+	except:
+		pass
 	app_state = {}
 	for appname in state['apps']:
 		app_state[appname] = state['apps'][appname].status
 	r.hmset('apps', app_state)
+	if('distancia' in state['devices_state']['caja_cisterna']):
+		r.set('Nivel cisterna', state['devices_state']['caja_cisterna']['distancia'])
 	return
