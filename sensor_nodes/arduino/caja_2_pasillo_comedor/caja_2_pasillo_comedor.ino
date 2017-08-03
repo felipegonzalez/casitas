@@ -95,6 +95,7 @@ void registro_enviar(){
   Serial.println(c);
 }
 
+
 void registro_enviar_bmp(){
   sensors_event_t event;
   bmp.getEvent(&event);
@@ -103,7 +104,7 @@ void registro_enviar_bmp(){
   {
     /* Display atmospheric pressue in hPa */
     Serial.print("pressure,hPa,1,");
-    Serial.println(bmp.seaLevelForAltitude(1686, event.pressure));
+    Serial.println(bmp.seaLevelForAltitude(1701, event.pressure));
     float temperature;
     bmp.getTemperature(&temperature);
     Serial.print("temperature,C,1,");
