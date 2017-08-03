@@ -103,8 +103,7 @@ class Sonos(object):
         #                'alertDuration':alertDuration, 'tiempo_inicio':tiempo,
         #                'state':transport_state, 'volumen':volumen}
         #print estado_salida
-
-        except ValueError:
+        except:
             print("Error sonos")
         return 
  
