@@ -170,7 +170,7 @@ while True:
             add_units = ' ' + ev_content['units']
         else:
             add_units = ''
-        state['devices_state'][ev_content['device_name']][ev_content['event_type'] + add_units] = ev_content['value'] 
+        state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value'] 
         place = device_settings[ev_content['device_name']]['place']
         event_type = ev_content['event_type']
         if(event_type != 'none'):

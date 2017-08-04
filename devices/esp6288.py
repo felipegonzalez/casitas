@@ -39,8 +39,10 @@ class Esp6288(object):
     # we define these functions which are available to the system:
     def turn_on(self, command, state):
         self._send_get(command)
+        state['devices_state'][self.name][command['value']] = 'on'
         return
 
     def turn_off(self, command, state):
         self._send_get(command)
+        state['devices_state'][self.name][command['value']] = 'off'
         return

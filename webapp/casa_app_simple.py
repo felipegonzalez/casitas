@@ -32,7 +32,7 @@ class control(object):
         humedad = {}
         weath_out ={}
         lugares = ['recamara_principal', 'sala', 'estudiof','cocina',
-            'hall_entrada', 'patio', 'exterior']
+            'hall_entrada', 'patio', 'exterior', 'pasillo_comedor']
         if(secreto==house_secret):
             for lugar in lugares:
                 temps[lugar] = float(r.hget('temperature', lugar).decode('utf-8'))
@@ -40,11 +40,20 @@ class control(object):
             weath_out['planta baja'] = round((temps['sala'] + temps['cocina'] + temps['estudiof'])/3, 2)
             weath_out['planta alta'] = round(temps['recamara_principal'],2)
             weath_out['exterior'] = round(temps['exterior'],2)
-            weath_out['humedad_dentro'] = humedad['sala']
+            weath_out['humedad_dentro'] = round((humedad['sala'] + humedad['pasillo_comedor'] + humedad['cocina'])/3,1)
             weath_out['humedad_fuera'] = humedad['exterior']
             print(weath_out)
         return (weath_out)
 
+    @cherrypy.expose
+    @tools.json_out()
+    def devices(self, **kwargs):
+        secreto = kwargs.get('secreto', None)
+        state_appliances = {}
+        if(secreto == house_secret):
+            state_appliances = r.hgetall('devices')
+        return state_appliances
+            
 
     @cherrypy.expose
     def garage(self):
