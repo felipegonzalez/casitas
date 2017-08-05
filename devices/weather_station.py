@@ -28,19 +28,18 @@ class WeatherStation(object):
         message_p_strip = (message['data'].rstrip().replace("'", '"'))
         #print(message_p_strip)
         message_load = json.loads(message_p_strip)
+        parsed_m = []
+        if('date' in self.state.keys()):
+            state_day = dateparser.parse(self.state['date']).weekday()
+            message_day = dateparser.parse(message_load['date']).weekday()
 
-        state_day = dateparser.parse(self.state['date']).weekday()
-        message_day = dateparser.parse(message_load['date']).weekday()
-
-        if(state_day != message_day):
-            self.state['rain_mm_yesterday'] = self.state['rain_mm_day']
-
+            if(state_day != message_day):
+                self.state['rain_mm_yesterday'] = self.state['rain_mm_day']
         for elem in message_load:
             self.state[elem] = message_load[elem]
-        parsed_m = []
-        for k in message_load.keys():
+        for k in self.state.keys():
             parsed_m.append({'device_name':self.name, 'event_type':k, 
-                'value':message_load[k]})
+                    'value':self.state[k]})
 
         #print(out_dict)
         #parsed_m = [{'device_name':self.name, 'event_type':'motion','value':motion}]
