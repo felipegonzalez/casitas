@@ -35,7 +35,7 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
-            'front_door_hall':60, 'escaleras_patio':60, 'patio':120,
+            'front_door_hall':60, 'escaleras_patio':60*5, 'patio':60*5,
             'estudiof':120, 'jardin':80,'estudiot':120, 'comedor':120,
             'pasillo_comedor':120}
 
