@@ -21,7 +21,10 @@ def log(state, r):
 		app_state[appname] = state['apps'][appname].status
 	r.hmset('apps', app_state)
 	# Build appliances states
-	r.hmset('devices', state['devices_state'])
+	dev_json = {}
+	for dev_name in state['devices_state']:
+		dev_json[dev_name] = json.dumps(state['devices_state'][dev_name])
+	r.hmset('devices', dev_json)
 	if('distancia' in state['devices_state']['caja_cisterna']):
 		r.set('Nivel cisterna', state['devices_state']['caja_cisterna']['distancia'])
 	return

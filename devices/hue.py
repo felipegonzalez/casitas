@@ -57,6 +57,8 @@ class HueHub(object):
         #state['last_motion'][place] = state['timestamp']
         #if (int(state['photo'][place]) < state['min_photo'][place] and 
         #if (time.time() - self.last_on[light_no] > 1):
+        state['devices_state'][self.name][command['value']] = 'on'
+
         if('brightness' in command.keys()):
             bri = command['brightness']
         else:
@@ -72,6 +74,8 @@ class HueHub(object):
         return
    
     def turn_off(self, command, state):
+        state['devices_state'][self.name][command['value']] = 'off'
+
         if(self.state[command['value']]=='on'):
             address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
             data = json.dumps({'on':False})    

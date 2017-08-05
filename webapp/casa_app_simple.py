@@ -37,10 +37,10 @@ class control(object):
             for lugar in lugares:
                 temps[lugar] = float(r.hget('temperature', lugar).decode('utf-8'))
                 humedad[lugar] = float(r.hget('humidity', lugar).decode('utf-8'))
-            weath_out['planta baja'] = round((temps['sala'] + temps['cocina'] + temps['estudiof'])/3, 2)
+            weath_out['planta baja'] = round((temps['sala'] + temps['estudiof'])/2, 2)
             weath_out['planta alta'] = round(temps['recamara_principal'],2)
             weath_out['exterior'] = round(temps['exterior'],2)
-            weath_out['humedad_dentro'] = round((humedad['sala'] + humedad['pasillo_comedor'] + humedad['cocina'])/3,1)
+            weath_out['humedad_dentro'] = round((humedad['sala'] + humedad['cocina'] )/2,1)
             weath_out['humedad_fuera'] = humedad['exterior']
             print(weath_out)
         return (weath_out)
@@ -51,7 +51,9 @@ class control(object):
         secreto = kwargs.get('secreto', None)
         state_appliances = {}
         if(secreto == house_secret):
-            state_appliances = r.hgetall('devices')
+            state_appliances_b = r.hgetall('devices')
+            for dev_name in state_appliances_b.keys():
+                state_appliances[dev_name] = json.loads(state_appliances_b[dev_name])
         return state_appliances
             
 
