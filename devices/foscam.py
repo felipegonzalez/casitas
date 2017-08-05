@@ -22,6 +22,7 @@ class FosCam(object):
         self.place = init['place']
         self.id_cam = init['id_cam']
         self.path = init['img_path']
+        self.dest_path = '/Volumes/mmshared/web_img/' + self.name +'.jpg'
         self.get_address = self.ip_address + ':'+ self.port + '/cgi-bin/CGIProxy.fcgi'
         self.basic_payload = {'usr':self.user,'pwd':self.password}
         #self.state = self.get_state()
@@ -77,7 +78,7 @@ class FosCam(object):
         pars['isMovAlarmEnable'] = val
         pars['linkage'] = 12
         pars['snapInterval'] = 2
-        pars['sensitivity'] = 2
+        pars['sensitivity'] = 3
         pars['triggerInterval'] = 10
         pars['isPirAlarmEnable'] = 1
         for j in range(0,7):
@@ -102,12 +103,14 @@ class FosCam(object):
                 #    'command':'send_message', 'value':'Movimiento en ' + self.name}
                 #self.messager.publish('http_commands',
                 #a    json.dumps(new_message))
-                list_of_files = glob.glob(self.path+'snap/*') 
-                try:
-                    latest_file = max(list_of_files, key = os.path.getctime)
-                    copyfile(latest_file, self.dest_path)
-                except:
-                    print("could not copy file")
+                print(self.path+'/snap/*')
+
+                list_of_files = glob.glob(self.path+'/snap/*') 
+                #try:
+                latest_file = max(list_of_files, key = os.path.getctime)
+                copyfile(latest_file, self.dest_path)
+                #except:
+                #    print("could not copy file")
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] != '2'):
                 global_state['alarm_cam'] = False
         #     else:

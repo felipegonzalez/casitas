@@ -181,7 +181,7 @@ device_settings = {
         'user':'felipe',
         'password':'valqui1',
         'id_cam':'FI9821P_C4D6554064C4',
-        'img_path':'/Volumes/mmshared/img_entrada/',
+        'img_path':'/Volumes/mmshared/foscam_cams/FI9821P_C4D6554064C4',
         'dest_path':'/Volumes/mmshared/imagenes/img_mov_entrada.jpg' 
         },
         'cam_patio':{
@@ -192,7 +192,7 @@ device_settings = {
         'user':'felipe',
         'password':'valqui1',
         'id_cam':'AMBIENTCAMHD_00626E564319',
-        'img_path':'/Volumes/mmshared/img_patio/',
+        'img_path':'/Volumes/mmshared/foscam_cams/AMBIENTCAMHD_00626E564319',
         'dest_path':'/Volumes/mmshared/imagenes/img_mov_patio.jpg' 
         },
         'estacion_meteo':{

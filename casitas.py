@@ -84,10 +84,10 @@ coef = 0.01
 initial_time=time.time()
 max_time = 0
 
-r.publish('commands', 
-    json.dumps({'device_name':'pushover', 
-        'command':'send_message',
-        'value':'Iniciando sistema.'}))
+#r.publish('commands', 
+#    json.dumps({'device_name':'pushover', 
+#        'command':'send_message',
+#        'value':'Iniciando sistema.'}))
 
 logging.info('Iniciando sistema')
 
