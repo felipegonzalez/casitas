@@ -35,9 +35,8 @@ class WeatherStation(object):
         if(state_day != message_day):
             self.state['rain_mm_yesterday'] = self.state['rain_mm_day']
 
-        for(elem in message_load){
+        for elem in message_load:
             self.state[elem] = message_load[elem]
-        }
         parsed_m = []
         for k in message_load.keys():
             parsed_m.append({'device_name':self.name, 'event_type':k, 
