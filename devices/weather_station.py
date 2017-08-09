@@ -17,7 +17,11 @@ class WeatherStation(object):
         self.ip_address = init['ip_address']
         self.place = init['place']
         self.get_address =  'estacionyun.local' + '/arduino/weather/0'
-        self.state["rain_mm_yesterday"] = -1.0
+        try:
+            prev_state = json.loads(messager.hget('devices', 'estacion_meteo'))
+            self.state = prev_state
+        except:
+            self.state["rain_mm_yesterday"] = -1.0
         #self.state = self.get_state()
         #self.last_on = {}
         #for item in self.children:
