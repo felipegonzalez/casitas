@@ -58,13 +58,19 @@ class Sonos(object):
 
     def say(self, command, state):
         text = command['value']
-        os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
-        self._play("voz.mp4", volume = 80)        
+        try:
+            os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
+            self._play("voz.mp4", volume = 80)
+        except:
+            print("Error sonos") 
 
         return
 
     def resume(self, command, state):
-        self.prev_snapshot[command['value']].restore(fade = True)
+        try:
+            self.prev_snapshot[command['value']].restore(fade = True)
+        except:
+            print("Error resuming sonos.")
 
    
     def _play(self, file, volume = 80, player_name = None):

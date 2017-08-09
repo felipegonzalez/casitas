@@ -62,7 +62,7 @@ class HueHub(object):
         if('brightness' in command.keys()):
             bri = command['brightness']
         else:
-            bri = 254
+            bri = self.bri[command['value']]
         if(self.state[command['value']]=='off' or self.state[command['value']]==''):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
             data = json.dumps({'on':True, 'bri':bri})
