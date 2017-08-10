@@ -13,6 +13,7 @@ import logging.handlers
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 from apps.appdoorbell import DoorBell
+from apps.appalarm import Alarmist
 
 #create instances for apps #############
 
@@ -21,6 +22,7 @@ apps = {}
 apps['app_doorlight'] = AppDoorLight(place_lights)
 apps['app_autolight'] = AutoLight(delays)
 apps['app_doorbell'] = DoorBell()
+apps['app_alarm'] = Alarmist()
 state['apps'] = apps
 
 
@@ -50,6 +52,7 @@ commands.subscribe('commands')
 #create instances for devices ###############
 devices = {}
 for dev_name in device_settings.keys():
+    print(dev_name)
     type_device = device_settings[dev_name]['device_type']
     init = device_settings[dev_name]
     devices[dev_name] = dev_class[type_device](name=dev_name,init=init, messager = r)
