@@ -169,7 +169,7 @@ device_settings = {
         },
         'timer_1':{
         'device_type':'timer',
-        'place':'home',
+        'place':'casa',
         },
         'cam_entrada':{
         'device_type':'foscam',
@@ -298,7 +298,7 @@ state['motion_value'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 150
+        state['min_photo'][place] = 250
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0

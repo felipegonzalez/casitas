@@ -16,12 +16,6 @@ class Alarm(object):
     def parse(self, message):
         # general response 
         parsed_m = []
-        #message_p = json.loads(message['data'])
-        #if(isinstance(message_p, dict)):
-        #    if(message_p['type'] == 'status'):
-        #        for elem in message_p['events']:
-                    #self.status[elem] = message_p['values'][elem]
-        #            parsed_m.append(json.loads(message_p['events'][elem]))
         return parsed_m
 
     def update(self, state):

@@ -59,6 +59,7 @@ class Sonos(object):
     def say(self, command, state):
         text = command['value']
         try:
+            print("Say")
             os.system("say -v Paulina '"+text+"' -o "+"/Volumes/mmshared/sonidos/voz.mp4")
             self._play("voz.mp4", volume = 80)
         except:
@@ -74,6 +75,7 @@ class Sonos(object):
 
    
     def _play(self, file, volume = 80, player_name = None):
+        print("_play")
         if(player_name is None):
             player = self.sonos
             player_name = self.sonos.player_name

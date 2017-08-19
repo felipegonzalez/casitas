@@ -47,6 +47,11 @@ class control(object):
         return 'Ring!!'    
 
     @cherrypy.expose
+    def location(self):
+        print("Location")
+        return
+        
+    @cherrypy.expose
     def autoluz(self):
         message_say =json.dumps({'device_name':'sonos',
             'command':'say', 'value':'Auto luces'
