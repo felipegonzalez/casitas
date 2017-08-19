@@ -8,7 +8,7 @@ class AppDoorLight():
         'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
         'Entrance table', 'Caballeriza uno', 'Caballeriza dos'],
         'patio':['Caballeriza uno','Caballeriza dos', 'Patio stairs one',
-        'Patio stairs two', 'Patio stairs three']}
+        'Patio stairs two', 'Patio stairs three', 'Front door']}
         self.status = 'on'
         self.name = "app_doorlight"
 

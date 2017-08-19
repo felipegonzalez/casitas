@@ -1,35 +1,43 @@
+import json
 import time
 
 class Alarm(object):
 
     def __init__(self, name, init, messager):
         self.name = name
-        self.state =  init['state'] #armed, unarmed
-        self.messager =  messager
-        self.polling = 10000
+        self.place = init['place']
+        self.state = {}
+        self.messager = messager
+        self.polling = 30
+        self.last_alarm = 0
         self.last_check = 0
 
 
-    
-    def parse(self, m):
-        parsed_m = {'device':m['device'], 'event_type':'fired', 'value':'on'}
+    def parse(self, message):
+        # general response 
+        parsed_m = []
+        #message_p = json.loads(message['data'])
+        #if(isinstance(message_p, dict)):
+        #    if(message_p['type'] == 'status'):
+        #        for elem in message_p['events']:
+                    #self.status[elem] = message_p['values'][elem]
+        #            parsed_m.append(json.loads(message_p['events'][elem]))
         return parsed_m
 
-    def arm(self, command, state):
-        self.state = 'armed'
-        return
-        
-    def unarm(self, command, state):
-        self.state = 'unarmed'
-        return
-
-    def fire(self, command, state):
-        self.state = 'unarmed'
-        print("Alarm!!!")
-        return
-
-
     def update(self, state):
-        if(state['timestamp']-self.last_check > self.polling):
-            self.last_check = time.time()
         return
+
+    def sound_alarm(self, command, state):
+        r = self.messager
+        if(time.time() - self.last_alarm > 10):
+            self.last_alarm = time.time()
+            if(command['value']=='gas'):
+                r.publish('commands', json.dumps({'device_name':'pushover', 'command':'send_message',
+                    'value':'Alarma de gas'}))
+                r.publish('commands', json.dumps({'device_name':'sonos', 'command':'say',
+                    'value':'Alarma de gas', 'volume':100}))
+            if(command['value']=='temperature'):
+                r.publish('commands', json.dumps({'device_name':'pushover', 'command':'send_message',
+                    'value':'Alarma de temperatura'}))
+                r.publish('commands', json.dumps({'device_name':'sonos', 'command':'say',
+                    'value':'Alarma de temperatura'}))          

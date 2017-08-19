@@ -1,6 +1,7 @@
 import json
 import time
 import os
+import dateparser
 
 
 
@@ -16,6 +17,11 @@ class WeatherStation(object):
         self.ip_address = init['ip_address']
         self.place = init['place']
         self.get_address =  'estacionyun.local' + '/arduino/weather/0'
+        try:
+            prev_state = json.loads(messager.hget('devices', 'estacion_meteo'))
+            self.state = prev_state
+        except:
+            self.state["rain_mm_yesterday"] = -1.0
         #self.state = self.get_state()
         #self.last_on = {}
         #for item in self.children:
@@ -26,11 +32,19 @@ class WeatherStation(object):
         message_p_strip = (message['data'].rstrip().replace("'", '"'))
         #print(message_p_strip)
         message_load = json.loads(message_p_strip)
-        self.state = message_load
         parsed_m = []
-        for k in message_load.keys():
+        if('date' in self.state.keys()):
+            state_day = dateparser.parse(self.state['date']).weekday()
+            message_day = dateparser.parse(message_load['date']).weekday()
+
+            if(state_day != message_day):
+                self.state['rain_mm_yesterday'] = self.state['rain_mm_day']
+        for elem in message_load:
+            self.state[elem] = message_load[elem]
+        for k in self.state.keys():
             parsed_m.append({'device_name':self.name, 'event_type':k, 
-                'value':message_load[k]})
+                    'value':self.state[k]})
+
         #print(out_dict)
         #parsed_m = [{'device_name':self.name, 'event_type':'motion','value':motion}]
         return parsed_m

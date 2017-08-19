@@ -13,6 +13,7 @@ import logging.handlers
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 from apps.appdoorbell import DoorBell
+from apps.appalarm import Alarmist
 
 #create instances for apps #############
 
@@ -21,6 +22,7 @@ apps = {}
 apps['app_doorlight'] = AppDoorLight(place_lights)
 apps['app_autolight'] = AutoLight(delays)
 apps['app_doorbell'] = DoorBell()
+apps['app_alarm'] = Alarmist()
 state['apps'] = apps
 
 
@@ -50,6 +52,7 @@ commands.subscribe('commands')
 #create instances for devices ###############
 devices = {}
 for dev_name in device_settings.keys():
+    print(dev_name)
     type_device = device_settings[dev_name]['device_type']
     init = device_settings[dev_name]
     devices[dev_name] = dev_class[type_device](name=dev_name,init=init, messager = r)
@@ -84,10 +87,10 @@ coef = 0.01
 initial_time=time.time()
 max_time = 0
 
-r.publish('commands', 
-    json.dumps({'device_name':'pushover', 
-        'command':'send_message',
-        'value':'Iniciando sistema.'}))
+#r.publish('commands', 
+#    json.dumps({'device_name':'pushover', 
+#        'command':'send_message',
+#        'value':'Iniciando sistema.'}))
 
 logging.info('Iniciando sistema')
 
@@ -170,7 +173,7 @@ while True:
             add_units = ' ' + ev_content['units']
         else:
             add_units = ''
-        state['devices_state'][ev_content['device_name']][ev_content['event_type'] + add_units] = ev_content['value'] 
+        state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value'] 
         place = device_settings[ev_content['device_name']]['place']
         event_type = ev_content['event_type']
         if(event_type != 'none'):

@@ -81,6 +81,8 @@ class XbeeBox(object):
                        "parameter":"05", "mode":"pin"}
         self.state[command['value']] = 'on'
         self.messager.publish('xbee-commands', json.dumps(new_message))
+        state['devices_state'][self.name][command['value']] = 'on'
+
         print('Encender xbee')
         return
         
@@ -90,6 +92,8 @@ class XbeeBox(object):
                        "parameter":"04", "mode":"pin"}
         self.state[command['value']] = 'off'
         self.messager.publish('xbee-commands', json.dumps(new_message))
+        state['devices_state'][self.name][command['value']] = 'off'
+
         print('Apagar xbee')
         return 
 

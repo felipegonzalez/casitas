@@ -5,6 +5,7 @@ import json
 #import sqlite3 as lite
 import HTML
 import cherrypy
+from cherrypy import tools
 import os, sys
 sys.path.insert(0,os.path.pardir)
 from settings import r 
@@ -12,17 +13,49 @@ from settings import r
 
 cherrypy.server.socket_host = '0.0.0.0'
 
+house_secret = 'momoycuca'
 
 class control(object):
 
     @cherrypy.expose
     def remoto(self, secreto=''):
         salida = ''
-        if(secreto=='momoycuca'):
+        if(secreto==house_secret):
             salida = open('index_simple.html')
         return salida
 
+    @cherrypy.expose
+    @tools.json_out()
+    def micro_weather(self, **kwargs):
+        secreto = kwargs.get('secreto', None)
+        temps = {}
+        humedad = {}
+        weath_out ={}
+        lugares = ['recamara_principal', 'sala', 'estudiof','cocina',
+            'hall_entrada', 'patio', 'exterior', 'pasillo_comedor']
+        if(secreto==house_secret):
+            for lugar in lugares:
+                temps[lugar] = float(r.hget('temperature', lugar).decode('utf-8'))
+                humedad[lugar] = float(r.hget('humidity', lugar).decode('utf-8'))
+            weath_out['planta baja'] = round((temps['sala'] + temps['estudiof'])/2, 2)
+            weath_out['planta alta'] = round(temps['recamara_principal'],2)
+            weath_out['exterior'] = round(temps['exterior'],2)
+            weath_out['humedad_dentro'] = round((humedad['sala'] + humedad['cocina'] )/2,1)
+            weath_out['humedad_fuera'] = humedad['exterior']
+            print(weath_out)
+        return (weath_out)
 
+    @cherrypy.expose
+    @tools.json_out()
+    def devices(self, **kwargs):
+        secreto = kwargs.get('secreto', None)
+        state_appliances = {}
+        if(secreto == house_secret):
+            state_appliances_b = r.hgetall('devices')
+            for dev_name in state_appliances_b.keys():
+                state_appliances[dev_name] = json.loads(state_appliances_b[dev_name])
+        return state_appliances
+            
 
     @cherrypy.expose
     def garage(self):

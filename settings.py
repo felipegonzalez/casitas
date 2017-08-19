@@ -18,10 +18,12 @@ from devices.weather_station import WeatherStation
 from devices.pushover_service import PushMessenger
 from devices.esp6288 import Esp6288
 from devices.general import GeneralDevice
+from devices.alarm import Alarm
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
     'virtual':Virtual, 'timer':Timer, 'foscam':FosCam , 'meteo':WeatherStation,
-    'push_messenger':PushMessenger, 'esp6288':Esp6288, 'general':GeneralDevice}
+    'push_messenger':PushMessenger, 'esp6288':Esp6288, 'general':GeneralDevice,
+    'alarm_exe':Alarm}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -35,7 +37,7 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
-            'front_door_hall':60, 'escaleras_patio':60, 'patio':120,
+            'front_door_hall':60, 'escaleras_patio':60*5, 'patio':60*5,
             'estudiof':120, 'jardin':80,'estudiot':120, 'comedor':120,
             'pasillo_comedor':120}
 
@@ -165,10 +167,6 @@ device_settings = {
         'device_type':'sonos',
         'children':{'1':'Sala de estar', '2':'Estudio'}
         },
-        'ouralarm':{
-        'device_type':'alarm',
-        'state':'unarmed'
-        },
         'timer_1':{
         'device_type':'timer',
         'place':'home',
@@ -181,7 +179,7 @@ device_settings = {
         'user':'felipe',
         'password':'valqui1',
         'id_cam':'FI9821P_C4D6554064C4',
-        'img_path':'/Volumes/mmshared/img_entrada/',
+        'img_path':'/Volumes/mmshared/foscam_cams/FI9821P_C4D6554064C4',
         'dest_path':'/Volumes/mmshared/imagenes/img_mov_entrada.jpg' 
         },
         'cam_patio':{
@@ -192,7 +190,7 @@ device_settings = {
         'user':'felipe',
         'password':'valqui1',
         'id_cam':'AMBIENTCAMHD_00626E564319',
-        'img_path':'/Volumes/mmshared/img_patio/',
+        'img_path':'/Volumes/mmshared/foscam_cams/AMBIENTCAMHD_00626E564319',
         'dest_path':'/Volumes/mmshared/imagenes/img_mov_patio.jpg' 
         },
         'estacion_meteo':{
@@ -222,6 +220,10 @@ device_settings = {
         'device_type':'general',
         'ip_address':'192.168.100.50',
         'place':'unknown'
+        },
+        'alarm':{
+        'device_type':'alarm_exe',
+        'place':'casa'
         }
 }
 
@@ -296,7 +298,7 @@ state['motion_value'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 200
+        state['min_photo'][place] = 150
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
