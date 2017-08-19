@@ -76,7 +76,9 @@ device_settings = {
         'cajacocina':{
         'place':'cocina',
         'device_type':'xbeebox',
-        'addr_long':'0013a20040bf06bd'
+        'addr_long':'0013a20040bf06bd',
+        'txcommands':{'strip_cocina':{'turn_on':'1', 'turn_off':'0'}}
+        #'txcommands':{'turn_on':'1', 'turn_off':'0'}
         },
         'cajarecamara':{
         'place':'recamara_principal',
@@ -143,7 +145,7 @@ device_settings = {
         'place':'patio',
         'device_type':'xbeebox',
         'addr_long':'0013a20040c059bc',
-        'txcommands':{'garage_open':'g'},
+        'txcommands':{'garage':{'activate':'g'}},
         },
         'caja_comedor':{
         'place':'comedor',
@@ -313,6 +315,12 @@ for place in places:
                 if place_lights[elem] == place:
                         place_dict[elem] = 'hue'
         state['groups_lights'][place] = place_dict
+
+## Luces que no son de hue
+place_lights['strip_cocina'] = 'cocina'
+state['groups_lights']['cocina']['strip_cocina'] = 'cajacocina'
+print(place_lights)
+print(state['groups_lights'])
 #print(" ")
 #print("Groups lights")
 #print(state['groups_lights'])

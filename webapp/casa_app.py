@@ -126,7 +126,7 @@ class control(object):
     def garage(self):
         mensaje = 'Activando garage'
         r.publish('commands', json.dumps({"device_name":"caja_garage",
-            "command":"send_command", "value":"garage_open", "origin":"webapp"}))
+            "command":"activate", "value":"garage", "origin":"webapp"}))
         r.publish('commands', json.dumps({"device_name":"sonos",
                 "command":"say", "value":"Puerta de garage activada"})) 
         r.publish('commands', json.dumps({"device_name":"pushover",

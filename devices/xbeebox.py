@@ -23,7 +23,7 @@ class XbeeBox(object):
                 # suppose all pins are off
                 self.state[child] = 'off'
         else:
-            self.children = None
+            self.children = {}
 
         self.messager = messager
 
@@ -69,7 +69,7 @@ class XbeeBox(object):
 
     def send_command(self, command, state):
         new_message = {'addr_long': self.addr_long, 'mode':'tx',
-            'data':self.txcommands[command['value']]}
+            'data':self.txcommands[command['value']][command['command']]}
         self.messager.publish('xbee-commands', json.dumps(new_message))
         return
 
@@ -77,25 +77,31 @@ class XbeeBox(object):
         #command = json.loads(command['data']) should be done before
         #if (self.children[command['value']] in state['lights']):
         #    state['last_motion'][self.place] = state['timestamp']
-        new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
-                       "parameter":"05", "mode":"pin"}
+        if(command['value'] in self.children.keys()):
+            new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
+                        "parameter":"05", "mode":"pin"}  
+            self.messager.publish('xbee-commands', json.dumps(new_message))
+            print('Encender xbee')
+        else:
+            self.send_command(command, state)
         self.state[command['value']] = 'on'
-        self.messager.publish('xbee-commands', json.dumps(new_message))
         state['devices_state'][self.name][command['value']] = 'on'
-
-        print('Encender xbee')
         return
         
     def turn_off(self, command, state):
-        #command = json.loads(command['data']) should be done before
-        new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
-                       "parameter":"04", "mode":"pin"}
+        if(command['value'] in self.children.keys()):
+            new_message = {"addr_long": self.addr_long, "command":self.children[command['value']], 
+                           "parameter":"04", "mode":"pin"}
+            self.messager.publish('xbee-commands', json.dumps(new_message))
+            print('Apagar xbee')
+        else:
+            self.send_command(command, state)
         self.state[command['value']] = 'off'
-        self.messager.publish('xbee-commands', json.dumps(new_message))
         state['devices_state'][self.name][command['value']] = 'off'
-
-        print('Apagar xbee')
         return 
+
+    def activate(self, command, state):
+        return
 
     def press(self, m, state):
         # use threading to implement press on for a while without blocking main loop
