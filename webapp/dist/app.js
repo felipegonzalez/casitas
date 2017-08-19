@@ -36,8 +36,8 @@
            setTimeout(function(){location.reload()}, 2000);
 
          });
-         $("#accion-zumbador").click(function(e) {
-           $.post("/zumbador", {})
+         $("#accion-ciclo-filtrar").click(function(e) {
+           $.post("/filtro_tiempo", {})
             .done(function(string) {
                $("#respuesta input").val(string);
             });
