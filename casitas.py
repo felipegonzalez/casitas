@@ -130,7 +130,9 @@ while True:
         print(colored('Delta max :' + str(max_time), 'green'))
         print(colored('Outside: ', 'blue'))
         print(state['devices_state']['estacion_meteo'])
-        print(state['motion_value'])
+        #print(state['motion_value'])
+        print('Pending timers:')
+        print(state['devices']['timer_1'].state)
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))

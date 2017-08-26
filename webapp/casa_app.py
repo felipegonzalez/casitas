@@ -121,14 +121,16 @@ class control(object):
             r.publish('commands', json.dumps({"device_name":"caja_filtro_alberca",
             "command":"turn_on", "value":"bomba", "origin":"webapp"}))
         return 'Bomba alberca'
-
-    def filtro_tiempo(self, tiempo = 3):
+    
+    @cherrypy.expose
+    def filtro_tiempo(self, tiempo):
+        print("Filtro tiempo")
         r.publish('commands', json.dumps({"device_name":"caja_filtro_alberca",
         "command":"turn_on", "value":"bomba", "origin":"webapp"}))
         mensaje_off = json.dumps({"device_name":"caja_filtro_alberca",
         "command":"turn_off", "value":"bomba", "origin":"webapp"})
         r.publish('commands', json.dumps({"device_name":"timer_1",
-            "command":"add_timer", "interval":60*60*tiempo, 
+            "command":"add_timer", "interval":60*60*float(tiempo), 
             "value":mensaje_off, "origin":"webapp"}))
         return "Ciclo filtrado (3hrs)"
 

@@ -6,12 +6,12 @@ import redis
 
 def log(state, r):
 	r.hmset('temperature', state['temperature'])
-	print(state['temperature'])
+	#print(state['temperature'])
 	r.hmset('humidity', state['humidity'])
 	r.hmset('motion', state['motion'])
 	if(len(state['devices_state']['caja_consumo_electrico']) > 0):
 		r.hmset('power usage', state['devices_state']['caja_consumo_electrico'])
-	print(state['devices_state']['caja_goteo'])
+	#print(state['devices_state']['caja_goteo'])
 	try:
 		r.set('riego', state['devices_state']['caja_goteo']['regar'])
 	except:

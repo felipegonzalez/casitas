@@ -37,11 +37,12 @@
 
          });
          $("#accion-ciclo-filtrar").click(function(e) {
-           $.post("/filtro_tiempo", {})
+           $.post("/filtro_tiempo/3", {})
             .done(function(string) {
                $("#respuesta input").val(string);
             });
            e.preventDefault();
+           setTimeout(function(){location.reload()}, 2000);
          });
           $("#accion-alarma").click(function(e) {
            $.post("/alarma/1", {}).done(function(string) {
