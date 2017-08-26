@@ -236,6 +236,7 @@ place_lights = { 'Living room foot 1':'sala',
                 'Downstairs bath':'bano_visitas',
                 'Main bath one':'bano_principal',
                 'Main bath two':'bano_principal',
+                'Main bath three':'bano_principal',
                  'Kitchen one':'cocina',
                  'Kitchen two':'cocina',
                  'Entrance hall':'hall_entrada',
@@ -273,7 +274,7 @@ device_settings['hue'] = {
         'Dining hall 2':'40', 'Living room wall':'60',
         'Downstairs bath':'59' ,'Stairs':'61', 'Dining hall 1':'41',
         'Dining hall 2':'40', 'Caballeriza uno':'62','Caballeriza dos':'63',
-        'Backyard':'55'},
+        'Backyard':'55', 'Main bath three':'1'},
         'place_lights':place_lights
         }
 #xbee_dict

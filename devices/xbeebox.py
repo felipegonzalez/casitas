@@ -101,6 +101,7 @@ class XbeeBox(object):
         return 
 
     def activate(self, command, state):
+        self.send_command(command, state)
         return
 
     def press(self, m, state):

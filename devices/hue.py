@@ -38,6 +38,8 @@ class HueHub(object):
         if(isinstance(message_p, dict)):
             for light_no in message_p.keys():
                 if(light_no in self.light_names.keys()):
+                    print(self.light_names[light_no])
+                    print(message_p[light_no]['state']['bri'])
                     self.bri[self.light_names[light_no]] = message_p[light_no]['state']['bri']
                     self.reachable[self.light_names[light_no]] = message_p[light_no]['state']['reachable']
 

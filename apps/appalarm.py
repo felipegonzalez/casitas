@@ -17,11 +17,14 @@ class Alarmist():
             if(ev_content['event_type']=='gaslpg'):
                 #print("Tinmbre")
                 #print(ev_content)
-                if(float(ev_content['value']) > 350):
-                    place = devices[ev_content['device_name']].place
-                    fire = True
-                    value = {'device_name':'alarm',
+                try:
+                    if(float(ev_content['value']) > 350):
+                        place = devices[ev_content['device_name']].place
+                        fire = True
+                        value = {'device_name':'alarm',
                             'command':'sound_alarm','value':'gas','origin':ev_content['device_name']}
+                except:
+                    "Error alarm (parse or place)"
         return fire, value
 
     def temp_alarm_check(self, ev_content,  state):
