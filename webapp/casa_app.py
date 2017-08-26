@@ -201,6 +201,15 @@ class control(object):
         #     cur.execute(commandx)
         return mensaje
 
+    @cherrypy.expose
+    def obtener_timers(self, name):
+        mensaje = ''
+        all_timers = r.hgetall('timers '+name)
+        for k in all_timers.keys():
+            timer = all_timers[k]
+            mensaje = mensaje + timer.decode('utf-8') + '\n'
+        return mensaje
+
 class infoBasica(object):
     exposed = True
     @cherrypy.tools.accept(media='text/plain')
