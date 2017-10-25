@@ -132,7 +132,9 @@ while True:
         print(state['devices_state']['estacion_meteo'])
         #print(state['motion_value'])
         print('Pending timers:')
-        print(state['devices']['timer_1'].state)
+        for elem in state['devices']['timer_1'].state:
+            print(-round((time.time() - elem[0])/60, 2))
+            print(elem[1])
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
@@ -196,9 +198,12 @@ while True:
         if (comm['type']=='message'):
             print(colored(comm, 'red'))
             logging.info(comm)
-            comm_content = json.loads(comm['data'])
-            getattr(devices[comm_content['device_name']], 
-                comm_content['command'])(comm_content, state)
+            try:
+                comm_content = json.loads(comm['data'])
+                getattr(devices[comm_content['device_name']], 
+                    comm_content['command'])(comm_content, state)
+            except:
+                print("Error loading message")
 
     # update home state?
 
