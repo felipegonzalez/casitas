@@ -197,7 +197,7 @@ while True:
     if comm:
         if (comm['type']=='message'):
             print(colored(comm, 'red'))
-            logging.info(comm)
+            logging.info(comm['data'])
             try:
                 comm_content = json.loads(comm['data'])
                 getattr(devices[comm_content['device_name']], 
