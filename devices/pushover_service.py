@@ -28,7 +28,11 @@ class PushMessenger(object):
         return parsed_m
 
     def send_message(self, command, state):
-        self.client.send_message(command['value'], title="Notificación")
+        try:
+            self.client.send_message(command['value'], title="Notificación")
+        except:
+            print("Pushover no disponible")
+
         return 
 
     def update(self, global_state):
