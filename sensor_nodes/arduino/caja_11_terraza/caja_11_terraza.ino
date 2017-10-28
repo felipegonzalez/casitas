@@ -69,9 +69,8 @@ void registro_enviar(){
   
 void aleatorio() {
   //Serial.println("Prenderleds");
-  int i;
   for(int i=0; i<strip.numPixels(); i++) strip.setPixelColor(i, 0);
-  for(i=0; i < strip.numPixels(); i++){
+  for(int i=0; i < strip.numPixels(); i++){
     int r = random(100)+1;
     int g = random(100)+1;
     int b = random(100)+1;
