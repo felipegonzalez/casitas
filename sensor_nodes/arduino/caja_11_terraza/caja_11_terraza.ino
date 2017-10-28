@@ -52,10 +52,13 @@ void loop() {
   
   if(Serial.available() > 0){
     char leer = Serial.read();
-    if(leer=='a'){
+    if(leer=='1'){
       aleatorio();
     }
+    if(leer=='0'){
+      apagar_leds();
     }
+   }
 }
 
 void registro_enviar(){
@@ -65,20 +68,23 @@ void registro_enviar(){
  }
   
 void aleatorio() {
-  Serial.println("Prenderleds");
+  //Serial.println("Prenderleds");
   int i;
+  for(int i=0; i<strip.numPixels(); i++) strip.setPixelColor(i, 0);
   for(i=0; i < strip.numPixels(); i++){
     int r = random(100)+1;
     int g = random(100)+1;
     int b = random(100)+1;
-    strip.setPixelColor(i, strip.Color(r, g, b));
+    if(i%3 == 0){
+      strip.setPixelColor(i, strip.Color(r, g, b));
+      }
   }
   strip.show();
   delay(2000);
 }
 
 void apagar_leds() {
-  Serial.println("Apagar leds");
+  //Serial.println("Apagar leds");
   for(int i=0; i<strip.numPixels(); i++) strip.setPixelColor(i, 0);
   strip.show();
   delay(2000); 
