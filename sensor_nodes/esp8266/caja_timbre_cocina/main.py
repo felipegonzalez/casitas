@@ -26,6 +26,7 @@ led = machine.Pin(0, machine.Pin.OUT)
 led.off()
 utime.sleep(2)
 led.on()
+send_ring()
 #signal.irq(trigger=machine.Pin.IRQ_RISING, handler=detect_rising)
 candidate_ring = 0
 last_event = 0
@@ -51,9 +52,22 @@ while True:
             total_on = total_on + diff_time
         total_time = total_off + total_on
 
-        if(total_time > 2):
+        if(total_time > 0.75):
             if(total_on > total_off):
                 send_ring()
+                for i in range(0,3):
+                    led.off()
+                    utime.sleep(0.5)
+                    led.on()
+                    utime.sleep(0.2)
+            else:
+                for i in range(0,3):
+                    led.off()
+                    utime.sleep(0.1)
+                    led.on()
+                    utime.sleep(0.1)
+
+
             total_time = 0
             total_on = 0
             total_off = 0
