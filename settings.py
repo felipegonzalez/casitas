@@ -140,6 +140,7 @@ device_settings = {
         'place':'jardin',
         'device_type':'xbeebox',
         'addr_long':'0013a20040caacd7',
+        'txcommands':{'strip_terraza':{'turn_on':'1', 'turn_off':'0'}}
         },
         'caja_garage':{
         'place':'patio',
@@ -319,7 +320,10 @@ for place in places:
 
 ## Luces que no son de hue
 place_lights['strip_cocina'] = 'cocina'
+place_lights['strip_terraza'] = 'jardin'
+
 state['groups_lights']['cocina']['strip_cocina'] = 'cajacocina'
+state['groups_lights']['jardin']['strip_terraza'] = 'caja_terraza'
 print(place_lights)
 print(state['groups_lights'])
 #print(" ")
