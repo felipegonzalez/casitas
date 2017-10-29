@@ -70,7 +70,8 @@ class Timer():
             if(len(self.timers_fire) > 0):
                 self.activate(state)
             self.last_check = time.time()
-        self.state = self.timers
+            self.state = self.timers
+            state['devices_state'][self.name] = self.state
         return
 
 
