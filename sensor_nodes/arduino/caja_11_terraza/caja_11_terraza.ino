@@ -40,10 +40,10 @@ void loop() {
       tiempo_enviar = millis();
       registro_enviar();
     }
-    if(estado_leds==0){
-      aleatorio();
-      estado_leds = 1;
-    }
+  //  if(estado_leds==0){
+  //    aleatorio();
+  //    estado_leds = 1;
+  //  }
   }
   if(tiempo_actual >= tiempo_enviar + 10000){
     tiempo_enviar = millis();
