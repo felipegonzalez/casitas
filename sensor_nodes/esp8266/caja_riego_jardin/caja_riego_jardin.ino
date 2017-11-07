@@ -63,18 +63,16 @@ void setup() {
   server.on("/", handle_root);
   server.on("/hello", [](){  
   responseString = "Hello friend";
-  server.send(200, "text/plain", responseString);            // send to someones browser when asked
+  server.send(200, "text/plain", responseString);           
   });
 
-  server.on("/encender", comenzar_riego);
-  server.on("/apagar", detener_riego);
+  server.on("/jardinera", riego_jardinera);
+  server.on("/pasto", riego_pasto);
+  server.on("/macetas", riego_macetas);
   server.on("/estado", estado);
-  
   server.begin();
 
 }
-
-int value = 0;
 
 void loop() {
   server.handleClient();
@@ -98,81 +96,88 @@ void handle_root() {
   delay(100);
 }
 
-void comenzar_riego() {
-  String zona_arg = server.arg("zona");
+
+void riego_jardinera() {
+  String comando_arg = server.arg("command");
   String tiempo_arg = server.arg("tiempo");
-  
-  if(zona_arg!=""){
-    if(tiempo_arg!=""){
-      int zona_valor = 99;
-        if(zona_arg == "jardinera") zona_valor=0;
-        if(zona_arg == "macetas") zona_valor=1;
-        if(zona_arg == "pasto") zona_valor=2; 
-      switch(zona_valor){
-          case 0:
-            digitalWrite(pin_jardinera, HIGH);
-            tiempo_jardinera = 60*tiempo_arg.toInt()*1000;
-            timer_jardinera = millis();
-            break;
-          case 1:
-            digitalWrite(pin_macetas, HIGH);
-            tiempo_macetas = 60*tiempo_arg.toInt()*1000;
-            timer_macetas = millis();
-            break;
-          case 2:
-            digitalWrite(pin_pasto, HIGH);
-            tiempo_pasto = 60*tiempo_arg.toInt()*1000;
-            timer_pasto = millis();
-            break;
-          default:
-            break;
-          
-      }     
-    }
+    if(tiempo_arg==""){
+    tiempo_arg= "60";
   }
-  responseString = "Encendido ";
-  responseString += server.arg("zona");
-  responseString += " durante ";
-  responseString += server.arg("tiempo");
-  responseString += " minutos";
-  server.send(200, "text/plain", responseString);
+  if(comando_arg=="turn_on") {
+    digitalWrite(pin_jardinera, HIGH);
+    tiempo_jardinera = 60*tiempo_arg.toInt()*1000;
+    timer_jardinera = millis();
+  }
+  if(comando_arg == "turn_off") {
+    digitalWrite(pin_jardinera, LOW);
+  }
+  String respuesta = "";
+  server.send(200, "text/plain", respuesta);
 }
 
-void detener_riego() {
-  String zona_arg = server.arg("zona");
-  int pin_encender = 0;
-  int zona_valor = 99;
-  if(zona_arg == "jardinera") zona_valor=0;
-  if(zona_arg == "macetas") zona_valor=1;
-  if(zona_arg == "pasto") zona_valor=2;
-  if(zona_arg!=""){  
-      switch(zona_valor){
-          case 0:
-            digitalWrite(pin_jardinera, LOW);
-            break;
-          case 1:
-            digitalWrite(pin_macetas, LOW);
-            break;
-          case 2:
-             digitalWrite(pin_pasto, LOW);
-            break;
-          default:
-            break;
-      
-      }     
+void riego_macetas() {
+  String comando_arg = server.arg("command");
+  String tiempo_arg = server.arg("tiempo");
+  if(tiempo_arg==""){
+    tiempo_arg= "60";
   }
-  responseString = "Apagar ";
-  responseString += server.arg("zona");
-  server.send(200, "text/plain", responseString);
+  if(comando_arg=="turn_on") {
+    digitalWrite(pin_macetas, HIGH);
+    tiempo_macetas = 60*tiempo_arg.toInt()*1000;
+    timer_macetas = millis();
+  }
+  if(comando_arg == "turn_off") {
+    digitalWrite(pin_macetas, LOW);
+  }
+  String respuesta = "";
+  server.send(200, "text/plain", respuesta);
+
 }
+void riego_pasto() {
+  String comando_arg = server.arg("command");
+  String tiempo_arg = server.arg("tiempo");
+  if(tiempo_arg==""){
+    tiempo_arg= "60";
+  }
+  if(comando_arg=="turn_on") {
+    digitalWrite(pin_pasto, HIGH);
+    tiempo_pasto = 60*tiempo_arg.toInt()*1000;
+    timer_pasto = millis();
+  }
+  if(comando_arg == "turn_off") {
+    digitalWrite(pin_pasto, LOW);
+  }
+  String respuesta = "";
+  server.send(200, "text/plain", respuesta);
+
+}
+
+
 void estado(){
   int jardinera = digitalRead(pin_jardinera);
   int macetas = digitalRead(pin_macetas);
   int pasto = digitalRead(pin_pasto);
+  long actual = millis();
+  long restante_jardinera;
+  long restante_macetas;
+  long restante_pasto;
+
+  restante_jardinera = (actual - timer_jardinera)/(1000*60);
+  restante_macetas = (actual - timer_macetas)/(1000*60);
+  restante_pasto = (actual - timer_pasto)/(1000*60);
   String estado_str = "\{";
-  estado_str += "\"jardinera\":"+String(jardinera);
-  estado_str += ",\"pasto\":"+String(pasto);
-  estado_str += ",\"macetas\":"+String(macetas);
+  estado_str += "\"jardinera\":";
+  estado_str += "\{\"state\":";
+  estado_str += String(jardinera);
+  estado_str += "\}";
+  estado_str += ",\"pasto\":";
+  estado_str += "\{\"state\":";
+  estado_str += String(pasto);
+  estado_str += "\}";
+  estado_str += ",\"macetas\":";
+  estado_str += "\{\"state\":";
+  estado_str += String(macetas);
+  estado_str += "\}";
   estado_str += "\}";
   server.send(200, "text/plain", estado_str);
   
