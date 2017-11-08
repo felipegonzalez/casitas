@@ -212,12 +212,21 @@ device_settings = {
         'caja_cocina_timbre':{
         'device_type':'esp6288',
         'ip_address':'192.168.100.152',
-        'place':'calle_frente'
+        'place':'calle_frente',
+        'polling':0
+        },
+        'caja_riego_jardin':{
+            'device_type':'esp6288',
+            'ip_address':'192.168.100.154',
+            'place':'jardin',
+            'children':{'jardinera':'1','pasto':'2', 'macetas':'3'},
+            'polling':30
         },
         'caja_cisterna':{
         'device_type':'esp6288',
         'ip_address':'192.168.100.153',
-        'place':'patio'
+        'place':'patio',
+        'polling':0
         },
         'homeserver':{
         'device_type':'general',
