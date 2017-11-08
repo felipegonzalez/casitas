@@ -9,7 +9,10 @@ class Esp6288(object):
         self.place = init['place']
         self.state = {}
         self.messager = messager
-        self.polling = 30
+        if('polling' in init.keys()):
+            self.polling = init['polling']
+        else:
+            self.polling = 30
         self.last_check = 0
 
 
@@ -19,21 +22,37 @@ class Esp6288(object):
         message_p = json.loads(message['data'])
         if(isinstance(message_p, dict)):
             if(message_p['type'] == 'status'):
-                for elem in message_p['events']:
-                    #self.status[elem] = message_p['values'][elem]
-                    parsed_m.append(json.loads(message_p['events'][elem]))
+                for elem in message_p['values'].keys():
+                    self.state[elem] = message_p['values'][elem]
+            if(message_p['type'] == 'event'):
+                parsed_m.append(json.loads(message_p['event']))
         return parsed_m
 
     def update(self, state):
+        if(self.polling > 0):
+            if(time.time() - self.last_check > self.polling):
+                self.last_check = time.time()
+                address = self.ip_address + '/status' 
+                new_message = json.dumps({'device_name':self.name, 'address':address, 
+                        'payload':'', 'pars':'', 'type':'get'})
+                #self.messager.publish('http-commands', new_message)
         return
 
     #generic way of running a command on an esp6288 box
     def _send_get(self, command):
-        subdevice = command['value']
-        address = self.ip_address + '/' + subdevice + '/' + command['command']
-        new_message = json.dumps({'device_name':self.name, 'address':address, 
-            'payload':'', 'type':'get'})
-        self.messager.publish('http-commands', new_message)
+        child = command['value'] #value gives the noun 
+        comm = command['command'] # command gives the verb
+        pars_get = ''
+        # put command and command parameters in one list for get
+        if(child in self.children.keys()):
+            if('pars' in command.keys()):
+                pars_get = {**{'command':comm}, **command['pars']}
+            address = self.ip_address + '/' + child #+ '/' + command['command']
+            new_message = json.dumps({'device_name':self.name, 'address':address, 
+                'payload':'', 'pars':pars_get, 'type':'get'})
+            self.messager.publish('http-commands', new_message)
+        else:
+            print("Child device not found.")
         return 
 
     # we define these functions which are available to the system:
