@@ -34,12 +34,13 @@ class HueHub(object):
         # deal with gets from states
         message_p = json.loads(message['data'])
         parsed_m = []
+        #print("Parse lights")
         #print(message_p)
         if(isinstance(message_p, dict)):
             for light_no in message_p.keys():
                 if(light_no in self.light_names.keys()):
-                    print(self.light_names[light_no])
-                    print(message_p[light_no]['state']['bri'])
+                    #print(self.light_names[light_no])
+                    #print(message_p[light_no]['state']['bri'])
                     self.bri[self.light_names[light_no]] = message_p[light_no]['state']['bri']
                     self.reachable[self.light_names[light_no]] = message_p[light_no]['state']['reachable']
 
@@ -65,7 +66,7 @@ class HueHub(object):
             bri = command['brightness']
         else:
             #bri = self.bri[command['value']]
-            bri = self.bri[self.light_names[light_no]]  # use current state
+            bri = self.bri[self.light_names[light_no]]  # use previous brightness
             #bri = 254
         if(self.state[command['value']]=='off' or self.state[command['value']]==''):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
