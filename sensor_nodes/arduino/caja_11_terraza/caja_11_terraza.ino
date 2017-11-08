@@ -28,12 +28,12 @@ void setup() {
 void loop() {
   tiempo_actual = millis();
   int pir_read = digitalRead(pir_pin);
-  if(estado_leds == 1){
-    if(tiempo_actual >= tiempo_pir + 120000){
-      apagar_leds();
-      estado_leds = 0;
-    }
-  }
+  //if(estado_leds == 1){
+  // if(tiempo_actual >= tiempo_pir + 120000){
+  //   apagar_leds();
+  //    estado_leds = 0;
+   // }
+  //}
   if(pir_read > 0) {
     if(tiempo_actual >= tiempo_pir + 5000){
       tiempo_pir = millis();
