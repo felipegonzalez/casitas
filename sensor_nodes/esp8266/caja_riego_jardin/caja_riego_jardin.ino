@@ -69,7 +69,7 @@ void setup() {
   server.on("/jardinera", riego_jardinera);
   server.on("/pasto", riego_pasto);
   server.on("/macetas", riego_macetas);
-  server.on("/estado", estado);
+  server.on("/status", estado);
   server.begin();
 
 }
