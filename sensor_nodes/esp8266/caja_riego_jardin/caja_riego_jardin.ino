@@ -166,19 +166,30 @@ void estado(){
   restante_macetas = (actual - timer_macetas)/(1000*60);
   restante_pasto = (actual - timer_pasto)/(1000*60);
   String estado_str = "\{";
+  estado_str += "\"type\":\"status\",";
+  estado_str += "\"values\":";
+  estado_str += "\{";
   estado_str += "\"jardinera\":";
   estado_str += "\{\"state\":";
   estado_str += String(jardinera);
+  estado_str += ",\"tiempo\":";
+  estado_str += String(restante_jardinera);
   estado_str += "\}";
   estado_str += ",\"pasto\":";
   estado_str += "\{\"state\":";
   estado_str += String(pasto);
+  estado_str += ",\"tiempo\":";
+  estado_str += String(restante_pasto);
   estado_str += "\}";
   estado_str += ",\"macetas\":";
   estado_str += "\{\"state\":";
   estado_str += String(macetas);
+  estado_str += ",\"tiempo\":";
+  estado_str += String(restante_macetas);
   estado_str += "\}";
   estado_str += "\}";
+  estado_str += "\}";
+
   server.send(200, "text/plain", estado_str);
   
 }
