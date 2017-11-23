@@ -5,16 +5,16 @@ import pytz
 
 
 class AppIrrigation():
-    def __init__(self, place_lights):
+    def __init__(self):
         self.name = 'app_irrigation'
-
+        self.status = 'on'
         self.pattern = [{'device':'caja_riego_jardin', 'child':'pasto', 'start_time':17, 'duration':1},
                         {'device':'caja_riego_jardin', 'child':'jardinera', 'start_time':6, 'duration':20},
                         {'device':'caja_riego_jardin', 'child':'macetas', 'start_time': 5, 'duration':20}]
         # start today
         now = datetime.datetime.now()
         for i, val in enumerate(self.pattern):
-            self.pattern[i]['next_time'] =  now.replace(hour = elem['start_time'], minute = 0, second = 0)
+            self.pattern[i]['next_time'] =  now.replace(hour = val['start_time'], minute = 0, second = 0)
 
 
     def activate(self, ev_content, state, r, value):
@@ -38,12 +38,13 @@ class AppIrrigation():
     def check_event(self, ev_content,  state):
         fire = False
         value =''
-        if(ev_content['event_type'] == 'hearbeat'):
-            now = datetime.datetime.now()
-            for i, current_patern in self.pattern:
-                if(pat['next_time'] < now):
-                    fire = True
-                    value = i 
+        if(ev_content):
+            if(ev_content['event_type'] == 'hearbeat'):
+                now = datetime.datetime.now()
+                for i, current_patern in self.pattern:
+                    if(pat['next_time'] < now):
+                        fire = True
+                        value = i 
         return fire, value
 
     def check_command(self, comm_content,  state):
