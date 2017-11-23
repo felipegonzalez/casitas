@@ -16,7 +16,9 @@ int estado_leds = 0;
 void setup() {
   Serial.begin(9600);
   strip.begin();
+  apagar_leds();
   strip.show();
+  delay(1000);
   estado_leds = 0;
   tiempo_actual = millis();
   tiempo_pir = millis();
@@ -28,22 +30,13 @@ void setup() {
 void loop() {
   tiempo_actual = millis();
   int pir_read = digitalRead(pir_pin);
-  //if(estado_leds == 1){
-  // if(tiempo_actual >= tiempo_pir + 120000){
-  //   apagar_leds();
-  //    estado_leds = 0;
-   // }
-  //}
+
   if(pir_read > 0) {
     if(tiempo_actual >= tiempo_pir + 5000){
       tiempo_pir = millis();
       tiempo_enviar = millis();
       registro_enviar();
     }
-  //  if(estado_leds==0){
-  //    aleatorio();
-  //    estado_leds = 1;
-  //  }
   }
   if(tiempo_actual >= tiempo_enviar + 10000){
     tiempo_enviar = millis();
@@ -53,10 +46,14 @@ void loop() {
   if(Serial.available() > 0){
     char leer = Serial.read();
     if(leer=='1'){
-      aleatorio();
+      if(estado_leds==0) {
+        aleatorio();
+      }
     }
     if(leer=='0'){
-      apagar_leds();
+      if(estado_leds==1){
+        apagar_leds();
+      }
     }
    }
 }
@@ -70,11 +67,15 @@ void registro_enviar(){
 void aleatorio() {
   //Serial.println("Prenderleds");
   for(int i=0; i<strip.numPixels(); i++) strip.setPixelColor(i, 0);
+  strip.show();
+  
+  delay(1000);
+  estado_leds = 1;
   for(int i=0; i < strip.numPixels(); i++){
     int r = random(100)+1;
     int g = random(100)+1;
     int b = random(100)+1;
-    if(i%3 == 0){
+    if(i%4 == 0){
       strip.setPixelColor(i, strip.Color(r, g, b));
       }
   }
@@ -84,6 +85,7 @@ void aleatorio() {
 
 void apagar_leds() {
   //Serial.println("Apagar leds");
+  estado_leds = 0;
   for(int i=0; i<strip.numPixels(); i++) strip.setPixelColor(i, 0);
   strip.show();
   delay(2000); 
