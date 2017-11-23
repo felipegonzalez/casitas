@@ -14,6 +14,7 @@ from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 from apps.appdoorbell import DoorBell
 from apps.appalarm import Alarmist
+from apps.appirrigation import AppIrrigation
 
 #create instances for apps #############
 
@@ -23,6 +24,7 @@ apps['app_doorlight'] = AppDoorLight(place_lights)
 apps['app_autolight'] = AutoLight(delays)
 apps['app_doorbell'] = DoorBell()
 apps['app_alarm'] = Alarmist()
+apps['app_irrigation'] = AppIrrigation()
 state['apps'] = apps
 
 
