@@ -115,13 +115,15 @@ while True:
     if(time.time()-timer_print > 10):
         #print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
         for dev in state['devices']:
-            print("")
+            pass
+            #print("")
             #print(dev)
             #print(round(time.time() - state['devices'][dev].last_check, 1))
         for item in state:
             if(item!='devices' and item!='devices_state' and item!='groups_lights'):
-                print(item)
-                print(colored(state[item], 'magenta'))
+                #print(item)
+                #print(colored(state[item], 'magenta'))
+                pass
         timer_print = time.time()
         print(colored('Alarma: '+str(state['alarm_cam']), 'green'))
         if(state['alarm_cam']):
@@ -163,6 +165,7 @@ while True:
             except Exception as ex:
                 print("Error parsing message")
                 print("From device "+ from_device)
+                print(con_name)
                 print(ex)
                 raise
 
@@ -196,7 +199,7 @@ while True:
     comm = commands.get_message()
     if comm:
         if (comm['type']=='message'):
-            print(colored(comm, 'red'))
+            #print(colored(comm, 'red'))
             logging.info(comm['data'])
             try:
                 comm_content = json.loads(comm['data'])
@@ -204,6 +207,7 @@ while True:
                     comm_content['command'])(comm_content, state)
             except:
                 print("Error loading message")
+                print(comm)
 
     # update home state?
 
