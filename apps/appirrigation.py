@@ -8,17 +8,22 @@ class AppIrrigation():
     def __init__(self):
         self.name = 'app_irrigation'
         self.status = 'on'
-        self.pattern = [{'device':'caja_riego_jardin', 'child':'pasto', 'start_time':17, 'duration':1},
-                        {'device':'caja_riego_jardin', 'child':'jardinera', 'start_time':6, 'duration':20},
-                        {'device':'caja_riego_jardin', 'child':'macetas', 'start_time': 5, 'duration':20}]
+        self.pattern = [{'device':'caja_riego_jardin', 'child':'pasto', 'start_time':3, 'duration':110},
+                        {'device':'caja_riego_jardin', 'child':'jardinera', 'start_time':6, 'duration':40},
+                        {'device':'caja_riego_jardin', 'child':'macetas', 'start_time': 5, 'duration':30}]
         # start today
         now = datetime.datetime.now()
         for i, val in enumerate(self.pattern):
-            self.pattern[i]['next_time'] =  now.replace(hour = val['start_time'], minute = 0, second = 0)
+            if(val['start_time'] > 8):
+                self.pattern[i]['next_time'] =  now.replace(hour = val['start_time'], minute = 0, second = 0)
+            else:
+                time_now =  now.replace(hour = val['start_time'], minute = 0, second = 0)
+                self.pattern[i]['next_time'] = time_now + datetime.timedelta(days = 1)
 
 
     def activate(self, ev_content, state, r, value):
         now = datetime.datetime.now()
+        i = value
         device_name = self.pattern[i]['device']
         child = self.pattern[i]['child']
         duration = self.pattern[i]['duration']
@@ -39,12 +44,15 @@ class AppIrrigation():
         fire = False
         value =''
         if(ev_content):
-            if(ev_content['event_type'] == 'hearbeat'):
+            if(ev_content['event_type'] == 'heartbeat'):
                 now = datetime.datetime.now()
-                for i, current_patern in self.pattern:
-                    if(pat['next_time'] < now):
+                for i, current_pattern in enumerate(self.pattern):
+                    if(current_pattern['next_time'] < now):
+                        print("Start irrigation")
+                        print(self.pattern[i])
                         fire = True
-                        value = i 
+                        value = i
+                        break 
         return fire, value
 
     def check_command(self, comm_content,  state):
