@@ -8,8 +8,8 @@ class AppIrrigation():
     def __init__(self):
         self.name = 'app_irrigation'
         self.status = 'on'
-        self.pattern = [{'device':'caja_riego_jardin', 'child':'pasto', 'start_time':3, 'duration':110},
-                        {'device':'caja_riego_jardin', 'child':'jardinera', 'start_time':6, 'duration':40},
+        self.pattern = [{'device':'caja_riego_jardin', 'child':'jardinera', 'start_time':3, 'duration':110},
+                        {'device':'caja_riego_jardin', 'child':'pasto', 'start_time':6, 'duration':20},
                         {'device':'caja_riego_jardin', 'child':'macetas', 'start_time': 5, 'duration':30}]
         # start today
         now = datetime.datetime.now()
