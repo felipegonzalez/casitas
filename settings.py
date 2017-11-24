@@ -222,6 +222,13 @@ device_settings = {
             'children':{'jardinera':'1','pasto':'2', 'macetas':'3'},
             'polling':30
         },
+        'caja_hongos':{
+            'device_type':'esp6288',
+            'ip_address':'192.168.100.155',
+            'place':'patio',
+            'children':{'ventilador':'1', 'environment':'2'},
+            'polling':10
+        },
         'caja_cisterna':{
         'device_type':'esp6288',
         'ip_address':'192.168.100.153',
