@@ -31,6 +31,15 @@ class AppIrrigation():
         self.pattern[i]['next_time'] = self.pattern[i]['next_time'] + datetime.timedelta(days=2)
         mensajes = []
         no_rain = True
+        try:
+            estacion_meteo = state['devices_state']['estacion_meteo']
+            lluvia_hoy_cm = estacion_meteo['rain_mm_day']/10
+            lluvia_ayer_cm = estacion_meteo['rain_mm_yesterday']/10
+            if(lluvia_hoy_cm > 12 or lluvia_ayer_cm > 12):
+                no_rain = False
+        except Exception as ex:
+            print("Error parsing meteo station")
+            print(ex)
         if(no_rain):
             mensajes.append(json.dumps({'device_name':device_name, 'value':child, 
                 'command':'turn_on', 'origin':self.name, 
