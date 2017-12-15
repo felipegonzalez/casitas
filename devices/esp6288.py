@@ -14,28 +14,43 @@ class Esp6288(object):
         else:
             self.polling = 30
         self.last_check = 0
+        self.children = {}
+        if('children' in init):
+            self.children = init['children']
 
 
     def parse(self, message):
         # general response 
         parsed_m = []
-        message_p = json.loads(message['data'])
-        if(isinstance(message_p, dict)):
-            if(message_p['type'] == 'status'):
-                for elem in message_p['values'].keys():
-                    self.state[elem] = message_p['values'][elem]
-            if(message_p['type'] == 'event'):
-                parsed_m.append(json.loads(message_p['event']))
+        #print("Mensaje:")
+        #print(message)
+        #print(message['data'])
+        try:
+            message_p = json.loads(message['data'])
+       
+            #print(message_p)
+            if(isinstance(message_p, dict)):
+                if('type' in message_p.keys()):
+                    if(message_p['type'] == 'status'):
+                        for elem in message_p['values'].keys():
+                            self.state[elem] = message_p['values'][elem]
+                    if(message_p['type'] == 'event'):
+                        parsed_m.append(json.loads(message_p['event']))
+                #print(self.state)
+        except Exception as ex:
+            print("Error parsing message") 
         return parsed_m
 
     def update(self, state):
+        state['devices_state'][self.name] = self.state
         if(self.polling > 0):
             if(time.time() - self.last_check > self.polling):
+                #print("Updating")
                 self.last_check = time.time()
                 address = self.ip_address + '/status' 
                 new_message = json.dumps({'device_name':self.name, 'address':address, 
                         'payload':'', 'pars':'', 'type':'get'})
-                #self.messager.publish('http-commands', new_message)
+                self.messager.publish('http-commands', new_message)
         return
 
     #generic way of running a command on an esp6288 box
@@ -58,6 +73,7 @@ class Esp6288(object):
     # we define these functions which are available to the system:
     def turn_on(self, command, state):
         self._send_get(command)
+        print("Comando on recibido")
         state['devices_state'][self.name][command['value']] = 'on'
         return
 
