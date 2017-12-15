@@ -22,8 +22,10 @@ class AutoLight():
                     'value':dd, 'command':'turn_on', 'origin':self.name}))
         else:       
             for place in self.candidates_off:
-                state['last_motion'][place] = state['timestamp']
+                self.last_auto_off[place] = state['timestamp']
+                #self.delays[place] = self.base_delays[place]
                 ll = state['groups_lights'][place]
+
                 for dd in ll.keys():
                     messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 
                         'command':'turn_off', 'origin':self.name}))
@@ -48,7 +50,7 @@ class AutoLight():
                     value = 'on'
                 if(place in self.last_auto_off):
                     if(state['timestamp'] - self.last_auto_off[place] < 5):
-                        self.delays[place] = min(self.base_delays[place]*1.5, 60*8)
+                        self.delays[place] = min(self.delays[place]*1.5, 60*8)
                     if(state['timestamp'] - self.last_auto_off[place] > 60):
                         self.delays[place] = self.base_delays[place]
 
