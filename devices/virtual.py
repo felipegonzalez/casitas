@@ -4,7 +4,8 @@ import time
 class Virtual(object):
 
     def __init__(self, name, init, messager):
-        pass
+    	self.name = name
+    	self.place = init['place']
         
     def parse(self, message):
         parsed_m = []

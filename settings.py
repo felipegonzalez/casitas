@@ -177,17 +177,19 @@ device_settings = {
         'cam_entrada':{
         'device_type':'foscam',
         'place':'hall_entrada',
+        'places_movement': [],
         'ip_address':'192.168.100.220',
         'port':'88',
         'user':'felipe',
         'password':'valqui1',
         'id_cam':'FI9821P_C4D6554064C4',
-        'img_path':'/Volumes/mmshared/foscam_cams/FI9821P_C4D6554064C4',
+        'img_path':'/Users/felipe/Volumes/mmshared/foscam_camds/FI9821P_C4D6554064C4',
         'dest_path':'/Volumes/mmshared/imagenes/img_mov_entrada.jpg' 
         },
         'cam_patio':{
         'device_type':'foscam',
         'place':'patio',
+        'places_movement': ['patio', 'escaleras_patio'],
         'ip_address':'192.168.100.221',
         'port':'88',
         'user':'felipe',
@@ -326,6 +328,8 @@ for place in places :
         state['motion_value'][place] = 0
 #state['min_photo']['estudiot'] = 1000
 state['min_photo']['pasillo_comedor'] = 100
+state['min_photo']['estudiot'] = 360
+
 state['groups_lights'] = {}
 for place in places:
         place_dict = {}
@@ -354,6 +358,6 @@ print(state['groups_lights'])
 
 state['lights'] = place_lights.keys()
 state['place_lights'] = place_lights
-state['alarm_cam'] = False
+state['alarm_cam'] = True
 #print(state['lights'])
 #apps_settings = ['app_motion']
