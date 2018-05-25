@@ -37,6 +37,35 @@ class control(object):
         return json.dumps(ev)
 
     @cherrypy.expose
+    def regar_jardin(self, **kwargs):
+        zona = kwargs.get('zona', None)
+        tiempo = kwargs.get('tiempo', None)
+        comm = {}
+        if(tiempo == 0):
+            comm = {"device_name":"caja_riego_jardin", "value":zona, "command":"turn_off",
+                        "pars":{}, "origin":"webapp"}
+        else:
+            comm = {"device_name":"caja_riego_jardin", "value":zona, "command":"turn_on",
+                        "pars":{"tiempo":int(tiempo)}, "origin":"webapp"}
+        message = json.dumps(comm)
+        r.publish('commands', message)
+        return "Comando de riego enviado"
+
+    @cherrypy.expose
+    def ventilar_hongos(self, **kwargs):
+        tiempo = kwargs.get('tiempo', None)
+        comm = {}
+        if(tiempo == 0):
+            comm = {"device_name":"caja_hongos", "value":"ventilador", "command":"turn_off",
+                        "pars":{}, "origin":"webapp"}
+        else:
+            comm = {"device_name":"caja_hongos", "value":"ventilador", "command":"turn_on",
+                        "pars":{"tiempo":int(tiempo)}, "origin":"webapp"}
+        message = json.dumps(comm)
+        r.publish('commands', message)
+        return "Comando de ventilación enviado"
+
+    @cherrypy.expose
     def ring(self, lugar):
         print("ring")
         #r.publish('commands', json.dumps({'device_name':'sonos',
@@ -199,6 +228,7 @@ class control(object):
         #         commandx = "INSERT INTO pendientes VALUES('regar','0')"
         #         mensaje = 'Dejar de regar patio'
         #     cur.execute(commandx)
+        cherrypy.response.status = 200
         return mensaje
 
     @cherrypy.expose
@@ -305,12 +335,14 @@ if __name__ == '__main__':
     conf = {
          '/': {
              'tools.sessions.on': True,
-             'tools.staticdir.root': os.path.abspath(os.getcwd())
+             'tools.staticdir.root': os.path.abspath(os.getcwd()),
+             'tools.response_headers.headers': [('Access-Control-Allow-Origin', 'http://34.236.65.248')]
+
          },
          '/info_bas': {
              'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
              'tools.response_headers.on': True,
-             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
+             'tools.response_headers.headers': [('Content-Type', 'text/plain'), ('Access-Control-Allow-Origin', 'http://34.236.65.248')],
          },
 
          '/dist/css/bootstrap.min.css': {
