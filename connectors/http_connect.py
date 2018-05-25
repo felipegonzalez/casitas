@@ -20,8 +20,11 @@ def process_response(session, response):
     print(" ")
     data = response.content
     ip_addr = str(urlparse(response.url).hostname)
-    new_message = json.dumps({'device_name':ip_dict[ip_addr], 
-        'ip_addr':ip_addr, 'data':data.decode('utf-8')})
+    data_decode = data.decode('utf-8')
+    if data_decode == '':
+        data_decode = json.dumps({})
+    new_message = json.dumps({"device_name":ip_dict[ip_addr], 
+        "ip_addr":ip_addr, "data":data_decode})
     #print(new_message)
     r.publish('http-events', new_message)
     return
@@ -39,7 +42,7 @@ def monitor():
     #    print "Error serial/xbee"
     print('Iniciar ciclo')
 
-    session = FuturesSession(max_workers=10)
+    session = FuturesSession(max_workers=20)
 
     while True:
         message = command_sub.get_message()        
