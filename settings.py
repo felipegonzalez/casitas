@@ -33,13 +33,13 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
         'exterior', 'estudiot' ,'comedor', 'pasillo_comedor','casa',
-        'calle_frente']
+        'calle_frente', 'cuarto_tv']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
             'front_door_hall':60, 'escaleras_patio':60*5, 'patio':60*5,
             'estudiof':120, 'jardin':80,'estudiot':120, 'comedor':120,
-            'pasillo_comedor':120}
+            'pasillo_comedor':120, 'cuarto_tv':180}
 
 
 # devices
@@ -231,6 +231,13 @@ device_settings = {
             'children':{'ventilador':'1', 'environment':'2'},
             'polling':10
         },
+        'caja_tv':{
+            'device_type':'esp6288',
+            'ip_address':'192.168.100.157',
+            'place':'cuarto_tv',
+            'children':{'lampara':'1'},
+            'polling':10
+        },
         'caja_cisterna':{
         'device_type':'esp6288',
         'ip_address':'192.168.100.153',
@@ -306,7 +313,8 @@ for key in device_settings.keys():
         if('ip_address' in device_settings[key].keys()):
                 ip_dict[device_settings[key]['ip_address']] = key
 
-#print(ip_dict)
+print('Ip devices ***********')
+print(ip_dict)
 
 
 #state definition, initial
@@ -329,6 +337,7 @@ for place in places :
 #state['min_photo']['estudiot'] = 1000
 state['min_photo']['pasillo_comedor'] = 100
 state['min_photo']['estudiot'] = 360
+state['min_photo']['cuarto_tv'] = 600
 
 state['groups_lights'] = {}
 for place in places:
@@ -341,9 +350,11 @@ for place in places:
 ## Luces que no son de hue
 place_lights['strip_cocina'] = 'cocina'
 place_lights['strip_terraza'] = 'jardin'
+place_lights['lampara'] = 'cuarto_tv'
 
 state['groups_lights']['cocina']['strip_cocina'] = 'cajacocina'
 state['groups_lights']['jardin']['strip_terraza'] = 'caja_terraza'
+state['groups_lights']['cuarto_tv']['lampara'] = 'caja_tv'
 print(place_lights)
 print(state['groups_lights'])
 #print(" ")
