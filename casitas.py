@@ -182,7 +182,12 @@ while True:
             add_units = ' ' + ev_content['units']
         else:
             add_units = ''
-        state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value'] 
+        try:
+            state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value'] 
+        except Exception as ex:
+            print("unknown device")
+            print(ev_content)
+            raise
         place = device_settings[ev_content['device_name']]['place']
         event_type = ev_content['event_type']
         if(event_type != 'none'):
@@ -196,7 +201,7 @@ while True:
         if(event_type == 'motion'):
             if(ev_content['value']):
                 state['motion_value'][place] = 1.0
-
+                print(state['motion_value'])
     # get command and process using device class
     comm = commands.get_message()
     if comm:
