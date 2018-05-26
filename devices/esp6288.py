@@ -62,6 +62,8 @@ class Esp6288(object):
         if(child in self.children.keys()):
             if('pars' in command.keys()):
                 pars_get = {**{'command':comm}, **command['pars']}
+            else:
+                pars_get = {**{'command':comm}}
             address = self.ip_address + '/' + child #+ '/' + command['command']
             new_message = json.dumps({'device_name':self.name, 'address':address, 
                 'payload':'', 'pars':pars_get, 'type':'get'})
@@ -73,7 +75,6 @@ class Esp6288(object):
     # we define these functions which are available to the system:
     def turn_on(self, command, state):
         self._send_get(command)
-        print("Comando on recibido")
         state['devices_state'][self.name][command['value']] = 'on'
         return
 
