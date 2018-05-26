@@ -59,8 +59,13 @@ class AutoLight():
                 self.candidates_off = []
                 for place in self.delays.keys():
                     if(state['timestamp'] - state['last_motion'][place] > self.delays[place]):
-                        self.candidates_off.append(place)
-                        self.last_auto_off[place] = state['timestamp']
+                        if(place in self.last_auto_off):
+                            if(state['timestamp'] - self.last_auto_off[place] > self.delays[place]):
+                                self.candidates_off.append(place)
+                                self.last_auto_off[place] = state['timestamp']
+                        else:
+                            self.candidates_off.append(place)
+                            self.last_auto_off[place] = state['timestamp']
                 if(len(self.candidates_off) > 0):
                     fire = True
                     value = 'off'
