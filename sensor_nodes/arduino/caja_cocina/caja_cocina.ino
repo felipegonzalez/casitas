@@ -10,8 +10,8 @@ int photo_pin = 0;
 int pir_pin = 7;
 int gas_pin = 1;
 int enviar_gas = 1;
-int data_led_pin  = 14;
-int clock_led_pin = 15;
+int data_led_pin  = 12;
+int clock_led_pin = 13;
 LPD8806 strip = LPD8806(74 , data_led_pin, clock_led_pin);
 DHT dht(pin_dht, dht_type);
 long tiempo_ultima;
@@ -43,7 +43,7 @@ void loop() {
       registro_enviar();
     }
   }
-  if (tiempo_actual >= tiempo_ultima +  20000) {
+  if (tiempo_actual >= tiempo_ultima +  15000) {
     registro_enviar();
     tiempo_ultima = millis();
   }
@@ -91,6 +91,8 @@ void registro_enviar() {
 
   } else {
     int photo_read = analogRead(photo_pin);
+    delay(10);
+    photo_read = analogRead(photo_pin);
     int pir_read = digitalRead(pir_pin);
 
     Serial.print("photo,analog,1,");

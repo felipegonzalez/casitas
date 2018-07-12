@@ -53,7 +53,7 @@ while True:
         total_time = total_off + total_on
 
         if(total_time > 0.75):
-            if(total_on > total_off):
+            if(total_on > 0.25*total_off):
                 send_ring()
                 for i in range(0,3):
                     led.off()
