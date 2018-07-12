@@ -9,6 +9,7 @@ class AutoLight():
         self.last_auto_off = {}
         self.status = 'on'
         self.name = 'app_autolight'
+        self.state = {}
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -22,11 +23,13 @@ class AutoLight():
                     'value':dd, 'command':'turn_on', 'origin':self.name}))
         else:       
             for place in self.candidates_off:
-                state['last_motion'][place] = state['timestamp']
+                self.last_auto_off[place] = state['timestamp']
+                #self.delays[place] = self.base_delays[place]
                 ll = state['groups_lights'][place]
+
                 for dd in ll.keys():
                     messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 
-                        'command':'turn_off', 'origin':self.name}))
+                        'command':'turn_off', 'origin':self.name, 'transition':300}))
         return messages
 
     def check_event(self, ev_content,  state):
@@ -48,7 +51,7 @@ class AutoLight():
                     value = 'on'
                 if(place in self.last_auto_off):
                     if(state['timestamp'] - self.last_auto_off[place] < 5):
-                        self.delays[place] = min(self.base_delays[place]*1.5, 60*8)
+                        self.delays[place] = min(self.delays[place]*1.5, 60*8)
                     if(state['timestamp'] - self.last_auto_off[place] > 60):
                         self.delays[place] = self.base_delays[place]
 
@@ -57,8 +60,13 @@ class AutoLight():
                 self.candidates_off = []
                 for place in self.delays.keys():
                     if(state['timestamp'] - state['last_motion'][place] > self.delays[place]):
-                        self.candidates_off.append(place)
-                        self.last_auto_off[place] = state['timestamp']
+                        if(place in self.last_auto_off):
+                            if(state['timestamp'] - self.last_auto_off[place] > self.delays[place]):
+                                self.candidates_off.append(place)
+                                self.last_auto_off[place] = state['timestamp']
+                        else:
+                            self.candidates_off.append(place)
+                            self.last_auto_off[place] = state['timestamp']
                 if(len(self.candidates_off) > 0):
                     fire = True
                     value = 'off'

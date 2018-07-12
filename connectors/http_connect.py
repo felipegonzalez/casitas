@@ -15,15 +15,32 @@ import json
 
 def process_response(session, response):
     #print("Calling process_response")
-    print(" ")
-    print(response.content) 
-    print(" ")
+    print("------------- ")
+    #print(response.content) 
     data = response.content
     ip_addr = str(urlparse(response.url).hostname)
-    new_message = json.dumps({'device_name':ip_dict[ip_addr], 
-        'ip_addr':ip_addr, 'data':data.decode('utf-8')})
-    #print(new_message)
-    r.publish('http-events', new_message)
+    #print(ip_addr)
+    data_decode = data.decode('utf-8')
+    if data_decode == '':
+        data_decode = json.dumps({})
+    try:
+        if(ip_addr in ip_dict):
+            new_message = json.dumps({"device_name":ip_dict[ip_addr], 
+                "ip_addr":ip_addr, "data":data_decode})
+            print("Received from " + ip_dict[ip_addr])
+            #print(new_message)
+            r.publish('http-events', new_message)
+        else:
+            if(data_decode!="success\n"):
+                print("Message of unknown")
+                print(data_decode)
+                print(response.content)
+    except Exception as ex:
+        print("Could not parse message.")
+        print(ip_addr)
+        print(data_decode)
+        print(ex)
+        raise
     return
 
 def monitor():
@@ -39,7 +56,7 @@ def monitor():
     #    print "Error serial/xbee"
     print('Iniciar ciclo')
 
-    session = FuturesSession(max_workers=10)
+    session = FuturesSession(max_workers=20)
 
     while True:
         message = command_sub.get_message()        
@@ -50,11 +67,14 @@ def monitor():
             if message_in['type'] == 'get':
                 #print(message_in)
                 try:
-                    req =  session.get('http://'+message_in['address']+'', 
+                    url_initial = 'http://'
+                    if(message_in['address'][:4] == "http"):
+                        url_initial = ''
+                    req =  session.get(url_initial+message_in['address']+'', 
                                     #data = message_in['payload'], 
                                     params = message_in['pars'],
                                     background_callback =process_response,
-                                    timeout = 2)
+                                    timeout = 4)
                 except Exception as ex:
                     print('Error http request get')
                     print(format(ex))

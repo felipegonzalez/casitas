@@ -6,6 +6,7 @@ class DoorBell():
         self.bells = {'patio':'two_tone_doorbell.wav', 'calle_frente':'store_bell.wav'}
         self.status = 'on'
         self.name = 'app_doorbell'
+        self.state = {}
         pass
 
     def activate(self, ev_content, state, r, value):
@@ -30,7 +31,7 @@ class DoorBell():
         devices = state['devices']
         if ev_content:
             if(ev_content['event_type']=='timbre'):
-                print("Tinmbre")
+                print("Timbre")
                 print(ev_content)
             if(ev_content['event_type']=='timbre' and (ev_content['value'])):
                 place = devices[ev_content['device_name']].place

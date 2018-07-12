@@ -20,6 +20,8 @@ class FosCam(object):
         self.user = init['user']
         self.password = init['password']
         self.place = init['place']
+        self.places_movement = init['places_movement']
+        self.notify_alarm = False #can be movement, alarm
         self.id_cam = init['id_cam']
         self.path = init['img_path']
         self.dest_path = '/Volumes/mmshared/web_img/' + self.name +'.jpg'
@@ -33,15 +35,19 @@ class FosCam(object):
     def parse(self, message):
         message_p = (message)['data']
         parsed_m = []
-        out_dict = xmltodict.parse(message_p)['CGI_Result']
-        if('sdFreeSpace' in out_dict.keys()):
-            #we assume this condition means a get for state (?)
-            self.state = out_dict
-            if('motionDetectAlarm' in out_dict.keys()):
-                motion = out_dict['motionDetectAlarm'] == '2'
+        try:
+            out_dict = xmltodict.parse(message_p)['CGI_Result']
+            if('sdFreeSpace' in out_dict.keys()):
+                #we assume this condition means a get for state (?)
                 self.state = out_dict
-                #print(self.state)
-                parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
+                if('motionDetectAlarm' in out_dict.keys()):
+                    motion = out_dict['motionDetectAlarm'] == '2'
+                    self.state = out_dict
+                    #print(self.state)
+                    parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
+        except Exception as ex:
+            print("could not parse message: ")
+            print(message_p)
         return parsed_m
 
     def get_state(self):
@@ -99,6 +105,12 @@ class FosCam(object):
 
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] == '2'):
                 global_state['alarm_cam'] = True
+                                ### send movement events
+                for place in self.places_movement:
+                    virtual_dev = 'virtual-'+place
+                    new_message = {'device_name':virtual_dev,
+                    'event_type':'motion', 'value':True, 'units':'binary'}
+                    self.messager.publish('events', json.dumps(new_message))
                 #new_message = {'device_name':'pushover',
                 #    'command':'send_message', 'value':'Movimiento en ' + self.name}
                 #self.messager.publish('http_commands',
@@ -111,6 +123,8 @@ class FosCam(object):
                 copyfile(latest_file, self.dest_path)
                 #except:
                 #    print("could not copy file")
+
+                
             if('motionDetectAlarm' in self.state.keys() and self.state['motionDetectAlarm'] != '2'):
                 global_state['alarm_cam'] = False
         #     else:

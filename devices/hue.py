@@ -48,8 +48,8 @@ class HueHub(object):
                         self.state[self.light_names[light_no]] = 'on'
                     else:
                         self.state[self.light_names[light_no]] = 'off'
-            print(self.state)
-            print(self.bri)
+            #print(self.state)
+            #print(self.bri)
         return parsed_m
 
     def turn_on(self, command, state):
@@ -67,7 +67,7 @@ class HueHub(object):
         else:
             #bri = self.bri[command['value']]
             bri = self.bri[self.light_names[light_no]]  # use previous brightness
-            #bri = 254
+        bri = 254
         if(self.state[command['value']]=='off' or self.state[command['value']]==''):
             address = self.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
             data = json.dumps({'on':True, 'bri':bri})
@@ -80,12 +80,15 @@ class HueHub(object):
    
     def turn_off(self, command, state):
         state['devices_state'][self.name][command['value']] = 'off'
-
         if(self.state[command['value']]=='on'):
             address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
-            data = json.dumps({'on':False})    
+            if('transition' in command):
+                data = json.dumps({'on':False, 'transitiontime':command['transition']})
+            else:
+                data = json.dumps({'on':False})
+
             self.state[command['value']] = 'off'
-            print(self.state)
+            #print(self.state)
             new_message = {'device_name':self.name, 'address':address, 'payload':data, 'type':'put'}
             self.messager.publish('http-commands', json.dumps(new_message))
         #print('Apagar hue light')

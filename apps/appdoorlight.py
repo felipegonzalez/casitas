@@ -1,18 +1,21 @@
 import json
-
+import time
 
 class AppDoorLight():
     def __init__(self, place_lights):
         self.place_lights = place_lights
         self.door_mapping = {'hall_entrada':['Entrance hall','Front door',
         'Patio stairs one', 'Patio stairs two', 'Patio stairs three',
-        'Entrance table', 'Caballeriza uno', 'Caballeriza dos'],
+        'Entrance table', 'Caballeriza uno', 'Caballeriza dos', 'luzgarage'],
         'patio':['Caballeriza uno','Caballeriza dos', 'Patio stairs one',
-        'Patio stairs two', 'Patio stairs three', 'Front door']}
+        'Patio stairs two', 'Patio stairs three', 'Front door', 'luzgarage']}
         self.status = 'on'
         self.name = "app_doorlight"
+        self.state = {}
+        self.last_activation = 0
 
     def activate(self, ev_content, state, r, value):
+        self.last_activation = time.time()
         devices = state['devices']
         place = devices[ev_content['device_name']].place
         #state['last_motion'][place] = state['timestamp']
@@ -28,8 +31,12 @@ class AppDoorLight():
         #print(to_light)
         mensajes = []
         for dd in to_light:
-            mensajes.append(json.dumps({'device_name':'hue', 'value':dd, 
-                'command':'turn_on', 'origin':self.name}))
+            print(place)
+            print(dd)
+            device = state['groups_lights'][self.place_lights[dd]][dd] 
+            mensajes.append(json.dumps({'device_name':device, 'value':dd, 
+                    'command':'turn_on', 'origin':self.name}))
+
         return mensajes
 
 
@@ -41,22 +48,26 @@ class AppDoorLight():
         #print ev_content
         if ev_content:
             if(ev_content['event_type']=='door' and not(ev_content['value'])):
-                place = devices[ev_content['device_name']].place
-                places_fire = self.door_mapping[place]
-                for ll in places_fire:
-                    pl = self.place_lights[ll]
-                    if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
-                        fire = fire or True
+                if(time.time() - self.last_activation > 40):
+                    place = devices[ev_content['device_name']].place
+                    places_fire = self.door_mapping[place]
+                    for ll in places_fire:
+                        pl = self.place_lights[ll]
+                        if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
+                            fire = fire or True
         return fire, value
 
     def check_command(self, comm_content,  state):
         fire = False
         value = ''
-        if comm_content:
-            if(comm_content['value']=='garage_open'):
-                places_fire = self.door_mapping['hall_entrada']
-                for ll in places_fire:
-                    pl = self.place_lights[ll]
-                    if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
-                        fire = fire or True
+        #if comm_content:
+        #    if(comm_content['value']=='garage_open'):
+        #        state['last_motion']['patio'] = state['timestamp']
+        #        state['last_motion']['escaleras_patio'] = state['timestamp']
+        #        state['last_motion']['hall_entrada'] = state['timestamp']
+                #places_fire = self.door_mapping['hall_entrada']
+                #for ll in places_fire:
+                #    pl = self.place_lights[ll]
+                #    if(int(state['photo'][pl]) < int(state['min_photo'][pl])):
+                #        fire = fire or True
         return fire, value

@@ -25,13 +25,18 @@ class Alarm(object):
         r = self.messager
         if(time.time() - self.last_alarm > 10):
             self.last_alarm = time.time()
+            place = "casa"
+            try:
+                place = devices[command['origin']]['place']
+            except:
+                pass
             if(command['value']=='gas'):
                 r.publish('commands', json.dumps({'device_name':'pushover', 'command':'send_message',
-                    'value':'Alarma de gas'}))
+                    'value':'Alarma de gas en '+ place}))
                 r.publish('commands', json.dumps({'device_name':'sonos', 'command':'say',
-                    'value':'Alarma de gas', 'volume':100}))
+                    'value':'Alarma de gas en ' + place, 'volume':100}))
             if(command['value']=='temperature'):
                 r.publish('commands', json.dumps({'device_name':'pushover', 'command':'send_message',
-                    'value':'Alarma de temperatura'}))
+                    'value':'Alarma de temperatura en ' + place}))
                 r.publish('commands', json.dumps({'device_name':'sonos', 'command':'say',
-                    'value':'Alarma de temperatura'}))          
+                    'value':'Alarma de temperatura en ' + place}))          
