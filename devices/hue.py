@@ -80,10 +80,13 @@ class HueHub(object):
    
     def turn_off(self, command, state):
         state['devices_state'][self.name][command['value']] = 'off'
-
         if(self.state[command['value']]=='on'):
             address = self.ip_address + '/api/newdeveloper/lights/' + self.children[command['value']] + '/state'
-            data = json.dumps({'on':False})    
+            if('transition' in command):
+                data = json.dumps({'on':False, 'transitiontime':command['transition']})
+            else:
+                data = json.dumps({'on':False})
+
             self.state[command['value']] = 'off'
             #print(self.state)
             new_message = {'device_name':self.name, 'address':address, 'payload':data, 'type':'put'}

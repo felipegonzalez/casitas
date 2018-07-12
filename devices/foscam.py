@@ -35,15 +35,19 @@ class FosCam(object):
     def parse(self, message):
         message_p = (message)['data']
         parsed_m = []
-        out_dict = xmltodict.parse(message_p)['CGI_Result']
-        if('sdFreeSpace' in out_dict.keys()):
-            #we assume this condition means a get for state (?)
-            self.state = out_dict
-            if('motionDetectAlarm' in out_dict.keys()):
-                motion = out_dict['motionDetectAlarm'] == '2'
+        try:
+            out_dict = xmltodict.parse(message_p)['CGI_Result']
+            if('sdFreeSpace' in out_dict.keys()):
+                #we assume this condition means a get for state (?)
                 self.state = out_dict
-                #print(self.state)
-                parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
+                if('motionDetectAlarm' in out_dict.keys()):
+                    motion = out_dict['motionDetectAlarm'] == '2'
+                    self.state = out_dict
+                    #print(self.state)
+                    parsed_m.append({'device_name':self.name, 'event_type':'motion','value':motion})
+        except Exception as ex:
+            print("could not parse message: ")
+            print(message_p)
         return parsed_m
 
     def get_state(self):
