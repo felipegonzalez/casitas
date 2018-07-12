@@ -9,6 +9,7 @@ class AutoLight():
         self.last_auto_off = {}
         self.status = 'on'
         self.name = 'app_autolight'
+        self.state = {}
 
     def activate(self, ev_content, state, r, value):
         devices = state['devices']
@@ -28,7 +29,7 @@ class AutoLight():
 
                 for dd in ll.keys():
                     messages.append(json.dumps({'device_name':ll[dd], 'value':dd, 
-                        'command':'turn_off', 'origin':self.name}))
+                        'command':'turn_off', 'origin':self.name, 'transition':300}))
         return messages
 
     def check_event(self, ev_content,  state):

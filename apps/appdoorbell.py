@@ -6,6 +6,7 @@ class DoorBell():
         self.bells = {'patio':'two_tone_doorbell.wav', 'calle_frente':'store_bell.wav'}
         self.status = 'on'
         self.name = 'app_doorbell'
+        self.state = {}
         pass
 
     def activate(self, ev_content, state, r, value):

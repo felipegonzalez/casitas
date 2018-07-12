@@ -6,6 +6,7 @@ class Alarmist():
         self.alarms = ['gas_alarm_check', 'temp_alarm_check']
         self.status = 'on'
         self.name = 'app_alarm'
+        self.state = {}
         return
 
     def gas_alarm_check(self, ev_content,  state):
@@ -18,7 +19,7 @@ class Alarmist():
                 #print("Tinmbre")
                 #print(ev_content)
                 try:
-                    if(float(ev_content['value']) > 350):
+                    if(float(ev_content['value']) > 800):
                         place = devices[ev_content['device_name']].place
                         fire = True
                         value = {'device_name':'alarm',
@@ -36,11 +37,14 @@ class Alarmist():
             if(ev_content['event_type']=='temperature'):
                 #print("Tinmbre")
                 #print(ev_content)
-                if(float(ev_content['value']) > 29):
-                    place = devices[ev_content['device_name']].place
-                    fire = True
-                    value = {'device_name':'alarm',
-                            'command':'sound_alarm','value':'temperature','origin':ev_content['device_name']}
+                try:
+                    if(float(ev_content['value']) > 38):
+                        place = devices[ev_content['device_name']].place
+                        fire = True
+                        value = {'device_name':'alarm',
+                                'command':'sound_alarm','value':'temperature','origin':ev_content['device_name']}
+                except:
+                    print("Error parse alarma temperatura")
         return fire, value
 
     def activate(self, ev_content, state, r, value):
