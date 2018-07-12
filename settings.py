@@ -19,11 +19,17 @@ from devices.pushover_service import PushMessenger
 from devices.esp6288 import Esp6288
 from devices.general import GeneralDevice
 from devices.alarm import Alarm
+from devices.external_api import ExternalApi
+from devices.solcast_api import SolcastApi
+from devices.sonoff import Sonoff
+from devices.apple_tv import AppleTV
+
 # device classes
 dev_class = {'xbeebox':XbeeBox, 'hue':HueHub, 'alarm':Alarm, 'sonos':Sonos,
     'virtual':Virtual, 'timer':Timer, 'foscam':FosCam , 'meteo':WeatherStation,
     'push_messenger':PushMessenger, 'esp6288':Esp6288, 'general':GeneralDevice,
-    'alarm_exe':Alarm}
+    'alarm_exe':Alarm, 'external_api':ExternalApi, 'solcast_api':SolcastApi,
+    'sonoff':Sonoff, 'apple_tv':AppleTV}
 
 # connections
 conn_names = ['xbee-events', 'http-events']
@@ -33,7 +39,7 @@ places = ['sala', 'bano_visitas', 'bano_principal', 'cocina',
 'hall_entrada', 'recamara_principal', 'pasillo_recamaras',
         'front_door_hall', 'escaleras_patio','patio', 'estudiof','jardin',
         'exterior', 'estudiot' ,'comedor', 'pasillo_comedor','casa',
-        'calle_frente', 'cuarto_tv']
+        'calle_frente', 'cuarto_tv', 'external']
 
 delays = {'sala':120, 'bano_visitas':125, 'bano_principal':130, 'cocina':130,
             'hall_entrada':65, 'recamara_principal':180, 'pasillo_recamaras':30,
@@ -53,6 +59,10 @@ device_settings = {
         'device_type':'virtual'
         },
         'virtual-front_door_hall':{
+        'place':'front_door_hall',
+        'device_type':'virtual'
+        },
+        'virtual-hall_entrada':{
         'place':'front_door_hall',
         'device_type':'virtual'
         },
@@ -174,6 +184,14 @@ device_settings = {
         'device_type':'timer',
         'place':'casa',
         },
+        'apple_tv_1':{
+            'device_type':'apple_tv',
+            'ip_address':'192.168.100.206',
+            'login_id':'00000000-103f-73f9-0dfa-3907df3f43d8',
+            'port':3689,
+            'place':'cuarto_tv',
+            'name':'Entertainment Room'
+        },
         'cam_entrada':{
         'device_type':'foscam',
         'place':'hall_entrada',
@@ -189,7 +207,7 @@ device_settings = {
         'cam_patio':{
         'device_type':'foscam',
         'place':'patio',
-        'places_movement': ['patio', 'escaleras_patio'],
+        'places_movement': ['patio', 'escaleras_patio', 'hall_entrada', 'front_door_hall'],
         'ip_address':'192.168.100.221',
         'port':'88',
         'user':'felipe',
@@ -217,6 +235,27 @@ device_settings = {
         'place':'calle_frente',
         'polling':0
         },
+        'solcast':{
+        'device_type':'solcast_api',
+        'ip_address':'api.solcast.com.au',
+        'requests':[  # [endpoint, parameters]
+            ['/radiation/forecasts',
+            {'longitude':-99.226185, 'latitude':18.956130, 'api_key':'Gfeq_t9Crr0DgbfqN-TdKXd0fA6bW5ef', 'format':'json'}]
+            ],
+        'place':'external',
+        'polling':60*60,
+        'port':80
+        },
+        'gas_meter':{
+        'device_type':'external_api',
+        'ip_address':'raspicam.local',
+        'requests':[
+            ['/get_reading', {}]
+        ],
+        'place':'cocina',
+        'polling':300,
+        'port':80
+        },
         'caja_riego_jardin':{
             'device_type':'esp6288',
             'ip_address':'192.168.100.154',
@@ -235,7 +274,21 @@ device_settings = {
             'device_type':'esp6288',
             'ip_address':'192.168.100.157',
             'place':'cuarto_tv',
-            'children':{'lampara':'1'},
+            'children':{'switch':'1'},
+            'polling':10
+        },
+        'sonoff_washing':{
+            'device_type':'sonoff',
+            'ip_address':'192.168.100.161',
+            'place':'cocina',
+            'children':{'luz_lavado':'1'},
+            'polling':10
+        },
+        'sonoff_garage':{
+            'device_type':'sonoff',
+            'ip_address':'192.168.100.160',
+            'place':'patio',
+            'children':{'luzgarage':'1'},
             'polling':10
         },
         'caja_cisterna':{
@@ -257,7 +310,7 @@ device_settings = {
 
 place_lights = { 'Living room foot 1':'sala', 
                 'Living room foot 2':'sala',
-                'Hue bloom 1':'sala',
+                'Hue bloom 1':'comedor',
                 'Living room wall':'sala',
                 'Downstairs bath':'bano_visitas',
                 'Main bath one':'bano_principal',
@@ -265,6 +318,7 @@ place_lights = { 'Living room foot 1':'sala',
                 'Main bath three':'bano_principal',
                  'Kitchen one':'cocina',
                  'Kitchen two':'cocina',
+                 'TV room':'cuarto_tv',
                  'Entrance hall':'hall_entrada',
                  'Entrance table':'hall_entrada',
                  'Bedroom one':'recamara_principal',
@@ -291,6 +345,7 @@ device_settings['hue'] = {
         'children':{'Living room foot 1':'49', 'Living room foot 2':'50',
         'Patio stairs three':'37' ,'Main bath one':'57' ,
         'Main bath two':'56', 'Kitchen one':'42',
+        'TV room':'47',
         'Kitchen two':'44' ,'Entrance hall':'39', 'Bedroom one':'45', 
         'Bedroom two':'46', 'Bedroom hall':'54', 'Front door':'51',
         'Patio stairs one':'52', 'Patio stairs two':'53', 
@@ -328,16 +383,17 @@ state['motion_value'] = {}
 state['motion'] = {}
 for place in places :
         state['photo'][place] = 0
-        state['min_photo'][place] = 250
+        state['min_photo'][place] = 300
         state['last_motion'][place] =  0
         state['humidity'][place] = 0
         state['temperature'][place] = 0.0
         state['motion'][place] = False
         state['motion_value'][place] = 0
 #state['min_photo']['estudiot'] = 1000
-state['min_photo']['pasillo_comedor'] = 100
+state['min_photo']['pasillo_comedor'] = 70
 state['min_photo']['estudiot'] = 360
-state['min_photo']['cuarto_tv'] = 600
+state['min_photo']['cuarto_tv'] = 150
+state['min_photo']['cocina'] = 150
 
 state['groups_lights'] = {}
 for place in places:
@@ -350,11 +406,16 @@ for place in places:
 ## Luces que no son de hue
 place_lights['strip_cocina'] = 'cocina'
 place_lights['strip_terraza'] = 'jardin'
-place_lights['lampara'] = 'cuarto_tv'
+#place_lights['lampara'] = 'cuarto_tv'
+place_lights['luzgarage'] = 'patio'
+place_lights['luz_lavado'] = 'cocina'
 
 state['groups_lights']['cocina']['strip_cocina'] = 'cajacocina'
 state['groups_lights']['jardin']['strip_terraza'] = 'caja_terraza'
-state['groups_lights']['cuarto_tv']['lampara'] = 'caja_tv'
+#state['groups_lights']['cuarto_tv']['lampara'] = 'caja_tv'
+state['groups_lights']['cocina']['luz_lavado'] = 'sonoff_washing'
+state['groups_lights']['patio']['luzgarage'] = 'sonoff_garage'
+
 print(place_lights)
 print(state['groups_lights'])
 #print(" ")

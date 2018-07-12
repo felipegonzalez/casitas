@@ -9,13 +9,17 @@ import math
 import os
 import logging
 import logging.handlers
+import datetime
+import asyncio
 
 from apps.appautolight import AutoLight
 from apps.appdoorlight import AppDoorLight
 from apps.appdoorbell import DoorBell
 from apps.appalarm import Alarmist
 from apps.appirrigation import AppIrrigation
-
+from apps.apppool import AppPool
+from apps.appkalman import AppKalman
+from apps.appactionmove import Actions
 #create instances for apps #############
 
 ## Add to dictionary
@@ -25,7 +29,13 @@ apps['app_autolight'] = AutoLight(delays)
 apps['app_doorbell'] = DoorBell()
 apps['app_alarm'] = Alarmist()
 apps['app_irrigation'] = AppIrrigation()
+apps['app_pool'] = AppPool()
+apps['app_kalman'] = AppKalman()
+apps['app_actions'] = Actions()
+
 state['apps'] = apps
+
+state['loop']  = asyncio.get_event_loop()
 
 
 #start logging
@@ -115,6 +125,7 @@ while True:
 
     ########### Print reports
     if(time.time()-timer_print > 10):
+        #print(state)
         #print(str(round(1/(time.time() - state['timestamp'])))+' cycles per second' )
         for dev in state['devices']:
             pass
@@ -139,10 +150,11 @@ while True:
         for elem in state['devices']['timer_1'].state:
             print(-round((time.time() - elem[0])/60, 2))
             print(elem[1])
+        #print(state['devices']['solcast'].state)
         max_time = 0
 
         #r.publish('commands', json.dumps({'device_name':'sonos', 'value':'Sistema vivo', 'command':'say'}))
-    if(time.time()-timer_log > 3):
+    if(time.time()-timer_log > 2):
        logdata.log(state,r)
        timer_log = time.time()
 
@@ -183,7 +195,8 @@ while True:
         else:
             add_units = ''
         try:
-            state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value'] 
+            state['devices_state'][ev_content['device_name']][ev_content['event_type']] = ev_content['value']
+            state['devices_state'][ev_content['device_name']]['last_update'] = str(datetime.datetime.now())
         except Exception as ex:
             print("unknown device")
             print(ev_content)
@@ -198,10 +211,7 @@ while True:
                 state[event_type][place] = ev_content['value']
         
         # update central state depending on events #######
-        if(event_type == 'motion'):
-            if(ev_content['value']):
-                state['motion_value'][place] = 1.0
-                print(state['motion_value'])
+
     # get command and process using device class
     comm = commands.get_message()
     if comm:
@@ -235,7 +245,7 @@ while True:
                 appcomms = apps[app].activate(comm_content, state, r, value)
                 app_messages = app_messages + appcomms
 
-    ######## send commands of apps 
+
 
     for message in app_messages:
         r.publish('commands', message)
@@ -243,3 +253,9 @@ while True:
     ######## update devices
     for dev_name in devices.keys():
         devices[dev_name].update(state)
+    # finally update motion values
+    if (ev and (ev['type']=='message')):
+        if(event_type == 'motion'):
+            if(ev_content['value']):
+                state['motion_value'][place] = 1.0
+                state['last_motion'][place] = state['timestamp']
