@@ -11,7 +11,7 @@ import datetime
 from astral import Astral
 import pytz
 devices_outside = ['virtual-jardin','virtual-patio', 
-	'virtual-front_door_hall', 'virtual-escaleras_patio', 
+    'virtual-front_door_hall', 'virtual-escaleras_patio', 
     'virtual-bano_visitas', 'virtual-pasillo_recamaras']
 
 a = Astral()
@@ -28,27 +28,30 @@ def OutsidePhoto():
     while True:
         #response = xbee.wait_read_frame(timeout=0.10)
         #message = json.dumps({'type':'xbee', 'source':response['dest_addr_long'], 'content':response})
-        if(time.time() - time_last > 120):
-        	dt = datetime.datetime.now()
-        	dt_local = pytz.timezone('America/Mexico_City').localize(dt)
-        	sun = city.sun(date = dt, local = True)
+        if(time.time() - time_last > 60):
+            dt = datetime.datetime.now()
+            dt_local = pytz.timezone('America/Mexico_City').localize(dt)
+            sun = city.sun(date = dt, local = True)
 
-        	print(time.time())
-        	value = '1000'
-        	if(not sun_up(dt, sun)):
-        		value = '0'
-        	for dev in devices_outside:
-        		r.publish('events', json.dumps({'device_name':dev, 
-        			'event_type':'photo', 'value':value}))
-       		time_last = time.time()
+            print(time.time())
+            value = '1000'
+            if(not sun_up(dt, sun)):
+                value = '0'
+            #value = '0'
+            for dev in devices_outside:
+                r.publish('events', json.dumps({'device_name':dev, 
+                    'event_type':'photo', 'value':value}))
+            time_last = time.time()
+            
+            print(value)
 
 def sun_up(dt, sun):
-	min_dt = pytz.timezone('America/Mexico_City').localize(dt + datetime.timedelta(hours = 0.5))
-	max_dt = pytz.timezone('America/Mexico_City').localize(dt - datetime.timedelta(hours = 0.5))
-	sunup = False
-	if(max_dt > sun['dawn'] and min_dt < sun['sunset']):
-		sunup = True
-	return sunup
+    min_dt = pytz.timezone('America/Mexico_City').localize(dt + datetime.timedelta(hours = 0.5))
+    max_dt = pytz.timezone('America/Mexico_City').localize(dt - datetime.timedelta(hours = 0.5))
+    sunup = False
+    if(max_dt > sun['dawn'] and min_dt < sun['sunset']):
+        sunup = True
+    return sunup
 if __name__ == "__main__":
     try:
         OutsidePhoto()

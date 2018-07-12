@@ -36,8 +36,8 @@ def monitor():
             #print(response)
             response['source_addr_long'] = response['source_addr_long'].hex()
             response['source_addr'] = response['source_addr'].hex()
-            #if(xbee_dict[response['source_addr_long']]=='caja_estudiot'):
-            #if(xbee_dict[response['source_addr_long']]=='caja_pasillo_recamaras'):
+            #if(xbee_dict[response['source_addr_long']]=='caja_estudiof'):
+            #if(xbee_dict[response['source_addr_long']]=='cajacocina'):
             if(True):
                 print(response)
                 print(response['source_addr_long'])
@@ -74,10 +74,13 @@ def monitor():
                 if message_in['mode'] == 'tx':
                     #dest_addr = message_in['source_addr']
                     data = str.encode(message_in['data'])
+                    print("Transmit tx")
+                    print(data)
                     xbee.tx(dest_addr_long=dest_addr_long, data=data)
                         #xbee.tx(dest_addr_long=b'\x00\x13\xa2\x00\x40\xbf\x96\x2c',dest_addr='\x40\xb3', data=b'1')
                 if message_in['mode'] == 'pin':
                     command = hexlify(bytes.fromhex(message_in['command']))
+                    print("Transmit xbee pin change")
                     print(dest_addr_long)
                     print(command)
                     parameter = bytes.fromhex(message_in['parameter'])

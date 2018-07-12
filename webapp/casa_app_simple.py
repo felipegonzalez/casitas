@@ -53,9 +53,24 @@ class control(object):
         if(secreto == house_secret):
             state_appliances_b = r.hgetall('devices')
             for dev_name in state_appliances_b.keys():
-                state_appliances[dev_name] = json.loads(state_appliances_b[dev_name])
+                if(dev_name != 'solcast'):
+                    state_appliances[dev_name] = json.loads(state_appliances_b[dev_name])
         return state_appliances
-            
+
+    @cherrypy.expose
+    @tools.json_out()
+    def apps(self, **kwargs):
+        secreto = kwargs.get('secreto', None)
+        state_app = {}
+        if(secreto == house_secret):
+            state_app_b = r.hgetall('apps')
+            for app_name in state_app_b.keys():
+                try: 
+                    state_app[app_name] = json.loads(state_app_b[app_name])
+                except Exception as ex:
+                    print(ex)
+        return state_app
+
 
     @cherrypy.expose
     def garage(self):

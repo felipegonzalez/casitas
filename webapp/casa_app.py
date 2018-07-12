@@ -31,6 +31,8 @@ class control(object):
             device_name = ip_dict[ip_origin]
         else:
             device_name = 'unknown'
+        if(value == 'True'):
+            value = True
         ev = {'device_name':device_name, 'event_type':event_type, 
             'value':value}
         r.publish('events', json.dumps(ev))
@@ -51,20 +53,20 @@ class control(object):
         r.publish('commands', message)
         return "Comando de riego enviado"
 
+
     @cherrypy.expose
-    def ventilar_hongos(self, **kwargs):
-        tiempo = kwargs.get('tiempo', None)
+    def lampara_tv(self, **kwargs):
+        command = kwargs.get('command', None)
         comm = {}
-        if(tiempo == 0):
-            comm = {"device_name":"caja_hongos", "value":"ventilador", "command":"turn_off",
+        if(command== 'turn_off'):
+            comm = {"device_name":"caja_tv", "value":"lampara", "command":"turn_off",
                         "pars":{}, "origin":"webapp"}
         else:
-            comm = {"device_name":"caja_hongos", "value":"ventilador", "command":"turn_on",
-                        "pars":{"tiempo":int(tiempo)}, "origin":"webapp"}
+            comm = {"device_name":"caja_tv", "value":"lampara", "command":"turn_on",
+                        "pars":{}, "origin":"webapp"}
         message = json.dumps(comm)
         r.publish('commands', message)
-        return "Comando de ventilación enviado"
-
+        return ""
     @cherrypy.expose
     def ring(self, lugar):
         print("ring")
@@ -203,8 +205,8 @@ class control(object):
             r.publish('commands', json.dumps({"device_name":"caja_goteo",
                 "command":"turn_on", "value":"regar", "origin":"webapp"
                 }))
-            r.publish('commands', json.dumps({"device_name":"sonos",
-                "command":"say", "value":"Regando ahora", "origin":"webapp"}))
+            #r.publish('commands', json.dumps({"device_name":"sonos",
+            #    "command":"say", "value":"Regando ahora", "origin":"webapp"}))
             message_off =json.dumps({'device_name':'caja_goteo',
                 'command':'turn_off', 'value':'regar', "origin":"timer"})
             r.publish('commands', json.dumps({"device_name":"timer_1",
